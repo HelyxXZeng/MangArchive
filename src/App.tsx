@@ -7,6 +7,11 @@ import AuthPage from "./pages/authpage/Authpage";
 
 function App() {
 
+  // const Layout = () => {
+  //   return (
+  //     // đang tạo
+  //   );
+  // }
 
   const router = createBrowserRouter([
     {
