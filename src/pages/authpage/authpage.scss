@@ -1,0 +1,31 @@
+.homepage-login,
+.wallpaper-icon {
+  position: relative;
+  overflow: hidden;
+}
+.wallpaper-icon {
+  height: 1024px;
+  flex: 1;
+  max-width: 100%;
+  object-fit: cover;
+  min-width: 468px;
+}
+.homepage-login {
+  width: 100%;
+  background-color: #fafcfc;
+  border: 1px solid #1f1f1f;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  letter-spacing: normal;
+  line-height: normal;
+  row-gap: 20px;
+}
+@media screen and (max-width: 675px) {
+  .wallpaper-icon {
+    min-width: 100%;
+  }
+}
