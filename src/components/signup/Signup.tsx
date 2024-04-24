@@ -118,7 +118,7 @@ const Signup: FunctionComponent = () => {
               },
             }}
           >
-            Signup
+            Sign up
           </Button>
           <Button
             variant="contained"
