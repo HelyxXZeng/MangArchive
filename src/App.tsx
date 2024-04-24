@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider, Route, Outlet } from "react-router-dom";
-import Homepage from './pages/homepage/homepage';
-import Login from './pages/authpage/Authpage';
-import Signup from './components/signup/Signup';
+import Homepage from './pages/homepage/Homepage';
+
 import "./App.css";
 import AuthPage from "./pages/authpage/Authpage";
 

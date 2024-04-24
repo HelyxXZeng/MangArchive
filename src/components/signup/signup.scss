@@ -1,0 +1,142 @@
+.mainFrame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    min-width: 468px;
+    max-width: 100%;
+    // margin: 16px 0 64px;
+
+    .heading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+  
+      .logoContent {
+        h1 {
+          color: #1B6FA8;
+          font-family: 'Lato', sans-serif;
+          font-size: 40px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          letter-spacing: 2px;
+        }
+      }
+      .welcome-content {
+        .welcome-back {
+          font-family: 'Lato', sans-serif;
+          font-style: normal;
+          font-size: 32px;
+          color: #1F1F1F;
+          /* Thêm các thuộc tính khác nếu cần */
+          .back {
+            color:#1b6fa8
+          }
+        }
+        .description {
+          max-width: 384px;
+          text-align: center;
+          .slogan {
+            color: rgba(31, 31, 31, 0.75)
+          }
+        }
+      }
+      .loginFrame {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+  
+        .inputContainer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          gap:24px;
+          margin-top: 32px;
+          .username-input-field,
+          .password-input-field {
+            font-family: 'Lato', sans-serif;
+            width: 100%;
+            /* Thêm các thuộc tính khác nếu cần */
+          }
+          .password-input-field .MuiButtonBase-root.MuiIconButton-root:focus,
+          .password-input-field .MuiButtonBase-root.MuiIconButton-root:focus-visible {
+            outline: none;
+          }
+          .loginOption {
+            display: flex;
+            align-self: stretch;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 30px;
+            flex-direction: row;
+            .remember-me-button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+  
+              .checkbox {
+                cursor: pointer;
+              }
+              .remember-me {
+                margin-left: 5px; // Khoảng cách giữa checkbox và text
+                color: #1F1F1F; // Màu chữ cho Remember me
+                cursor: pointer; // Biến con trỏ thành bàn tay khi hover
+              }
+            }
+          
+            .recovery-password {
+              color: #1b6fa8; // Màu chữ cho Recovery password
+              cursor: pointer; // Biến con trỏ thành bàn tay khi hover
+            }
+          }
+        }
+        .buttonOption {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          min-width: 384px;
+          gap: 16px;
+          margin-top: 18px;
+          Button {
+            &.MuiButton-contained {
+              &.MuiButton-contained {
+                border-radius: 10px;
+                width: 384px;
+                height: 48px;
+                border-radius: '10px';
+              }
+            }
+            .google-icon {
+              width: 24px;
+              height: 24px; 
+            }
+            .log-in-with-google-wrapper {
+              .log-in-with {
+                color: #1f1f1f;
+              }
+            }
+          }
+        }
+        .otherOption {
+          margin-top: 16px;
+          font-family: 'Lato', sans-serif; // Áp dụng font Lato cho phần text
+          color: #1F1F1F; // Thiết lập màu chữ #1F1F1F cho phần text
+          span {
+            color: #1b6fa8; // Thiết lập màu chữ #1b6fa8 cho phần span bên trong
+            cursor: pointer;
+          }
+        }
+        
+      }
+    }
+  }
+  

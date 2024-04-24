@@ -1,386 +1,140 @@
-.main-area-child {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #fafcfc;
-  border-right: 1px solid #1f1f1f;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  display: none;
-}
-.login-section-child {
-  align-self: stretch;
-  height: 640px;
-  position: relative;
-  background-color: #fafcfc;
-  display: none;
-}
-.back {
-  color: #1b6fa8;
-}
-.slogan,
-.welcome-back {
-  position: relative;
-  letter-spacing: 0.05em;
-  font-weight: 600;
-  z-index: 1;
-}
-.welcome-back {
-  margin: 0;
-  align-self: stretch;
-  font-size: inherit;
-  font-family: inherit;
-}
-.slogan {
-  flex: 1;
-  display: inline-block;
-  max-width: 100%;
-}
-.description,
-.welcome-content {
-  align-self: stretch;
+.mainFrame {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-.description {
-  flex-direction: row;
-  padding: 0 32px;
-  font-size: 12px;
-  color: rgba(31, 31, 31, 0.75);
-}
-.welcome-content {
   flex-direction: column;
-  padding: 0 0 16px;
-  gap: 13px;
-}
-.username-input-field {
-  border: 0;
-  background-color: transparent;
-  height: 50px;
-  flex: 1;
-  font-family: Lato;
-  font-weight: 600;
-  font-size: 16px;
-  color: rgba(31, 31, 31, 0.75);
-  min-width: 232px;
-  max-width: 100%;
-  z-index: 1;
-}
-.login-form-container {
-  align-self: stretch;
-  height: 48px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding: 0 32px 0 30px;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-.password-input-field {
-  border: 0;
-  background-color: transparent;
-  align-self: stretch;
-  height: 50px;
-  font-family: Lato;
-  font-size: 12px;
-  color: #1f1f1f;
-  z-index: 1;
-}
-.checkbox,
-.remember-me {
-  position: relative;
-  flex-shrink: 0;
-  debug_commit: 1de1738;
-}
-.checkbox {
-  margin: 0;
-  height: 16px;
-  width: 16px;
-  border-radius: 5px;
-  border: 1px solid #1f1f1f;
-  box-sizing: border-box;
-}
-.remember-me {
-  letter-spacing: 0.05em;
-  display: inline-block;
-  min-width: 83px;
-}
-.remember-me-button {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: flex-start;
-  gap: 4px;
-  opacity: 0.75;
-  z-index: 1;
-}
-.recovery-password {
-  position: relative;
-  letter-spacing: 0.05em;
-  display: inline-block;
-  color: #1b6fa8;
-  text-align: right;
-  min-width: 115px;
-  z-index: 1;
-}
-.login-options1 {
-  align-self: stretch;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 20px;
-  text-align: center;
-  font-size: 12px;
-}
-.login-button-child {
-  align-self: stretch;
-  width: 384px;
-  position: relative;
-  border-radius: 10px;
-  background-color: #1b6fa8;
-  display: none;
-  max-width: 100%;
-}
-.log-in,
-.login-button1 {
-  display: flex;
-  max-width: 100%;
-  z-index: 1;
-}
-.log-in {
-  height: 48px;
-  flex: 1;
-  position: relative;
-  font-size: 14px;
-  letter-spacing: 0.05em;
-  font-family: Lato;
-  color: #fafcfc;
-  text-align: center;
   align-items: center;
-  justify-content: center;
-}
-.login-button1 {
-  cursor: pointer;
-  border: 0;
-  padding: 0;
-  background-color: #1b6fa8;
-  align-self: stretch;
-  border-radius: 10px;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.login-button1:hover {
-  background-color: #4296cf;
-}
-.google-login-child {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  margin: 0 !important;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  border-radius: 10px;
-  background-color: rgba(250, 252, 252, 0.5);
-  border: 1px solid #1f1f1f;
-  box-sizing: border-box;
-}
-.google-icon,
-.log-in-with {
-  position: relative;
-  z-index: 1;
-}
-.google-icon {
-  height: 24px;
-  width: 24px;
-  object-fit: contain;
-}
-.log-in-with {
-  letter-spacing: 0.05em;
-  font-weight: 500;
-  display: inline-block;
-  min-width: 127px;
-}
-.log-in-with-google-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding: 0 0 3px;
-}
-.google-login {
-  align-self: stretch;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 12px 20px;
-  position: relative;
-  gap: 15px;
-  cursor: pointer;
-  z-index: 1;
-  color: rgba(31, 31, 31, 0.5);
-}
-.dont-have-an {
-  font-weight: 500;
-}
-.sign-up1 {
-  color: #1b6fa8;
-}
-.dont-have-an-container {
-  position: relative;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  z-index: 1;
-}
-.login-button,
-.sign-up {
-  align-self: stretch;
-  display: flex;
-  align-items: flex-start;
-}
-.sign-up {
-  flex-direction: row;
-  justify-content: center;
-  padding: 0 20px 0 22px;
-}
-.login-button {
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 16px;
-  max-width: 100%;
-}
-.go-back-to {
-  font-weight: 500;
-}
-.home-page {
-  color: #1b6fa8;
-}
-.go-back-to-container {
-  position: relative;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  z-index: 1;
-}
-.homepage-button-area,
-.login-area {
-  display: flex;
-  align-items: flex-start;
-}
-.homepage-button-area {
-  align-self: stretch;
-  flex-direction: row;
-  justify-content: center;
-  padding: 0 21px 0 20px;
-}
-.login-area {
-  flex: 1;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 16px;
-  max-width: 100%;
-}
-.login-options,
-.login-section {
-  display: flex;
-  box-sizing: border-box;
-  max-width: 100%;
-}
-.login-options {
-  align-self: stretch;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-end;
-  padding: 0 30px 0 32px;
-  text-align: left;
-  font-size: 14px;
-}
-.login-section {
-  position: absolute;
-  top: 204px;
-  left: 136px;
-  width: 448px;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding: 65px 0 94px;
-  gap: 32px;
-  z-index: 1;
-}
-.mangarchive {
-  margin: 0;
-  flex: 1;
-  position: relative;
-  font-size: inherit;
-  letter-spacing: 0.05em;
-  font-weight: 400;
-  font-family: inherit;
-}
-.logo {
-  position: absolute;
-  top: 162px;
-  left: 224px;
-  width: 271px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  cursor: pointer;
-  z-index: 2;
-  text-align: left;
-  font-size: 40px;
-  color: #1b6fa8;
-}
-.main-area {
-  height: 1024px;
-  flex: 1;
-  position: relative;
-  background-color: #fafcfc;
-  border-right: 1px solid #1f1f1f;
-  box-sizing: border-box;
+  justify-content: space-between;
+  font-family: 'Lato', sans-serif;
+  font-style: normal;
   min-width: 468px;
   max-width: 100%;
-  text-align: center;
-  font-size: 32px;
-  color: #1f1f1f;
-  font-family: Lato;
-}
-@media screen and (max-width: 750px) {
-  .welcome-back {
-    font-size: 26px;
-  }
-  .mangarchive {
-    font-size: 32px;
-  }
-}
-@media screen and (max-width: 675px) {
-  .main-area {
-    min-width: 100%;
-  }
-}
-@media screen and (max-width: 450px) {
-  .welcome-back {
-    font-size: 19px;
-  }
-  .login-options1 {
-    flex-wrap: wrap;
-  }
-  .mangarchive {
-    font-size: 24px;
-  }
-  .main-area {
-    height: auto;
-    min-height: 1024;
-  }
-}
 
+  .heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .logoContent {
+      h1 {
+        color: #1B6FA8;
+        font-family: 'Lato', sans-serif;
+        font-size: 40px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: 2px;
+      }
+    }
+    .welcome-content {
+      .welcome-back {
+        font-family: 'Lato', sans-serif;
+        font-style: normal;
+        font-size: 32px;
+        color: #1F1F1F;
+        /* Thêm các thuộc tính khác nếu cần */
+        .back {
+          color:#1b6fa8
+        }
+      }
+      .description {
+        max-width: 384px;
+        text-align: center;
+        .slogan {
+          color: rgba(31, 31, 31, 0.75)
+        }
+      }
+    }
+    .loginFrame {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+
+      .inputContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap:24px;
+        margin-top: 32px;
+        .username-input-field,
+        .password-input-field {
+          font-family: 'Lato', sans-serif;
+          width: 100%;
+          /* Thêm các thuộc tính khác nếu cần */
+        }
+        .password-input-field .MuiButtonBase-root.MuiIconButton-root:focus,
+        .password-input-field .MuiButtonBase-root.MuiIconButton-root:focus-visible {
+          outline: none;
+        }
+        .loginOption {
+          display: flex;
+          align-self: stretch;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 30px;
+          flex-direction: row;
+          .remember-me-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .checkbox {
+              cursor: pointer;
+            }
+            .remember-me {
+              margin-left: 5px; // Khoảng cách giữa checkbox và text
+              color: #1F1F1F; // Màu chữ cho Remember me
+              cursor: pointer; // Biến con trỏ thành bàn tay khi hover
+            }
+          }
+        
+          .recovery-password {
+            color: #1b6fa8; // Màu chữ cho Recovery password
+            cursor: pointer; // Biến con trỏ thành bàn tay khi hover
+          }
+        }
+      }
+      .buttonOption {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 384px;
+        gap: 16px;
+        margin-top: 18px;
+        Button {
+          &.MuiButton-contained {
+            &.MuiButton-contained {
+              border-radius: 10px;
+              width: 384px;
+              height: 48px;
+              border-radius: '10px';
+            }
+          }
+          .google-icon {
+            width: 24px;
+            height: 24px; 
+          }
+          .log-in-with-google-wrapper {
+            .log-in-with {
+              color: #1f1f1f;
+            }
+          }
+        }
+      }
+      .otherOption {
+        margin-top: 16px;
+        font-family: 'Lato', sans-serif; // Áp dụng font Lato cho phần text
+        color: #1F1F1F; // Thiết lập màu chữ #1F1F1F cho phần text
+        span {
+          color: #1b6fa8; // Thiết lập màu chữ #1b6fa8 cho phần span bên trong
+          cursor: pointer;
+        }
+      }
+      
+    }
+  }
+}

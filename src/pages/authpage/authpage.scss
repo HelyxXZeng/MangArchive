@@ -4,7 +4,7 @@
   overflow: hidden;
 }
 .wallpaper-icon {
-  height: 1024px;
+  height: 100vh;
   flex: 1;
   max-width: 100%;
   object-fit: cover;
@@ -13,19 +13,42 @@
 .homepage-login {
   width: 100%;
   background-color: #fafcfc;
-  border: 1px solid #1f1f1f;
+  border: 0px solid #1f1f1f;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: flex-start;
-  letter-spacing: normal;
-  line-height: normal;
-  row-gap: 20px;
 }
 @media screen and (max-width: 675px) {
   .wallpaper-icon {
     min-width: 100%;
+  }
+}
+.auth-container {
+  overflow-y: auto;
+  max-height: 100vh;
+  border-radius: 8px;
+  background-color: #ffffff;
+  scrollbar-width: thin; /* Hiển thị scrollbar */
+  scrollbar-color: #1b6fa8 #f0f0f0; /* Màu của scrollbar thumb và track */
+
+  /* Cho trình duyệt Chrome và Safari */
+  &::-webkit-scrollbar {
+    width: 8px; /* Chiều rộng của scrollbar */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Màu nền của track */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #1b6fa8; /* Màu của thumb */
+    border-radius: 4px; /* Bo tròn thumb */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #4296cf; /* Màu thumb khi hover */
   }
 }

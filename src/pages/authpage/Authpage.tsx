@@ -8,8 +8,7 @@ const AuthPage = () => {
 
   return (
     <div className="homepage-login">
-        {action === "login" && <Login />}
-        {action === "signup" && <Signup />}
+        <AuthContainer action={action} />
       <img
         className="wallpaper-icon"
         loading="lazy"
@@ -21,3 +20,12 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+
+const AuthContainer = ({ action }: { action: string }) => {
+  return (
+    <div className="auth-container">
+      {action === "login" && <Login />}
+      {action === "signup" && <Signup />}
+    </div>
+  );
+};
