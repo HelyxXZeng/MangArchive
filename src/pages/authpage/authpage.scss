@@ -1,3 +1,5 @@
+@import "../../global-styles/Color.scss";
+
 .homepage-login,
 .wallpaper-icon {
   position: relative;
@@ -12,8 +14,8 @@
 }
 .homepage-login {
   width: 100%;
-  background-color: #fafcfc;
-  border: 0px solid #1f1f1f;
+  background-color: $main-white;
+  border: 0px solid $main-bg;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -30,9 +32,9 @@
   overflow-y: auto;
   max-height: 100vh;
   border-radius: 8px;
-  background-color: #ffffff;
+  background-color: $main-white;
   scrollbar-width: thin; /* Hiển thị scrollbar */
-  scrollbar-color: #1b6fa8 #f0f0f0; /* Màu của scrollbar thumb và track */
+  scrollbar-color: $blue-main $main-white; /* Màu của scrollbar thumb và track */
 
   /* Cho trình duyệt Chrome và Safari */
   &::-webkit-scrollbar {
@@ -40,11 +42,11 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: #f0f0f0; /* Màu nền của track */
+    background: $main-white; /* Màu nền của track */
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #1b6fa8; /* Màu của thumb */
+    background-color: $blue-main; /* Màu của thumb */
     border-radius: 4px; /* Bo tròn thumb */
   }
 
