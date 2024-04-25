@@ -1,0 +1,40 @@
+@import "./Color.scss";
+
+* {
+//   margin: 0;
+//   padding: 0;
+  box-sizing: border-box;
+}
+body{
+  margin: 0;
+  display: flex;
+}
+
+// a {
+//   text-decoration: none;
+//   color: inherit;
+// }
+
+.main{
+  font-family: "Lato", sans-serif;
+  background-color: $main-bg;
+
+  .container{
+
+    display: flex;
+
+    .sideBarContainer{
+      width: 240px;
+      padding: 5px 20px;
+      border-right: 1px solid #000;
+      background: $blue-main;
+
+      .contentContainer{
+        padding: 5px 20px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+

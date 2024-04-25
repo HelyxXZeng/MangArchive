@@ -38,7 +38,7 @@ const Signup: FunctionComponent = () => {
       </div>
       <div className="welcome-content">
          <h1 className="welcome-back">
-           <span>{`Welcome `}</span>
+           <span>{`Welcome`}</span>
            <span>!</span>
          </h1>
          <div className="description">

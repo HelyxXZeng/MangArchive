@@ -1,3 +1,5 @@
+@import "../../../global-styles/Color.scss";  
+
 .mainFrame {
   display: flex;
   flex-direction: column;
@@ -17,7 +19,7 @@
 
     .logoContent {
       h1 {
-        color: #1B6FA8;
+        color: $blue-main;
         font-family: 'Lato', sans-serif;
         font-size: 40px;
         font-style: normal;
@@ -31,10 +33,10 @@
         font-family: 'Lato', sans-serif;
         font-style: normal;
         font-size: 32px;
-        color: #1F1F1F;
+        color: $main-bg;
         /* Thêm các thuộc tính khác nếu cần */
         .back {
-          color:#1b6fa8
+          color:$blue-main
         }
       }
       .description {
@@ -86,13 +88,13 @@
             }
             .remember-me {
               margin-left: 5px; // Khoảng cách giữa checkbox và text
-              color: #1F1F1F; // Màu chữ cho Remember me
+              color: $main-bg; // Màu chữ cho Remember me
               cursor: pointer; // Biến con trỏ thành bàn tay khi hover
             }
           }
         
           .recovery-password {
-            color: #1b6fa8; // Màu chữ cho Recovery password
+            color: $blue-main; // Màu chữ cho Recovery password
             cursor: pointer; // Biến con trỏ thành bàn tay khi hover
           }
         }
@@ -120,7 +122,7 @@
           }
           .log-in-with-google-wrapper {
             .log-in-with {
-              color: #1f1f1f;
+              color: $main-bg;
             }
           }
         }
@@ -128,9 +130,9 @@
       .otherOption {
         margin-top: 16px;
         font-family: 'Lato', sans-serif; // Áp dụng font Lato cho phần text
-        color: #1F1F1F; // Thiết lập màu chữ #1F1F1F cho phần text
+        color: $main-bg; // Thiết lập màu chữ #1F1F1F cho phần text
         span {
-          color: #1b6fa8; // Thiết lập màu chữ #1b6fa8 cho phần span bên trong
+          color: $blue-main; // Thiết lập màu chữ #1b6fa8 cho phần span bên trong
           cursor: pointer;
         }
       }
