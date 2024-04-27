@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Route, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Homepage from './pages/homepage/Homepage';
 
 import "./global-styles/App.scss";

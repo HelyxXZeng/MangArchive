@@ -20,7 +20,7 @@ const menu = [
             {
                 id:3,
                 title:"Advance Search",
-                url:"/",
+                url:"/auth/login",
                 icon:"/icons/search.svg",
             },
         ]
@@ -85,7 +85,7 @@ const menu = [
         listItems: [
             {
                 id:1,
-                title:"Support Us",
+                title:"Setting",
                 url:"/",
                 icon:"/icons/gift.svg",
             },

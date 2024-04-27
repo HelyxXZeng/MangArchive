@@ -7,7 +7,7 @@
 }
 body{
   margin: 0;
-  display: flex;
+  // display: flex;
 }
 
 // a {
@@ -18,7 +18,27 @@ body{
 .main{
   font-family: "Lato", sans-serif;
   background-color: $main-bg;
+  overflow-y: scroll;
+  max-height: 100vh;
 
+  /* Cho trình duyệt Chrome và Safari */
+  &::-webkit-scrollbar {
+    width: 8px; /* Chiều rộng của scrollbar */
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* Màu nền của track */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $blue-soft; /* Màu của thumb */
+    border-radius:32px; /* Bo tròn thumb */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: $blue-soft-hover; /* Màu thumb khi hover */
+  }
   .container{
 
     display: flex;
@@ -34,38 +54,29 @@ body{
         width: 100%;
       }
 
-      overflow-y: auto;
+      overflow-y: scroll;
       max-height: 100vh;
-      scrollbar-width: thin; /* Hiển thị scrollbar */
-      scrollbar-color: $blue-main $main-white; /* Màu của scrollbar thumb và track */
 
       /* Cho trình duyệt Chrome và Safari */
       &::-webkit-scrollbar {
         width: 8px; /* Chiều rộng của scrollbar */
+        height: 8px;
       }
 
       &::-webkit-scrollbar-track {
-        background: $main-white; /* Màu nền của track */
+        background: transparent; /* Màu nền của track */
       }
 
       &::-webkit-scrollbar-thumb {
-        background-color: $blue-main; /* Màu của thumb */
+        background-color: $blue-soft; /* Màu của thumb */
         border-radius:32px; /* Bo tròn thumb */
       }
 
       &::-webkit-scrollbar-thumb:hover {
-        background-color: $blue-soft; /* Màu thumb khi hover */
+        background-color: $blue-soft-hover; /* Màu thumb khi hover */
       }
 
-      &::-webkit-scrollbar-track-piece:start {
-        background-color: transparent; /* Đặt màu nền của phần đầu là trong suốt */
-        margin-top: 8px; /* Ẩn phần đầu bằng cách thêm margin-top */
-      }
       
-      &::-webkit-scrollbar-track-piece:end {
-        background-color: transparent; /* Đặt màu nền của phần cuối là trong suốt */
-        margin-bottom: 8px; /* Ẩn phần cuối bằng cách thêm margin-bottom */
-      }
     }
   }
 }
