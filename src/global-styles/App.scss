@@ -18,13 +18,15 @@ body{
 .main{
   font-family: "Lato", sans-serif;
   background-color: $main-bg;
-  overflow-y: scroll;
-  max-height: 100vh;
-
+  // padding-top: 80px;
+  overscroll-behavior: contain;
+  overflow-y: auto;
+  height: 100vh;
   /* Cho trình duyệt Chrome và Safari */
   &::-webkit-scrollbar {
     width: 8px; /* Chiều rộng của scrollbar */
     height: 8px;
+    // oaddi
   }
 
   &::-webkit-scrollbar-track {
@@ -39,10 +41,11 @@ body{
   &::-webkit-scrollbar-thumb:hover {
     background-color: $blue-soft-hover; /* Màu thumb khi hover */
   }
+
+  
   .container{
 
     display: flex;
-
     .sideBarContainer{
       width: 250px;
       padding: 5px 20px;
@@ -50,12 +53,14 @@ body{
       background: $blue-main;
       
       .contentContainer{
+        /* Cho trình duyệt Chrome và Safari */
+  
         padding: 5px 20px;
         width: 100%;
       }
-
-      overflow-y: scroll;
-      max-height: 100vh;
+      overscroll-behavior: contain;
+      overflow-y: auto;
+      height: calc(100vh - 80px);
 
       /* Cho trình duyệt Chrome và Safari */
       &::-webkit-scrollbar {

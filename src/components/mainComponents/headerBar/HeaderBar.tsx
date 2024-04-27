@@ -16,7 +16,7 @@ const HeaderBar = () => {
   const [status, setStatus] = useState<boolean>(false);
   console.log(status?"y":"n")
   return (
-    <div className="headerBar">
+    <header className="headerBar">
       <div className="logo">
         <img src="/Logo.png" alt="" />
       </div>
@@ -66,7 +66,7 @@ const HeaderBar = () => {
           )}
         </div>
       </div>
-    </div>
+    </header>
   )
 }
 
