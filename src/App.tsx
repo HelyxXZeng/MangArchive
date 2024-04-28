@@ -13,7 +13,9 @@ function App() {
   const Layout = () => {
     return (
       <div className="main">
-        <HeaderBar/>
+        <div className="headerWarper">
+          <HeaderBar/>
+        </div>
         <div className="container">
           <div className="sideBarContainer">
             <SideBar/>

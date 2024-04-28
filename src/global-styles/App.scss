@@ -19,48 +19,23 @@ body{
   font-family: "Lato", sans-serif;
   background-color: $main-bg;
   // padding-top: 80px;
-  overscroll-behavior: contain;
-  overflow-y: auto;
   height: 100vh;
-  /* Cho trình duyệt Chrome và Safari */
-  &::-webkit-scrollbar {
-    width: 8px; /* Chiều rộng của scrollbar */
-    height: 8px;
-    // oaddi
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent; /* Màu nền của track */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: $blue-soft; /* Màu của thumb */
-    border-radius:32px; /* Bo tròn thumb */
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: $blue-soft-hover; /* Màu thumb khi hover */
-  }
+  overflow: hidden;
 
   
   .container{
 
     display: flex;
+
     .sideBarContainer{
       width: 250px;
       padding: 5px 20px;
       border-right: 1px solid #000;
       background: $blue-main;
       
-      .contentContainer{
-        /* Cho trình duyệt Chrome và Safari */
-  
-        padding: 5px 20px;
-        width: 100%;
-      }
       overscroll-behavior: contain;
       overflow-y: auto;
-      height: calc(100vh - 80px);
+      height: calc(100vh - 56px);
 
       /* Cho trình duyệt Chrome và Safari */
       &::-webkit-scrollbar {
@@ -82,6 +57,30 @@ body{
       }
 
       
+    }
+    .contentContainer{
+      width: 100%;
+      overscroll-behavior: contain;
+  overflow-y: auto;
+  height: 100vh;
+  /* Cho trình duyệt Chrome và Safari */
+  &::-webkit-scrollbar {
+    width: 8px; /* Chiều rộng của scrollbar */
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* Màu nền của track */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $blue-soft; /* Màu của thumb */
+    border-radius:32px; /* Bo tròn thumb */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: $blue-soft-hover; /* Màu thumb khi hover */
+  }
     }
   }
 }
