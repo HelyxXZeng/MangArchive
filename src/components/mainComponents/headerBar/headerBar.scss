@@ -1,0 +1,62 @@
+@import "../../../global-styles/Color.scss";
+
+.headerBar{
+    width: 100%;
+    height: 56px;
+    display: flex;
+    // position: fixed;
+    // top: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background-color: $main-white;
+    padding: 0px 16px 0px 16px;
+    
+    .logo{
+        justify-content: center;
+        align-items: center;
+    }
+
+    .leftContainer
+    {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap:20px;
+        align-items: flex-start;
+        .searchbar{
+            min-width: 252px;
+            width: 420px;
+            height: 44px;
+            border-radius: 25px;
+            border: 2px solid $main-bg;
+        }
+
+        .auth{
+            .userThings{
+                display: flex;
+            }
+
+            .authButton{
+                display: flex;
+                justify-content: space-between;
+                gap: 10px;
+                flex-direction: row;
+                
+                Button{
+                    &.MuiButton-contained {
+                        &.MuiButton-contained {
+                          border-radius: 10px;
+                          width: 108px;
+                          height: 44px;
+                          border-radius: '10px';
+                          font-weight: 700;
+                        }
+                      }
+                }
+            }
+        }
+    }
+
+}

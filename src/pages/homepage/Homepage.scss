@@ -1,0 +1,9 @@
+@import "../../global-styles/Color.scss";
+
+.mainHomepage{
+    background-color: $main-white;
+    color: $main-bg;
+    align-self: center;
+    justify-content: center;
+    height: 200vh;
+}
