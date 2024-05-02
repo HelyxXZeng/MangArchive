@@ -24,7 +24,8 @@
         flex-direction: row;
         justify-content: space-between;
         gap:20px;
-        align-items: flex-start;
+        align-items: center;
+        min-width: 380px;
         .searchbar{
             min-width: 252px;
             width: 420px;
@@ -70,8 +71,48 @@
         }
 
         .auth{
+            min-width: 108px;
+            height: 100%;
+            display: flex;
+            align-items: center;
             .userThings{
                 display: flex;
+                position: relative;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 24px;
+                .avatar{
+                    flex-shrink: 0;
+                    cursor: pointer;
+                    img{
+                        height: 48px;
+                        width: 48px;
+                        border-radius: 50%;
+                        border: 2px solid $main-bg;
+                    }
+                }
+                .notificationIcon {
+                    // position: relative;
+                    cursor: pointer;
+                }
+                  
+                // .notification-badge {
+                //     position: absolute;
+                //     top: -5px;
+                //     right: 20px;
+                //     background-color: $red;
+                //     width: 18px;
+                //     height: 18px;
+                //     font-size: 8px;
+                //     color: $main-white;
+                //     border-radius: 50%;
+                //     padding: 4px;
+                //     stroke: $main-bg;
+                //     stroke-width: 1px;
+                //     cursor: pointer;
+                // }
+                  
             }
 
             .authButton{
@@ -79,11 +120,11 @@
                 justify-content: space-between;
                 gap: 10px;
                 flex-direction: row;
-                
                 Button{
                     &.MuiButton-contained {
                         &.MuiButton-contained {
                           border-radius: 10px;
+                          min-width: 54px;
                           width: 108px;
                           height: 44px;
                           border-radius: '10px';
