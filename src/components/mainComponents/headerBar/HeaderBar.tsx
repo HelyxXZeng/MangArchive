@@ -21,7 +21,16 @@ const HeaderBar = () => {
         <img src="/Logo.png" alt="" />
       </div>
       <div className="leftContainer">
-        <div className="searchbar"></div>
+        <div className="searchbar">
+          <button className="searchicon">
+            <img src="/icons/searchiconbar.svg" alt="" />
+          </button>
+          <input type="text" placeholder="Search something!" spellCheck='false'/>
+          <div className="verticaldotline"></div>
+          <button className="filter">
+            <img src="/icons/filter.svg" alt="" />
+          </button>
+        </div>
         <div className="auth">
           { status? 
           (

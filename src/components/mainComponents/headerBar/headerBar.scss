@@ -30,7 +30,43 @@
             width: 420px;
             height: 44px;
             border-radius: 25px;
+            border: 1px solid $main-bg;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            input{
+                font-family: 'Lato', sans-serif;
+                border: none;
+                outline: none;
+                background-color: transparent;
+                flex: 1;
+            }
+            .verticaldotline{
+                height: 100%;
+                width: 1px;
+                border-left: 1px dashed black;
+            }
+            button{
+                
+                outline: none;
+                border: none;
+                cursor: pointer;
+                &:hover{
+                    background-color: $main-white-hover;
+                }
+            }
+            .filter{
+                border-top-right-radius: 25px;
+                border-bottom-right-radius: 25px;
+            }
+            .searchicon{
+                border-top-left-radius: 25px;
+                border-bottom-left-radius: 25px;                    
+            }
+            &:focus-within{
             border: 2px solid $main-bg;
+            }
         }
 
         .auth{
