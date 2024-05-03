@@ -1,11 +1,12 @@
 @import "./Color.scss";
 
 * {
-//   margin: 0;
-//   padding: 0;
+  //   margin: 0;
+  //   padding: 0;
   box-sizing: border-box;
 }
-body{
+
+body {
   margin: 0;
   // display: flex;
 }
@@ -15,74 +16,84 @@ body{
 //   color: inherit;
 // }
 
-.main{
+.main {
   font-family: "Lato", sans-serif;
   background-color: $main-bg;
   // padding-top: 80px;
   height: 100vh;
   overflow: hidden;
 
-  
-  .container{
+
+  .container {
 
     display: flex;
 
-    .sideBarContainer{
+    .sideBarContainer {
       width: 250px;
       padding: 5px 20px;
       border-right: 1px solid #000;
       background: $blue-main;
-      
+
       overscroll-behavior: contain;
       overflow-y: auto;
       height: calc(100vh - 56px);
 
       /* Cho trình duyệt Chrome và Safari */
       &::-webkit-scrollbar {
-        width: 8px; /* Chiều rộng của scrollbar */
+        width: 8px;
+        /* Chiều rộng của scrollbar */
         height: 8px;
       }
 
       &::-webkit-scrollbar-track {
-        background: transparent; /* Màu nền của track */
+        background: transparent;
+        /* Màu nền của track */
       }
 
       &::-webkit-scrollbar-thumb {
-        background-color: $blue-soft; /* Màu của thumb */
-        border-radius:32px; /* Bo tròn thumb */
+        background-color: $blue-soft;
+        /* Màu của thumb */
+        border-radius: 32px;
+        /* Bo tròn thumb */
       }
 
       &::-webkit-scrollbar-thumb:hover {
-        background-color: $blue-soft-hover; /* Màu thumb khi hover */
+        background-color: $blue-soft-hover;
+        /* Màu thumb khi hover */
       }
 
-      
+
     }
-    .contentContainer{
+
+    .contentContainer {
       width: 100%;
       overscroll-behavior: contain;
       overflow-y: auto;
       height: 100vh;
-  /* Cho trình duyệt Chrome và Safari */
-  &::-webkit-scrollbar {
-    width: 8px; /* Chiều rộng của scrollbar */
-    height: 8px;
-  }
 
-  &::-webkit-scrollbar-track {
-    background: transparent; /* Màu nền của track */
-  }
+      /* Cho trình duyệt Chrome và Safari */
+      &::-webkit-scrollbar {
+        width: 8px;
+        /* Chiều rộng của scrollbar */
+        height: 8px;
+      }
 
-  &::-webkit-scrollbar-thumb {
-    background-color: $blue-soft; /* Màu của thumb */
-    border-radius:32px; /* Bo tròn thumb */
-  }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+        /* Màu nền của track */
+      }
 
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: $blue-soft-hover; /* Màu thumb khi hover */
-  }
+      &::-webkit-scrollbar-thumb {
+        background-color: $blue-soft;
+        /* Màu của thumb */
+        border-radius: 32px;
+        /* Bo tròn thumb */
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background-color: $blue-soft-hover;
+        /* Màu thumb khi hover */
+      }
     }
   }
 }
-
-

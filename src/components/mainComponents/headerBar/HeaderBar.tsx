@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import "./headerBar.scss"
-import { Button } from "@mui/material";
+import { Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const HeaderBar = () => {
@@ -13,21 +13,38 @@ const HeaderBar = () => {
     navigate("/auth/signup")
   }, [navigate]);
 
-  const [status, setStatus] = useState<boolean>(false);
-  console.log(status?"y":"n")
+  const [status, setStatus] = useState<boolean>(true);
+  const [notificationCount, setNotificationCount] = useState(1);
+
+
   return (
     <div className="headerBar">
       <div className="logo">
         <img src="/Logo.png" alt="" />
       </div>
       <div className="leftContainer">
-        <div className="searchbar"></div>
+        <div className="searchbar">
+          <button className="searchicon">
+            <img src="/icons/searchiconbar.svg" alt="" />
+          </button>
+          <input type="text" placeholder="Search something!" spellCheck='false'/>
+          <div className="verticaldotline"></div>
+          <button className="filter">
+            <img src="/icons/filter.svg" alt="" />
+          </button>
+        </div>
         <div className="auth">
           { status? 
           (
             <div className="userThings">
-              <div className="notificationIcon"></div>
-              <div className="avatar"></div>
+              <div className="notificationIcon">
+                <Badge color="error" badgeContent={notificationCount} max={99} anchorOrigin={{vertical:"top", horizontal: "right"}}>
+                  <img src="/icons/messagetext.svg" alt="" />
+                </Badge>
+              </div>
+              <div className="avatar">
+                <img src="/wallpaper/test-avatar.png" alt="avatar" />
+              </div>
             </div>
           ) : (
             <div className="authButton">
