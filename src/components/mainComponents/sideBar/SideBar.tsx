@@ -13,8 +13,8 @@ const menu = [
             },
             {
                 id:2,
-                title:"Lastest",
-                url:"/lastest",
+                title:"Latest",
+                url:"/latest",
                 icon:"/icons/discover.svg",
             },
             {
@@ -51,7 +51,7 @@ const menu = [
                 id:4,
                 title:"Notification",
                 url:"/",
-                icon:"icons/notification.svg",
+                icon:"/icons/notification.svg",
             },
         ]
     },

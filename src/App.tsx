@@ -7,6 +7,7 @@ import "./global-styles/Font.scss"
 import AuthPage from "./pages/authpage/Authpage";
 import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
+import Profile from "./pages/profile/Profile";
 
 function App() {
 
@@ -37,6 +38,10 @@ function App() {
           path:"/",
           element: <Homepage/>
         },
+        {
+          path:"/profile/:username",
+          element: <Profile/>
+        }
         
       ]
     },
