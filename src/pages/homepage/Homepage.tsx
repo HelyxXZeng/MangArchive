@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./Homepage.scss";
-import Manga from "../Manga";
+import Manga from "../manga/Manga";
 
 interface Manga {
   id: string;

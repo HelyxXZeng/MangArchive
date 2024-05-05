@@ -1,0 +1,50 @@
+  .manga-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr); /* Five columns with equal width */
+    gap: 20px; /* Adjust the gap between items as needed */
+    margin: 20px;
+  }
+
+  .mainPage {
+    padding-bottom: 50px;
+    max-width: 1280px;
+    // align-content: center;
+  }
+
+  .horizontal-manga-list {
+    display: inline-flex; /* Display children in a single line */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    padding: 10px; /* Add padding for better appearance */
+    height: fit-content;
+  }
+  
+  .manga-card {
+    flex: 1; /* Allow cards to shrink as needed */
+    height: 200px; /* Set a fixed width for each card */
+    margin-right: 20px; /* Add margin between grid items */
+  }
+  
+  
+@media screen and (min-width: 512px) {
+  .manga-grid {
+    grid-template-columns: repeat(2, 1fr); /* Three columns on screens wider than 768px */
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .manga-grid {
+    grid-template-columns: repeat(3, 1fr); /* Four columns on screens wider than 1024px */
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .manga-grid {
+    grid-template-columns: repeat(4, 1fr); /* Five columns on screens wider than 1280px */
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .manga-grid {
+    grid-template-columns: repeat(5, 1fr); /* Six columns on screens wider than 1600px */
+  }
+}
