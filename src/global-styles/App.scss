@@ -94,6 +94,39 @@ body {
         background-color: $blue-soft-hover;
         /* Màu thumb khi hover */
       }
+
+      .socialMain{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        height: 100vh;
+
+        .masterFrame{
+          padding: 0px 1rem;
+          width: 100%;
+          position: relative;
+          flex:1;
+          @media (max-width: 1024px) {
+            padding: 0px 1.5rem;
+            display: block; /* tương đương với hidden lg:block */
+          }
+        }
+        .suggestRightbar{
+          flex:0.25;
+          width: 100%;
+          position: relative;
+          @media (min-width: 1024px) {
+            display: block;
+          }
+        
+          @media (max-width: 1023px) {
+            display: none;
+          }
+        
+          
+
+          }
+        }
     }
   }
 }

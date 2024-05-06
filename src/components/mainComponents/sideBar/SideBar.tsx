@@ -62,7 +62,7 @@ const menu = [
             {
                 id:1,
                 title:"Profile",
-                url:"/",
+                url:"/profile/test",
                 icon:"/icons/profile.svg",
             },
             {

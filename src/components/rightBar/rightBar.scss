@@ -1,0 +1,17 @@
+@import "../../global-styles/Color.scss";
+
+.rightBarContaner {
+    width: 100%;
+  
+    @media (min-width: 1280px) {
+      display: block;
+    }
+  
+    @media (max-width: 1279px) {
+      display: none;
+    }
+  
+    position: relative;
+    color: $text-white-new;
+  }
+  

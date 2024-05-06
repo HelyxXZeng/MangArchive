@@ -2,8 +2,7 @@
 
 .profileFrame{
     display: flex;
-    width: 100vh;
-    height: 100vh;
+    
     color: $text-white-new;
     .main{
         .headernav{    
@@ -43,6 +42,23 @@
                 font-size: 13px;
                 font-weight: 400;
                 color: $text-gray-soft-new;
+            }
+        }
+
+        .profileFrame {
+            display: flex;
+            flex-direction: column;
+
+            .background {
+                height: 240px; 
+                // overflow: hidden; 
+                width: 100% !important;
+                object-fit: cover;
+                // img {
+                //     width: 100dvi; 
+                //     height: 100%;
+                //     object-fit: cover;
+                // }
             }
         }
     }

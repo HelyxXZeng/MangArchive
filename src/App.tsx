@@ -8,6 +8,7 @@ import AuthPage from "./pages/authpage/Authpage";
 import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
 import Profile from "./pages/profile/Profile";
+import RightBar from "./components/rightBar/RightBar";
 
 function App() {
 
@@ -29,6 +30,18 @@ function App() {
     );
   }
 
+  const SocialLayout = () => {
+    return (
+      <div className="socialMain">
+        <div className="masterFrame">
+          {<Outlet/>}
+        </div>
+        <div className="suggestRightbar">
+          <RightBar/>
+        </div>
+      </div>
+    );
+  }
   const router = createBrowserRouter([
     {
       path: "/",
@@ -39,8 +52,14 @@ function App() {
           element: <Homepage/>
         },
         {
-          path:"/profile/:username",
-          element: <Profile/>
+          path:"/",
+          element: <SocialLayout/>,
+          children: [
+            {
+              path:"profile/:username",
+              element: <Profile/>
+            }
+          ]
         }
         
       ]
