@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import "./headerBar.scss"
-import { Badge, Button } from "@mui/material";
+import { Avatar, Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const HeaderBar = () => {
@@ -42,9 +42,11 @@ const HeaderBar = () => {
                   <img src="/icons/messagetext.svg" alt="" />
                 </Badge>
               </div>
-              <div className="avatar">
-                <img src="/wallpaper/test-avatar.png" alt="avatar" />
-              </div>
+              <Avatar
+                    className="avatar"
+                    src="https://cdn.donmai.us/original/5f/ea/__firefly_honkai_and_1_more_drawn_by_baba_ba_ba_mb__5feaaa99527187a3db0e437380ec3932.jpg"
+                    alt="avatar"
+                    sx={{width:"48px",height:"48px",border:"2px solid #1F1F1F"}}/>
             </div>
           ) : (
             <div className="authButton">

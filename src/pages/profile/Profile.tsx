@@ -1,13 +1,18 @@
 import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import "./profile.scss"
+import { Avatar, Button } from "@mui/material";
 
 const Profile = () => {
     const navigate = useNavigate();
     const { username } = useParams<{ username: string }>();
     const handleBack=() => navigate(-1);
+    const handleOpenProfile=()=>{console.log("open fire!")}
+    const handleFollowUser=()=>{console.log("Follow him!")}
+
   const [name, setName] = useState<any>(username);
   const [postcount, setPostcount] = useState(0);
+  const [level, setLevel] =useState(3);
   return (
     <div className="profileFrame">
         <div className="main">
@@ -24,15 +29,58 @@ const Profile = () => {
                     </div>
                 </div>
             </section>
-            <div className="profileFrame">
-                    <img className="background" src="https://cdn.donmai.us/original/ba/da/__robin_honkai_and_1_more_drawn_by_rsef__badad19e219a773536c434f47d03463f.jpg" alt="" />
-                    {/* <img className="background" src="https://wallup.net/wp-content/uploads/2019/09/726722-landscape.jpg" alt="" /> */}
-                
+            <div className="profileInfoFrame">
+                <img className="background" src="https://cdn.donmai.us/original/ba/da/__robin_honkai_and_1_more_drawn_by_rsef__badad19e219a773536c434f47d03463f.jpg" alt="" />
                 <div className="info">
-                    <img src="" alt="" />
+                    <Avatar
+                    className="Avatar"
+                    src="https://cdn.donmai.us/original/5f/ea/__firefly_honkai_and_1_more_drawn_by_baba_ba_ba_mb__5feaaa99527187a3db0e437380ec3932.jpg"
+                    alt="avatar"
+                    sx={{width:"128px",height:"128px",border:"4px solid #1F1F1F"}}/>
+                    {true? <Button
+                        className="textwhite"
+                        onClick={handleOpenProfile}
+                        variant="contained"
+                        sx={{borderRadius:"24px"}}    
+                    >Edit Profile</Button>
+                    :
+                    <Button
+                        className={true?"textblack":"textwhite"}
+                        onClick={handleFollowUser}
+                        variant="contained"
+                        sx={{borderRadius:"24px"}}    
+                    >{true? "Follow":"Unfollow"}</Button>
+                }
                 </div>
-                <div className="buttonOption">
-
+                <div className="userNameInfo">
+                    <div className="userNameChild">
+                        <span className="Name">{name}</span>
+                        <span className="level">LV <span className="textHighlight">{level}</span></span>
+                    </div> 
+                    <span className="userName">@{name}</span>
+                </div>
+                <div className="profileDescrition">
+                    <span>崩壊したスターレールの位置</span>
+                    <div className="linkNPromotion">
+                        <a  href="https://www.pixiv.net/users/66526024" className="link">
+                            <img src="/icons/link.svg" alt="" /> 
+                            <span>pixiv.net/users/66526024</span> 
+                        </a>
+                        <div className="joinDate">
+                            <img src="/icons/calendar.svg" alt="" />
+                            <span>Joined in <span className="textHighlight">August 2024</span></span>
+                        </div>
+                    </div>
+                    <div className="friendCount">
+                        <div className="friends">
+                            <span className="textHighlight">69</span>
+                            <span> Friends</span>
+                        </div>
+                        <div className="mutural">
+                            <span className="textHighlight">69</span>
+                            <span> Mutural</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="userThings">
