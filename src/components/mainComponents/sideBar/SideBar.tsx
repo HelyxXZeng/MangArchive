@@ -13,8 +13,8 @@ const menu = [
             },
             {
                 id:2,
-                title:"Lastest",
-                url:"/lastest",
+                title:"Latest",
+                url:"/latest",
                 icon:"/icons/discover.svg",
             },
             {
@@ -51,7 +51,7 @@ const menu = [
                 id:4,
                 title:"Notification",
                 url:"/",
-                icon:"icons/notification.svg",
+                icon:"/icons/notification.svg",
             },
         ]
     },
@@ -62,7 +62,7 @@ const menu = [
             {
                 id:1,
                 title:"Profile",
-                url:"/",
+                url:"/profile/test",
                 icon:"/icons/profile.svg",
             },
             {
@@ -93,19 +93,19 @@ const menu = [
                 id:2,
                 title:"Site Policies",
                 url:"/",
-                icon:"",
+                icon:"/icons/firstline.svg",
             },
             {
                 id:3,
                 title:"Announcements",
                 url:"/",
-                icon:"",
+                icon:"/icons/lamp-charge.svg",
             },
             {
                 id:4,
                 title:"About Us",
                 url:"/",
-                icon:"",
+                icon:"/icons/message-question.svg",
             },
         ]
     },
@@ -128,10 +128,10 @@ const SideBar = () => {
         <div className="footer">
             <hr className="line" />
             <div className="socialIcon">
-                <img src="/vite.svg" alt="" />
-                <img src="/vite.svg" alt="" />
-                <img src="/vite.svg" alt="" />
-                <img src="/vite.svg" alt="" />
+                <img src="/icons/discord.svg" alt="" />
+                <img src="/icons/xtwitter.svg" alt="" />
+                <img src="/icons/facebook.svg" alt="" />
+                <img src="/icons/reddit.svg" alt="" />
             </div>
             <div className="content">
                 <div className="version">v2024.4.24</div>
