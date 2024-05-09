@@ -1,0 +1,75 @@
+@import '../../../global-styles/Color.scss';
+
+.cardFrame{
+    display: flex;
+    width: 100%;
+    max-width: 268px;
+    flex-direction: row;
+    gap: 8px;   
+    pointer-events: auto;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    padding: 16px 12px;
+    &:hover{
+        background-color: $gray-bg;
+    }
+    .avatar{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .nameAndId{
+        font-size: 15px;
+        display: flex;
+        flex-direction: column;
+        width: 144px;
+        min-width: 80px;
+        .name {
+            justify-content: center;
+            font-weight: 700;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+        .idName{
+            justify-content: center;
+            font-weight: 400;
+            color: $text-gray-soft-new;
+        }
+        
+    }
+    .followedbutton{    
+        align-self: flex-end;
+        min-width: 94px;
+        margin-left: 12px;
+
+        .followedButton{
+            border-radius: 25px;
+        }
+        .textwhite{
+            background-color: transparent;
+            color: $text-white-new;
+            border: 1px solid $text-white;
+        }
+        .textwhite,.textblack{
+            font-family: 'Lato',sans-serif;
+            text-transform: none;
+            font-weight: 700;
+        }
+        .textblack{
+            background-color: $text-white;
+            color: $main-bg;
+            border: 1px solid $text-white;
+            &:hover{
+                background-color: #d7dbdc;
+                transition-duration:0.2s;
+            }
+        }
+    }
+}

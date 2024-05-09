@@ -8,7 +8,7 @@ import AuthPage from "./pages/authpage/Authpage";
 import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
 import Profile from "./pages/profile/Profile";
-import RightBar from "./components/rightBar/RightBar";
+import RightBar from "./components/socialComponents/rightBar/RightBar";
 
 function App() {
 

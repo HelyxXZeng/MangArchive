@@ -1,0 +1,39 @@
+@import "../../../global-styles/Color.scss";
+
+.rightBarContainer {
+    width: 100%;
+    display: flex;
+    color: $text-white-new;
+    padding: 16px;
+    flex-direction: column;
+    .sugesstCard{
+      border: 1px solid $gray-bg;
+      display: flex;
+      flex-direction: column;
+      // width: 100%;
+      // gap: 16px;
+      background-color: $soft-bg;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      h1{
+        margin: 0px;
+        font-size: 20px;
+      }
+      a{
+        text-decoration: none;
+        color: $blue-soft;
+        width: 100%;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        &:hover{
+          background-color: $gray-bg;
+        }
+      }
+      h1, a{
+        padding: 16px 12px;
+      }
+    }    
+  }
+  
