@@ -3,6 +3,8 @@ import './MangaBanner.scss';
 import Tag from '../tag/Tag';
 
 import Image from '../image/Image';
+import { getTitleApi } from '../../utils/MangaData'
+import { suggestManga } from '../../utils/SuggestManga'
 
 interface BannerProps {
     rank: any
@@ -25,6 +27,16 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
 
     useEffect(() => {
         getCover();
+        
+        const fetchData = async () => {
+            try {
+                const data = await suggestManga();
+                console.log('This is suggestions: ', data);
+            } catch (error) {
+                console.error("Error fetching manga data:", error);
+            }
+        };
+        fetchData();
       }, []);
 
   return (
