@@ -3,23 +3,11 @@ import axios from 'axios';
 import './Manga.scss';
 // import searchManga from './MangaSearch.js';
 
-import MangaCard from '../Title/TitleCard2';
-
-// interface Manga {
-//   id: string;
-//   type: string;
-//   attributes: {
-//     title: {
-//       en: string;
-//     };
-//     cover_art: string;
-//     description: {
-//       en: string;
-//     };
-//     tags: string[];
-//   };
-// }
-
+import MangaCard from '../title/TitleCard2';
+import BannerSwiper from '../bannerswiper/BannerSwiper';
+import MangaCardSwiper from '../mangaswiper/MangaSwiper';
+import MangaBanner from '../mangabanner/MangaBanner';
+// import Banner from '../banner/Banner';
 
 const Manga = () => {
   const [mangaList, setMangaList] = useState([]);
@@ -31,7 +19,7 @@ const Manga = () => {
     try {
       const resp = await axios({
           method: 'GET',
-          url: `${baseUrl}/manga?includes[]=cover_art`,
+          url: `${baseUrl}/manga?includes[]=cover_art&includes[]=author`,
           params: {
             limit: 10,
             offset: 0
@@ -62,9 +50,18 @@ const Manga = () => {
 
   return (
     <div className="mainPage">
+      <div className="banner">
+        {/* <h1>Welcome to My Website</h1> */}
+        {mangaList.length > 0 &&
+          <BannerSwiper banners={mangaList} />
+        }
+      </div>
       <div className="textbox">
         <h1>Recent Uploaded</h1>
       </div>
+      {mangaList.length > 0 &&
+        <MangaBanner manga={mangaList[0]} rank={1}/>
+      }
       {/* <ul>
           {mangaList && mangaList.map((manga: any) => (
             <li key={manga.id}>
@@ -79,9 +76,11 @@ const Manga = () => {
       </div>
 
       <div className="horizontal-manga-list">
-        {mangaList.map((manga, index) => (
+        {/* {mangaList && mangaList.map((manga, index) => (
           <MangaCard key={index} manga={manga} />
-        ))}
+          // <TitleCardSkeleton></TitleCardSkeleton>
+        ))} */}
+        <MangaCardSwiper mangas={mangaList} />
       </div>
 
       {/* <ul className="ul-grid" style={{ width: '100%' }}>

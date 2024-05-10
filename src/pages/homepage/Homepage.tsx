@@ -62,17 +62,16 @@ const Homepage = () => {
 
   return (
     <div className="mainHomepage">
-      <div>
+      {/* <div>
         <h1>Manga List</h1>
         <ul>
           {mangaList && mangaList.map((manga: any) => (
             <li key={manga.id}>
               <p>Title: {manga.attributes.title.en}</p>
-              {/* <p>Slug: {mangaSlugs[manga.id]}</p> */}
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
       <Manga />
     </div>
   );

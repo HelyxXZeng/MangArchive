@@ -1,0 +1,15 @@
+@import "../../global-styles/Color.scss";
+
+.tag {
+    display: inline-block;
+    margin-right: 4px;
+    padding: 4px 4px;
+    background-color: $blue-soft;
+    border-radius: 4px;
+    font-size: 10px;
+    color: $text-white;
+  }
+
+  .tag:hover{
+    background-color: $blue-soft-hover;
+  }
