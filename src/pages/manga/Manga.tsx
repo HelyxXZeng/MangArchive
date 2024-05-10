@@ -7,10 +7,12 @@ import MangaCard from '../title/TitleCard2';
 import BannerSwiper from '../bannerswiper/BannerSwiper';
 import MangaCardSwiper from '../mangaswiper/MangaSwiper';
 import MangaBanner from '../mangabanner/MangaBanner';
+import { suggestManga } from '../../utils/SuggestManga';
 // import Banner from '../banner/Banner';
 
 const Manga = () => {
   const [mangaList, setMangaList] = useState([]);
+  const [suggestMangas, setSuggestManga] = useState([]);
   // const [mangaSlugs, setMangaSlugs] = useState({});
   
   const baseUrl = 'https://api.mangadex.org';
@@ -19,16 +21,15 @@ const Manga = () => {
     try {
       const resp = await axios({
           method: 'GET',
-          url: `${baseUrl}/manga?includes[]=cover_art&includes[]=author`,
+          url: `${baseUrl}/manga?includes[]=cover_art&includes[]=author&includes[]=artist`,
           params: {
             limit: 10,
             offset: 0
           }
       });
-      console.log("log1: ", resp.data.data.map((manga: any) => manga.id));
-
       console.log("log2: ", resp.data.data);
       setMangaList(resp.data.data);
+      setSuggestManga(await suggestManga());
 
       if (!resp) {
           throw new Error('Mangas not found.');
@@ -53,7 +54,7 @@ const Manga = () => {
       <div className="banner">
         {/* <h1>Welcome to My Website</h1> */}
         {mangaList.length > 0 &&
-          <BannerSwiper banners={mangaList} />
+          <BannerSwiper banners={suggestMangas} />
         }
       </div>
       <div className="textbox">

@@ -35,6 +35,8 @@ interface Props {
 
 const MangaCard: React.FC<Props> = ({ manga }) => {
   const [cover, setCover] = useState('');
+  const [author, setAuthor] = useState('');
+  const [artist, setArtist] = useState('');
   const [showPopup, setShowPopup] = useState(false);
 
   // function resizeImage(url: string, width: number) {
@@ -67,6 +69,8 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
   };
 
   useEffect(() => {
+    setAuthor(manga.relationships.find((r: any) => r.type === "author")?.attributes.name);
+    setArtist(manga.relationships.find((r: any) => r.type === "artist")?.attributes.name);
     getCover();
   }, []);
 
@@ -106,14 +110,17 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
               <h2>{(manga.attributes.title.en) || (manga.attributes.title.ja)}</h2>
             </div>
           )} */}
+          <div className="top-tag">
+            <Tag tag = {manga.attributes.tags[0]}/>
+          </div>
           <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />
         </div>
         <div className="manga-card-content">
           <h2>{(manga.attributes.title.en) || (manga.attributes.title.ja)}</h2>
-          {/* <p>{manga.attributes.description.en}</p> */}
+          <p>{(author === artist) ? (author) : (author + ', ' + artist)}</p>
           <div className="tags">
             {manga.attributes.tags.map((tag: any) => (
-              <Tag tag={tag}/>
+              <Tag key={tag.id} tag={tag}/>
             ))}
           </div>
         </div>

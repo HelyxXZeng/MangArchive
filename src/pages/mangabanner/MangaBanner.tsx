@@ -3,8 +3,7 @@ import './MangaBanner.scss';
 import Tag from '../tag/Tag';
 
 import Image from '../image/Image';
-import { getTitleApi } from '../../utils/MangaData'
-import { suggestManga } from '../../utils/SuggestManga'
+import { getTitleApi } from '../../utils/MangaData';
 
 interface BannerProps {
     rank: any
@@ -14,6 +13,7 @@ interface BannerProps {
 const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
     const [cover, setCover] = useState('');
     const [author, setAuthor] = useState('');
+    const [artist, setArtist] = useState('');
 
     const getCover = async() => {
         // manga.relationships.forEach((relate: any) => {
@@ -23,20 +23,11 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
         // });
         setCover(manga.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName);
         setAuthor(manga.relationships.find((r: any) => r.type === "author")?.attributes.name);
+        setArtist(manga.relationships.find((r: any) => r.type === "artist")?.attributes.name);
     }
 
     useEffect(() => {
         getCover();
-        
-        const fetchData = async () => {
-            try {
-                const data = await suggestManga();
-                console.log('This is suggestions: ', data);
-            } catch (error) {
-                console.error("Error fetching manga data:", error);
-            }
-        };
-        fetchData();
       }, []);
 
   return (
@@ -51,10 +42,10 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
                 <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />
             </div>
             <div className="manga-banner-info">
-                <h5>{author}</h5>
+                <h5>{(author === artist) ? (author) : (author + ', ' + artist)}</h5>
                 <div className="manga-banner-tags">
                     {manga.attributes.tags.map((tag: any) => (
-                        <Tag tag={tag}/>
+                        <Tag key={tag.id} tag={tag}/>
                     ))}
                 </div>
                 {/* <p>{manga.attributes.description.en}</p> */}
