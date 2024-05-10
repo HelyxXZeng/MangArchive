@@ -8,6 +8,7 @@
   .mainPage {
     padding-bottom: 50px;
     max-width: 1280px;
+    overflow: hidden;
     // align-content: center;
   }
 
@@ -22,6 +23,11 @@
     flex: 1; /* Allow cards to shrink as needed */
     height: 200px; /* Set a fixed width for each card */
     margin-right: 20px; /* Add margin between grid items */
+  }
+
+  .banner {
+    width: 100%;
+    height: fit-content;
   }
   
   

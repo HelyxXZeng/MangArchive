@@ -1,3 +1,5 @@
+@import "../../global-styles/Color.scss";
+
 .manga-card {
   // width: calc(20% - 20px); /* Adjust width to fit 5 cards in a row */
   // margin: 1%;
@@ -5,9 +7,10 @@
   clear: none; /* Clear any previous float settings */
   overflow: hidden;
   display: inline-block;
-  height: 100%;
+  height: inherit;
   width: auto;
-  max-width: auto;
+  max-width: 300px;
+  // flex: 1 1 auto;
 }
 
 .manga-card-content1 {
@@ -37,9 +40,13 @@
 .manga-card-image {
   position: relative;
   width: auto;
-  height: auto;
+  height: fit-content; // auto;
   object-fit: cover;
   overflow: hidden;
+}
+
+.manga-card-image:hover {
+  opacity: 0.5;
 }
 
 .manga-card-content {
@@ -62,7 +69,7 @@
 .manga-card-content p {
   margin-top: 8px;
   font-size: 14px;
-  color: #666;
+  color: $text-gray-soft;
   margin-bottom: 8px;
   max-height: 50px;
   overflow: hidden;
@@ -74,14 +81,14 @@
   height: 66px;
 }
 
-.tags span {
-  display: inline-block;
-  margin-right: 4px;
-  padding: 4px 4px;
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  font-size: 10px;
-}
+// .tags span {
+//   display: inline-block;
+//   margin-right: 4px;
+//   padding: 4px 4px;
+//   background-color: #f0f0f0;
+//   border-radius: 4px;
+//   font-size: 10px;
+// }
 
 .popup-container {
   position: relative;

@@ -3,12 +3,12 @@ import { styled, alpha } from '@mui/material/styles';
 
 import { Typography, Card, CardActionArea, Chip, Skeleton } from '@mui/material';
 // components
-import Image from '../Image';
+import Image from './image/Image';
 
 export default function TitleCardSkeleton() {
     return (
         <Card sx={{ borderRadius: { xs: 0.5, md: 1 } }}>
-            <Image src={null} alt='PlaceHolder' ratio='4/6' />
+            <Image src='' alt='PlaceHolder' ratio='4/6' />
             <OverlayStyle />
             <CaptionStyle>
                 <Typography width="100%" variant="subtitle1" component="span"><Skeleton variant='text' /></Typography>

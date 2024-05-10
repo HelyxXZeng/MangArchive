@@ -2,31 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '@mui/material';
 import Image from '../image/Image';
 import './TitleCard2.scss';
+import Tag from '../tag/Tag';
 
-interface Manga {
-  id: string;
-  attributes: {
-    title: {
-      en: string;
-    };
-    cover_art: string;
-    description: {
-      en: string;
-      ja: string;
-    };
-    // tags: string[];
-  };
-  relationships: Relate[];
-}
+// interface Manga {
+//   id: string;
+//   attributes: {
+//     title: {
+//       en: string;
+//     };
+//     cover_art: string;
+//     description: {
+//       en: string;
+//       ja: string;
+//     };
+//     // tags: string[];
+//   };
+//   relationships: Relate[];
+// }
 
-interface Relate {
-  id: string;
-  type: string;
-  attributes: {
-    fileName: string;
-    locale: string;
-  }
-}
+// interface Relate {
+//   id: string;
+//   type: string;
+//   attributes: {
+//     fileName: string;
+//     locale: string;
+//   }
+// }
 
 interface Props {
   manga: any;
@@ -36,9 +37,9 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
   const [cover, setCover] = useState('');
   const [showPopup, setShowPopup] = useState(false);
 
-  function resizeImage(url: string, width: number) {
-    return `https://images.weserv.nl/?url=https://services.f-ck.me/v1/image/${btoa(url).replace(/\+/g, "-").replace(/\//g, "_")}&w=${width}`
-  }
+  // function resizeImage(url: string, width: number) {
+  //   return `https://images.weserv.nl/?url=https://services.f-ck.me/v1/image/${btoa(url).replace(/\+/g, "-").replace(/\//g, "_")}&w=${width}`
+  // }
 
   const getCover = async() => {
     manga.relationships.forEach((relate: any) => {
@@ -112,7 +113,7 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
           {/* <p>{manga.attributes.description.en}</p> */}
           <div className="tags">
             {manga.attributes.tags.map((tag: any) => (
-              <span key={tag.id}>{tag.attributes.name.en}</span>
+              <Tag tag={tag}/>
             ))}
           </div>
         </div>
