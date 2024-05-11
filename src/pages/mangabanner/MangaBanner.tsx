@@ -3,14 +3,13 @@ import './MangaBanner.scss';
 import Tag from '../tag/Tag';
 
 import Image from '../image/Image';
-import { getTitleApi } from '../../utils/MangaData';
+import { getDataApi } from '../../utils/MangaData';
 
 interface BannerProps {
-    rank: any
     manga: any,
 }
 
-const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
+const MangaBanner: React.FC<BannerProps> = ({ manga }) => {
     const [cover, setCover] = useState('');
     const [author, setAuthor] = useState('');
     const [artist, setArtist] = useState('');
@@ -21,6 +20,14 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
         //         setCover(relate.attributes?.fileName);
         //     }
         // });
+        getDataApi(manga.id)
+            .then(returnData => {
+                console.log(returnData);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
         setCover(manga.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName);
         setAuthor(manga.relationships.find((r: any) => r.type === "author")?.attributes.name);
         setArtist(manga.relationships.find((r: any) => r.type === "artist")?.attributes.name);
@@ -49,7 +56,7 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
                     ))}
                 </div>
                 {/* <p>{manga.attributes.description.en}</p> */}
-                <h2>{((manga.attributes.title.en) || (manga.attributes.title.ja)) + ' - NO.' + rank}</h2>
+                <h2>{((manga.attributes.title.en) || (manga.attributes.title.ja))}</h2>
                 {/* Add more info sections here */}
             </div>
         </div>
@@ -57,4 +64,4 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
   );
 };
 
-export default Banner;
+export default MangaBanner;

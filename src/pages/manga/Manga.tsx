@@ -60,9 +60,9 @@ const Manga = () => {
       <div className="textbox">
         <h1>Recent Uploaded</h1>
       </div>
-      {mangaList.length > 0 &&
-        <MangaBanner manga={mangaList[0]} rank={1}/>
-      }
+        {mangaList.length > 0 &&
+          <MangaBanner manga={mangaList[0]}/>
+        }
       {/* <ul>
           {mangaList && mangaList.map((manga: any) => (
             <li key={manga.id}>
