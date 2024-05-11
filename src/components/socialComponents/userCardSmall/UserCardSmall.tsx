@@ -2,7 +2,10 @@ import { Avatar, Button } from "@mui/material";
 import { useState } from "react"
 import './userCardSmall.scss'
 
-const UserCardSmall = () => {
+interface UserCardSmallProps {
+  name: string;
+}
+const UserCardSmall: React.FC<UserCardSmallProps> = ({ name }) => {
   const [avatar, setAvatar] = useState<any>();
   const [userName, setUserName] = useState<string>('');
   const [idname, setIdName] = useState<string>('');
@@ -21,7 +24,7 @@ const UserCardSmall = () => {
       </div>
       <div className="nameAndId">
         <span className="name">
-          Testname
+          {name}
         </span>
         <span className="idName">@test</span>
       </div>

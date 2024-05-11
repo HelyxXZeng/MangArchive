@@ -1,11 +1,12 @@
 @import "../../../global-styles/Color.scss";
 
 .rightBarContainer {
-    width: 100%;
+    // width: 100%;
     display: flex;
     color: $text-white-new;
     padding: 16px;
     flex-direction: column;
+    
     .sugesstCard{
       border: 1px solid $gray-bg;
       display: flex;

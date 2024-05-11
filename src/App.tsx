@@ -52,7 +52,7 @@ function App() {
           element: <Homepage/>
         },
         {
-          path:"/",
+          path:"/social",
           element: <SocialLayout/>,
           children: [
             {

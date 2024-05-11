@@ -3,7 +3,7 @@
 .cardFrame{
     display: flex;
     width: 100%;
-    max-width: 268px;
+    min-width: 192px;
     flex-direction: row;
     gap: 8px;   
     pointer-events: auto;
@@ -23,8 +23,9 @@
         font-size: 15px;
         display: flex;
         flex-direction: column;
-        width: 144px;
+        width: 100%;
         min-width: 80px;
+        max-width: 144px;
         .name {
             justify-content: center;
             font-weight: 700;
