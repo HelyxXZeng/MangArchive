@@ -25,7 +25,8 @@ body {
 
 
   .container {
-
+    height: 100vh;
+    padding-top:56px;
     display: flex;
 
     .sideBarContainer {
@@ -69,7 +70,8 @@ body {
       width: 100%;
       overscroll-behavior: contain;
       overflow-y: auto;
-      height: 100vh;
+      // height: calc(100vh - 56px);
+      
 
       /* Cho trình duyệt Chrome và Safari */
       &::-webkit-scrollbar {
@@ -99,7 +101,7 @@ body {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        height: 100vh;
+        height: 100%;
 
         .masterFrame{
           padding: 0px 1rem;
