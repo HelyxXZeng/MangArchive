@@ -29,7 +29,7 @@ const getDataApi = async (slug: any) => {
 
     const { data: { data: chaptersData } } = await axios({
         method: 'GET',
-        url: `https://api.mangadex.org/manga/${slug}/feed?order[chapter]=asc&limit=500`, /* translatedLanguage[]=vi& */
+        url: `https://api.mangadex.org/manga/${slug}/feed?order[chapter]=asc&order[updatedAt]=desc&includeFutureUpdates=1`, /* translatedLanguage[]=vi& */
     });
 
     const chapterArray = chaptersData.map((chapter: any) => ({
@@ -49,6 +49,7 @@ const getDataApi = async (slug: any) => {
     groupIdArray.forEach((groupId: any, index: any) => { groupIdToNumber[groupId] = index; groups[index] = groupId });
 
     const chapters: any = {};
+    let manga_last_updated: any = "";
     chapterArray.forEach(({ id, volume, chapterNumber, title, translatedLanguage, groupId, release_date, last_updated }: any) => {
         const groupNumber = groupIdToNumber[groupId];
         if (!chapters[chapterNumber]) chapters[chapterNumber] = [];
@@ -56,6 +57,10 @@ const getDataApi = async (slug: any) => {
         const thisChapter: any = {};
         thisChapter.volume = volume;
         thisChapter.last_updated = Date.parse(last_updated);
+        const thisChapterLastUpdate: any = new Date(last_updated);
+        if (manga_last_updated === "") manga_last_updated = thisChapterLastUpdate.toISOString();
+        if ((new Date(manga_last_updated)).getTime() < thisChapterLastUpdate.getTime()) manga_last_updated = thisChapterLastUpdate.toISOString();
+
         thisChapter.title = title;
         thisChapter.translatedLanguage = translatedLanguage;
 
@@ -65,6 +70,7 @@ const getDataApi = async (slug: any) => {
         chapters[chapterNumber] = [...chapters[chapterNumber], thisChapter];
     })
 
+    returnData.lastUpdate = manga_last_updated;
     returnData.chapters = chapters;
     returnData.groups = groups;
     returnData.chapterNumbers = Object.keys(chapters);

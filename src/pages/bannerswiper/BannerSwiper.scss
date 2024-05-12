@@ -28,15 +28,16 @@
         // }
     }
 
-    .swiper-pagination {
+    .banner-swiper-pagination {
         position: absolute;
         bottom: 10px;
         left: 50%;
         transform: translateX(-50%);
         width: auto;
         text-align: center;
+        z-index: 30;
 
-        .swiper-pagination-bullet {
+        .banner-swiper-pagination-bullet {
             width: 10px;
             height: 10px;
             background-color: $blue-soft;

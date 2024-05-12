@@ -1,15 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 // import Swiper from 'swiper';
-import 'swiper/swiper-bundle.css';
+import "swiper/swiper-bundle.css";
 
-import './BannerSwiper.scss';
+import "./BannerSwiper.scss";
 
-import SwiperCore from 'swiper';
-import { Autoplay, Pagination } from 'swiper/modules';
-import Banner from '../banner/Banner';
+import SwiperCore from "swiper";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import Banner from "../banner/Banner";
 // import { Swiper, SwiperSlide } from 'swiper/react';
 
-SwiperCore.use([Autoplay, Pagination]);
+SwiperCore.use([Autoplay, Pagination, Navigation]);
 
 interface Props {
     banners: any;
@@ -18,7 +18,12 @@ interface Props {
     interval?: number;
 }
 
-const BannerSwiper: React.FC<Props> = ({ banners, autoplay = true, loop = true, interval = 5000 }) => {
+const BannerSwiper: React.FC<Props> = ({
+    banners,
+    autoplay = true,
+    loop = true,
+    interval = 5000,
+}) => {
     const swiperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -26,8 +31,8 @@ const BannerSwiper: React.FC<Props> = ({ banners, autoplay = true, loop = true, 
             const swiper = new SwiperCore(swiperRef.current, {
                 autoplay: autoplay ? { delay: interval } : false,
                 loop: loop,
-                pagination: { 
-                    el: '.swiper-pagination',
+                pagination: {
+                    el: ".banner-swiper-pagination",
                     clickable: true,
                 },
             });
@@ -49,7 +54,7 @@ const BannerSwiper: React.FC<Props> = ({ banners, autoplay = true, loop = true, 
                     </div>
                 ))}
             </div>
-            <div className="swiper-pagination"></div>
+            <div className="banner-swiper-pagination"></div>
         </div>
     );
 
@@ -59,13 +64,13 @@ const BannerSwiper: React.FC<Props> = ({ banners, autoplay = true, loop = true, 
     //       autoplay: autoplay ? { delay: interval } : false, // Autoplay if enabled
     //       loop: loop,
     //     });
-    
+
     //     // Destroy Swiper instance when the component unmounts
     //     return () => {
     //       swiper.destroy();
     //     };
     //   }, [autoplay, loop]);
-    
+
     //   return (
     //     <Swiper className="swiper-container">
     //       {banners.map((item: any, index: any) => (
