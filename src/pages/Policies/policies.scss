@@ -62,11 +62,13 @@
       color: $text-white-new;
       overflow-y: auto;
   
+      counter-reset: section;
       ol {
 
         text-align: -webkit-match-parent;
         unicode-bidi: isolate;
-  
+        
+        
         li {
           counter-increment: section;
           font-size: 16px;

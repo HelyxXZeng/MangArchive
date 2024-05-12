@@ -11,6 +11,7 @@ import Profile from "./pages/profile/Profile";
 import RightBar from "./components/socialComponents/rightBar/RightBar";
 import RulePage from "./pages/Policies/Policies";
 import AboutUs from "./pages/aboutus/AboutUs";
+import Announcement from "./pages/announcement/Announcement";
 
 function App() {
 
@@ -71,6 +72,10 @@ function App() {
           path:"/aboutus",
           element:<AboutUs/>
         },
+        {
+          path:"/announcement",
+          element:<Announcement/>
+        }
       ]
     },
     {
