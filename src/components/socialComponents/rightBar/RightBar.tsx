@@ -20,7 +20,6 @@ const RightBar = () => {
 
     fetchComics();
   }, []);
-  console.log(comics)
   return (
     <div className="rightBarContainer">
       <div className="sugesstCard">

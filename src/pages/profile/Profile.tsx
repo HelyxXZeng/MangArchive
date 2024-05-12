@@ -1,7 +1,45 @@
 import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import "./profile.scss"
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, Tab, Tabs } from "@mui/material";
+
+function samePageLinkNavigation(
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+  ) {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 || // ignore everything but left-click
+      event.metaKey ||
+      event.ctrlKey ||
+      event.altKey ||
+      event.shiftKey
+    ) {
+      return false;
+    }
+    return true;
+  }
+  interface LinkTabProps {
+    label?: string;
+    href?: string;
+    selected?: boolean;
+  }
+  
+  function LinkTab(props: LinkTabProps) {
+    return (
+      <Tab
+        sx={{color:"#FAFCFC"}}
+        component="a"
+        onClick={(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+          // Routing libraries handle this, you can remove the onClick handle when using them.
+          if (samePageLinkNavigation(event)) {
+            event.preventDefault();
+          }
+        }}
+        aria-current={props.selected && 'page'}
+        {...props}
+      />
+    );
+  }
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -9,7 +47,20 @@ const Profile = () => {
     const handleBack=() => navigate(-1);
     const handleOpenProfile=()=>{console.log("open fire!")}
     const handleFollowUser=()=>{console.log("Follow him!")}
-
+    const [value, setValue] = useState(0);
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        // event.type can be equal to focus with selectionFollowsFocus.
+        if (
+          event.type !== 'click' ||
+          (event.type === 'click' &&
+            samePageLinkNavigation(
+              event as React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+            ))
+        ) {
+          setValue(newValue);
+        }
+      };
+    
   const [name, setName] = useState<any>(username);
   const [postcount, setPostcount] = useState(0);
   const [level, setLevel] =useState(3);
@@ -85,6 +136,17 @@ const Profile = () => {
             </div>
             <div className="userThings">
                 <div className="optionbar">
+                <Tabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label="nav tabs example"
+                    role="navigation"
+                >
+                    <LinkTab label="Post" href="profile/test/drafts" />
+                    <LinkTab label="Media" href="/trash" />
+                    <LinkTab label="Friends" href="/spam" />
+                    <LinkTab label="Following Groups" href="/spam" />
+                </Tabs>
 
                 </div>
                 <div className="postlist">

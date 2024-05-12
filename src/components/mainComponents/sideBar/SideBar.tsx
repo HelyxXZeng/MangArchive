@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import "./sideBar.scss"
 const menu = [
     {
@@ -92,19 +92,19 @@ const menu = [
             {
                 id:2,
                 title:"Site Policies",
-                url:"/",
+                url:"/policies",
                 icon:"/icons/firstline.svg",
             },
             {
                 id:3,
                 title:"Announcements",
-                url:"/",
+                url:"/announcement",
                 icon:"/icons/lamp-charge.svg",
             },
             {
                 id:4,
                 title:"About Us",
-                url:"/",
+                url:"/aboutus",
                 icon:"/icons/message-question.svg",
             },
         ]
@@ -118,10 +118,10 @@ const SideBar = () => {
             <div className="item" key={item.id}>
                 <span className="title">{item.title}</span>
                 {item.listItems.map((listItem)=>(
-                    <Link to={listItem.url} className="listItem" key={listItem.id}>
+                    <NavLink to={listItem.url} className="listItem" key={listItem.id}>
                         <img src={listItem.icon} alt="" />
                         <span className="listItemTitles">{listItem.title}</span>
-                    </Link>
+                    </NavLink>
                 ))}
             </div>
         ))}

@@ -9,6 +9,8 @@ import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
 import Profile from "./pages/profile/Profile";
 import RightBar from "./components/socialComponents/rightBar/RightBar";
+import RulePage from "./pages/Policies/Policies";
+import AboutUs from "./pages/aboutus/AboutUs";
 
 function App() {
 
@@ -19,10 +21,10 @@ function App() {
           <HeaderBar/>
         </div>
         <div className="container">
-          <div className="sideBarContainer">
+          <div className="sideBarContainer customScrollbar">
             <SideBar/>
           </div>
-          <div className="contentContainer">
+          <div className="contentContainer customScrollbar">
             <Outlet/>
           </div>
         </div>
@@ -60,8 +62,15 @@ function App() {
               element: <Profile/>
             }
           ]
-        }
-        
+        },
+        {
+          path:"/policies",
+          element:<RulePage/>
+        },
+        {
+          path:"/aboutus",
+          element:<AboutUs/>
+        },
       ]
     },
     {
