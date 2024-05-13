@@ -4,7 +4,8 @@
   // width: calc(20% - 20px); /* Adjust width to fit 5 cards in a row */
   // margin: 1%;
   // float: left; /* Ensure cards are floated left */
-  clear: none; /* Clear any previous float settings */
+  clear: none;
+  /* Clear any previous float settings */
   overflow: hidden;
   display: inline-block;
   height: inherit;
@@ -24,11 +25,9 @@
   height: fit-content;
   max-height: 500px;
   margin-bottom: 10px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 1)
-  );
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1));
 }
 
 // .manga-card::after {
@@ -69,7 +68,41 @@
   flex: 1;
   padding: 16px;
   height: fit-content;
+  padding-top: 0px;
   // margin-bottom: 10px;
+}
+
+.title-and-artist-container {
+  width: 100%;
+  height: fit-content;
+  background-color: $blue-main;
+  padding: 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    height: 21px;
+    overflow: hidden;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $text-white;
+  }
+  
+  p {
+    // width: 100%;
+    margin-top: 8px;
+    font-size: 14px;
+    color: $text-white;
+    text-align: center;
+    margin-bottom: 8px;
+    // max-height: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    // font-weight: lighter;
+    font-style: italic;
+  }
 }
 
 .manga-card-content h2 {
@@ -77,20 +110,25 @@
   font-size: 18px;
   height: 21px;
   overflow: hidden;
-  text-align: left;
+  text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
+  color: $text-white;
 }
 
 .manga-card-content p {
-  width: 100%;
+  // width: 100%;
   margin-top: 8px;
   font-size: 14px;
-  color: $text-gray-soft;
+  color: $text-white;
+  text-align: center;
   margin-bottom: 8px;
-  max-height: 50px;
+  // max-height: 50px;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  // font-weight: lighter;
+  font-style: italic;
 }
 
 .tags {
@@ -101,11 +139,13 @@
   margin-top: 16px;
   overflow: hidden;
   height: 66px;
-  text-align: center; /* Aligns tags horizontally in the center */
+  text-align: center;
+  /* Aligns tags horizontally in the center */
 }
 
-.tags > * {
-  display: inline-block; /* Display tags as inline-block elements */
+.tags>* {
+  display: inline-block;
+  /* Display tags as inline-block elements */
   // margin-right: 8px; /* Add some space between tags */
 }
 
@@ -119,20 +159,24 @@
 // }
 
 .popup-container::-webkit-scrollbar {
-  display: none; /* Hide scrollbar */
+  display: none;
+  /* Hide scrollbar */
 }
 
 .popup-container {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* Cover the entire .manga-card-image */
-  height: 100%; /* Cover the entire .manga-card-image */
+  width: 100%;
+  /* Cover the entire .manga-card-image */
+  height: 100%;
+  /* Cover the entire .manga-card-image */
   background-color: rgba(0, 0, 0, 0.6);
   color: $text-white;
   padding: 10px;
-  border-radius: 5px;
-  display: none; /* Initially hidden */
+  border-radius: 4px;
+  display: none;
+  /* Initially hidden */
   z-index: 40;
   overflow-y: auto;
 
@@ -144,6 +188,7 @@
     // white-space: nowrap;
     // text-overflow: ellipsis;
   }
+
   h2 {
     font-size: 10px;
     font-weight: lighter;
@@ -151,6 +196,7 @@
     margin-top: 0px;
     height: fit-content;
   }
+
   p {
     font-size: 14px;
     margin-top: 0px;
@@ -162,6 +208,7 @@
 }
 
 .manga-card-image:hover .popup-container,
-.manga-card-content h2:hover + .popup-container {
-  display: block; /* Show the container when image or title is hovered over */
+.manga-card-content h2:hover+.popup-container {
+  display: block;
+  /* Show the container when image or title is hovered over */
 }

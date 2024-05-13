@@ -162,6 +162,7 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
           {showPopup && (
             <div className="popup-container">
               <h1>{(manga.attributes.title.en) || (manga.attributes.title.ja) || (manga.attributes.title.ko) || (manga.attributes.title['ja-ro']) || (manga.attributes.title['ko-ro'])}</h1>
+              <p>{(author === artist) ? (author) : (author + ', ' + artist)}</p>
               <h2>{'Status: ' + (manga.attributes.status)}</h2>
               <p>{(manga.attributes.description.en)}</p>
             </div>
@@ -172,15 +173,17 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
           </div>
           <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />
         </div>
-        <div className="manga-card-content">
+        <div className="title-and-artist-container">
           <h2>{title}</h2>
-          <p>{(author === artist) ? (author) : (author + ', ' + artist)}</p>
+          <p className='author-artist'>{(author === artist) ? (author) : (author + ', ' + artist)}</p>
+        </div>
+        <div className="manga-card-content">
           <div className="tags">
             {manga.attributes.tags.map((tag: any) => (
               <Tag key={tag.id} tag={tag} />
             ))}
           </div>
-          <p>{lastUpdated}</p>
+          <p style={{ color: 'black' }}>{lastUpdated}</p>
         </div>
       </Card>
     </div>
