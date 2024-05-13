@@ -1,0 +1,54 @@
+@import "../../global-styles/Color.scss";
+
+.aboutusframe{
+    // display: flex;
+    padding: 8px 16px;
+    color: $text-white-new;
+    align-items: center;
+    text-align: justify;
+    flex-grow: 1;
+    max-width: 960px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    .headernav{
+        align-items: center; 
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 4px 16px;
+        border-bottom: 1px solid $gray-bg;
+
+        .backbutton{
+            background-color: transparent;
+            border-radius: 100%;
+            outline: none;
+            border: none;
+            border-color: $main-bg;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            align-items: center;
+            &:hover{
+                background-color: $main-bg-hover;
+            }
+            &:active{
+                background-color: $main-bg-hold;
+            }
+        }
+    }
+    .content{
+        .aboutsmall{
+            background-color: $gray-bg;
+            text-align: center;
+            justify-content: center;
+            .yellowtext{
+                color:$orange-yellow;
+            }
+            .redtext{
+                color: $like-pink;
+            }
+        }
+    }
+}

@@ -1,0 +1,82 @@
+@import "../../global-styles/Color.scss";
+
+.announFrame {
+    flex-grow: 1;
+    max-width: 960px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 8px;
+    padding: 0px 16px;
+    color: $text-white-new;
+
+    .headernav {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 4px 16px;
+        border-bottom: 1px solid $gray-bg;
+
+        .backbutton {
+            background-color: transparent;
+            border-radius: 100%;
+            outline: none;
+            border: none;
+            border-color: $main-bg;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            align-items: center;
+
+            &:hover {
+                background-color: $main-bg-hover;
+            }
+
+            &:active {
+                background-color: $main-bg-hold;
+            }
+        }
+    }
+
+    .content {
+        text-align: center;
+        background-color: $orange-yellow;
+        color: $text-black;
+        font-size: 20px;
+        margin-bottom: 16px;
+
+    }
+
+    .nothingmore {
+        font-size: 20px;
+        text-align: center;
+        flex-direction: column;
+
+        .textblue {
+
+            color: $blue-main;
+            text-decoration: none;
+            transform: scale(0.5);
+            transition: all 2s ease-out;
+
+            &:hover {
+                text-decoration: underline;
+                opacity: 30%;
+            }
+        }
+
+        .textred{
+            color: $like-pink;
+            text-decoration: none;
+            transform: scale(0.5);
+            transition: all 2s ease-out;
+
+            &:hover {
+                text-decoration: underline;
+                opacity: 30%;
+            }
+        }
+    }
+}

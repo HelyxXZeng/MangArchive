@@ -20,7 +20,6 @@ const RightBar = () => {
 
     fetchComics();
   }, []);
-  console.log(comics)
   return (
     <div className="rightBarContainer">
       <div className="sugesstCard">
@@ -57,7 +56,7 @@ const RightBar = () => {
               id={comic.id}
             />
         ))}
-        <NavLink to="/i/connect_group" className="seeMoreLink">
+        <NavLink to="/i/latest/discover" className="seeMoreLink">
           See more
         </NavLink>
       </div>
