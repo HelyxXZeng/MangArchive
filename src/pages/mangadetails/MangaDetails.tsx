@@ -17,6 +17,18 @@ const MangaDetails = (manga: any) => {
     return (
         <div className="mainHomepage">
             <MangaBanner manga={manga} />
+            <div>
+                <button>
+                    <span>Add To Library</span>
+                </button>
+                <div>
+                    <div>
+                        <button>
+                            <span>Hello</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

@@ -60,7 +60,7 @@ const Manga = () => {
       </div>
 
       <div className="textbox">
-        <h1 style={{paddingLeft: '20px'}}>Recent Updated</h1>
+        <h1 style={{ paddingLeft: "20px" }}>Recent Updated</h1>
       </div>
 
       {/* {mangaList.length > 0 && <MangaBanner manga={mangaList[0]} />} */}
@@ -133,7 +133,7 @@ const Manga = () => {
           <MangaCard key={index} manga={manga} />
           // <TitleCardSkeleton></TitleCardSkeleton>
         ))} */}
-        <MangaCardSwiper mangas={mangaList} />
+        {suggestMangas.length > 0 && <MangaCardSwiper mangas={suggestMangas} />}
       </div>
 
       <div>

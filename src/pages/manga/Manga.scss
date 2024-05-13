@@ -23,6 +23,7 @@
 }
 
 .horizontal-manga-list {
+  width: 100%;
   display: inline-flex; /* Display children in a single line */
   overflow-x: auto; /* Allow horizontal scrolling */
   padding: 10px; /* Add padding for better appearance */
