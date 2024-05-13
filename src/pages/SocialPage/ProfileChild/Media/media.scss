@@ -1,0 +1,57 @@
+@import "../../../../global-styles/Color.scss";
+
+.mediaContainer {
+    color: $text-white-new;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
+    gap: 4px; /* Khoảng cách giữa các item */
+    padding: 4px 4px 0px;
+    width: 100%;
+    height: 100%;
+    min-height: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+    pointer-events: auto;
+    .smallimg {
+        object-fit: cover;
+        width: 100%; /* Chiều rộng tự động */
+        height: 100%; /* Chiều cao tự động */
+        max-width: 256px; /* Tối đa là 256px */
+        max-height: 256px; /* Tối đa là 256px */
+        display: block; /* Hiển thị dạng block */
+    }
+}
+
+@media (max-width: 1280px) {
+    .mediaContainer {
+        grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+        gap: 4px;
+    }
+    .smallimg {
+        max-width: 256px; /* Tối đa là 256px */
+        max-height: 256px; /* Tối đa là 256px */
+    }
+}
+
+@media (max-width: 1080px) {
+    .mediaContainer {
+        grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+        gap: 2px; /* Giảm khoảng cách giữa các hình ảnh */
+    }
+    .smallimg {
+        max-width: 256px; /* Tối đa là 256px */
+        max-height: 256px; /* Tối đa là 256px */
+    }
+}
+
+@media (max-width: 768px) {
+    .mediaContainer {
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+        gap: 2px; /* Giảm khoảng cách giữa các hình ảnh */
+    }
+    .smallimg {
+        max-width: 256px; /* Tối đa là 256px */
+        max-height: 256px; /* Tối đa là 256px */
+    }
+}

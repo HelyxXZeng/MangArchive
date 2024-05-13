@@ -1,0 +1,116 @@
+@import "../../global-styles/Color.scss";
+
+.settingFrame {
+    color: $text-white-new;
+    padding: 16px;
+    flex-grow: 1;
+    max-width: 960px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    .headernav {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 4px 16px;
+        border-bottom: 1px solid $gray-bg;
+
+        // background-color: $gray-bg;
+        .backbutton {
+            background-color: transparent;
+            border-radius: 100%;
+            outline: none;
+            border: none;
+            border-color: $main-bg;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            align-items: center;
+
+            &:hover {
+                background-color: $main-bg-hover;
+            }
+
+            &:active {
+                background-color: $main-bg-hold;
+            }
+        }
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    .account {
+        background-color: $gray-bg;
+        border-radius: 10px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+
+        .status {
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 18px;
+            display: flex;
+            padding: 0 8px;
+
+            .content {
+                display: block;
+            }
+
+            .role {
+                text-align: center;
+                display: block;
+                color: $orange-yellow;
+            }
+        }
+
+        .changeRoles {
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 18px;
+            display: flex;
+            padding: 16px 8px;
+            align-items: center;
+            .smalldescription{
+                color: $text-gray-soft-new;
+                font-size: 16px;
+
+                .red{
+                    color: $like-pink;
+                }
+            }
+            .clickhere {
+                background-color: $blue-main;
+                color: $text-white-new;
+
+                &:hover {
+                    background-color: $blue-soft;
+                }
+
+                border-radius: 10px;
+                min-width: 54px;
+                width: 108px;
+                height: 32px;
+                font-weight: 700;
+            }
+
+        }
+    }
+    .danger{
+        color: $like-pink;
+    }
+    .deleteAccount{
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        .delete{
+            color: $text-white-new;
+            background-color: $like-pink;
+        }
+    }
+}
