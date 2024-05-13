@@ -17,6 +17,7 @@
         justify-content: flex-start;
         gap: 10px;
         padding: 4px 16px;
+        border-bottom: 1px solid $gray-bg;
 
         .backbutton {
             background-color: transparent;
@@ -45,6 +46,7 @@
         color: $text-black;
         font-size: 20px;
         margin-bottom: 16px;
+
     }
 
     .nothingmore {

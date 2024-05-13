@@ -86,7 +86,7 @@ const menu = [
             {
                 id:1,
                 title:"Setting",
-                url:"/",
+                url:"/setting",
                 icon:"/icons/gift.svg",
             },
             {

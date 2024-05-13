@@ -7,11 +7,14 @@ import "./global-styles/Font.scss"
 import AuthPage from "./pages/authpage/Authpage";
 import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
-import Profile from "./pages/profile/Profile";
+import Profile from "./pages/SocialPage/profile/Profile";
 import RightBar from "./components/socialComponents/rightBar/RightBar";
 import RulePage from "./pages/Policies/Policies";
 import AboutUs from "./pages/aboutus/AboutUs";
 import Announcement from "./pages/announcement/Announcement";
+import Post from "./pages/SocialPage/ProfileChild/Post/Post";
+import Media from "./pages/SocialPage/ProfileChild/Media/Media";
+import Setting from "./pages/setting/setting";
 
 function App() {
 
@@ -60,7 +63,25 @@ function App() {
           children: [
             {
               path:"profile/:username",
-              element: <Profile/>
+              element: <Profile/>,
+              children: [
+                {
+                  path: "post",
+                  element: <Post />
+                },
+                {
+                  path: "media",
+                  element: <Media />
+                },
+                // {
+                //   path: "friend",
+                //   element: <Friend />
+                // },
+                // {
+                //   path: "group",
+                //   element: <Group />
+                // }
+              ]
             }
           ]
         },
@@ -75,6 +96,10 @@ function App() {
         {
           path:"/announcement",
           element:<Announcement/>
+        },
+        {
+          path:"/setting",
+          element:<Setting/>
         }
       ]
     },
