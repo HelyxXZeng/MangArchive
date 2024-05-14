@@ -112,6 +112,9 @@
                     .level{
                         font-weight: 400;
                         font-style: italic;
+                        .textHighlightBlue{
+                            color: $blue-soft;
+                        }
                     }
                     .level,.Name{
                         font-size: 20px;
