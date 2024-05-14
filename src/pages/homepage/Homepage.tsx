@@ -62,16 +62,6 @@ const Homepage = () => {
 
   return (
     <div className="mainHomepage">
-      {/* <div>
-        <h1>Manga List</h1>
-        <ul>
-          {mangaList && mangaList.map((manga: any) => (
-            <li key={manga.id}>
-              <p>Title: {manga.attributes.title.en}</p>
-            </li>
-          ))}
-        </ul>
-      </div> */}
       <Manga />
     </div>
   );

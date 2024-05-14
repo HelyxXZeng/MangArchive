@@ -12,6 +12,7 @@ interface BannerProps {
 const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
     const [cover, setCover] = useState('');
     const [author, setAuthor] = useState('');
+    const [artist, setArtist] = useState('');
 
     const getCover = async() => {
         // manga.relationships.forEach((relate: any) => {
@@ -21,6 +22,7 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
         // });
         setCover(manga.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName);
         setAuthor(manga.relationships.find((r: any) => r.type === "author")?.attributes.name);
+        setArtist(manga.relationships.find((r: any) => r.type === "artist")?.attributes.name);
     }
 
     useEffect(() => {
@@ -28,24 +30,29 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
       }, []);
 
   return (
-    <div className="banner-container" style={{backgroundImage: `url(https://uploads.mangadex.org/covers/${manga.id}/${cover}.512.jpg)`}}>
-      <div className="banner-image">
-        {/* <img src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} /> */}
-        <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />
-      </div>
-      <div className="banner-info">
-        <div>
-            <h2>{((manga.attributes.title.en) || (manga.attributes.title.ja)) + ' - NO.' + rank}</h2>
-            <div className="banner-tags">
-                {manga.attributes.tags.map((tag: any) => (
-                <Tag tag={tag}/>
-                ))}
-            </div>
-            <p>{manga.attributes.description.en}</p>
+    <div className="banner-container">
+        {/* <div className="background-img" style={{backgroundImage: `url(https://uploads.mangadex.org/covers/${manga.id}/${cover}.512.jpg)`}}/> */}
+        <div className="background-img">
+          <img src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en}/>
         </div>
-        <h5>{author}</h5>
-        {/* Add more info sections here */}
-      </div>
+        <div className="banner-content">
+            <div className="banner-image">
+                <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />
+            </div>
+            <div className="banner-info">
+                <div>
+                    <h2>{((manga.attributes.title.en) || (manga.attributes.title.ja)) + ' - NO.' + rank}</h2>
+                    <div className="banner-tags">
+                        {manga.attributes.tags.map((tag: any) => (
+                            <Tag key={tag.id} tag={tag}/>
+                        ))}
+                    </div>
+                    <p>{manga.attributes.description.en}</p>
+                </div>
+                <h5>{(author === artist) ? (author) : (author + ', ' + artist)}</h5>
+                {/* Add more info sections here */}
+            </div>
+        </div>
     </div>
   );
 };
