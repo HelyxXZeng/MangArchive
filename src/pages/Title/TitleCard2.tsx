@@ -109,7 +109,7 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
             </div>
           )}
           <div className="top-tag">
-            <Tag tag={manga.attributes.tags[0]} />
+            {/* <Tag key={manga.attributes.tags[0].id} tag={manga.attributes.tags[0]} /> */}
             {/* <Tag tag = {manga.attributes.tags[0]}/> */}
           </div>
           <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />

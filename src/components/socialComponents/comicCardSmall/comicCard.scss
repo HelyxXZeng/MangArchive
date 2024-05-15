@@ -1,0 +1,66 @@
+@import "../../../global-styles/Color.scss";
+
+.comicCard{
+    display: flex;
+    width: 100%;
+    min-width: 192px;
+    gap: 16px;
+    pointer-events: auto;
+    cursor: pointer;
+    padding: 0px 12px;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    padding: 16px 12px;
+
+    &:hover{
+        background-color: $gray-bg;
+    }
+    .image{
+        width: 32px;
+        height: 48px;
+        display: flex;
+        .cover{
+            width: 32px;
+            object-fit: cover;
+            height: 100%; 
+            border-radius: 5px; 
+            display: flex;
+        }
+    }
+    .info{
+        font-size: 15px;
+        width: 100%;
+        min-width: 80px;
+        .name{
+            justify-content: center;
+            font-weight: 700;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+        .smalltags{
+            .maintag{
+                .type{
+                    font-weight: 700;
+                    text-transform: capitalize;
+                }
+                .mangatype{
+                    color: $orange-yellow;
+                }
+                .manhuatype{
+                    color: $red-manhua-text;
+                }
+                .manhwatype{
+                    color: $blue-manhwa-text;
+                }
+            }
+        }
+    }
+}

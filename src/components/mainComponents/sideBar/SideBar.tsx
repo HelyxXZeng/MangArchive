@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import "./sideBar.scss"
 const menu = [
     {
@@ -13,8 +13,8 @@ const menu = [
             },
             {
                 id:2,
-                title:"Lastest",
-                url:"/lastest",
+                title:"Latest",
+                url:"/latest",
                 icon:"/icons/discover.svg",
             },
             {
@@ -51,7 +51,7 @@ const menu = [
                 id:4,
                 title:"Notification",
                 url:"/",
-                icon:"icons/notification.svg",
+                icon:"/icons/notification.svg",
             },
         ]
     },
@@ -62,7 +62,7 @@ const menu = [
             {
                 id:1,
                 title:"Profile",
-                url:"/",
+                url:"/profile/test",
                 icon:"/icons/profile.svg",
             },
             {
@@ -86,26 +86,26 @@ const menu = [
             {
                 id:1,
                 title:"Setting",
-                url:"/",
+                url:"/setting",
                 icon:"/icons/gift.svg",
             },
             {
                 id:2,
                 title:"Site Policies",
-                url:"/",
-                icon:"",
+                url:"/policies",
+                icon:"/icons/firstline.svg",
             },
             {
                 id:3,
                 title:"Announcements",
-                url:"/",
-                icon:"",
+                url:"/announcement",
+                icon:"/icons/lamp-charge.svg",
             },
             {
                 id:4,
                 title:"About Us",
-                url:"/",
-                icon:"",
+                url:"/aboutus",
+                icon:"/icons/message-question.svg",
             },
         ]
     },
@@ -118,20 +118,20 @@ const SideBar = () => {
             <div className="item" key={item.id}>
                 <span className="title">{item.title}</span>
                 {item.listItems.map((listItem)=>(
-                    <Link to={listItem.url} className="listItem" key={listItem.id}>
+                    <NavLink to={listItem.url} className="listItem" key={listItem.id}>
                         <img src={listItem.icon} alt="" />
                         <span className="listItemTitles">{listItem.title}</span>
-                    </Link>
+                    </NavLink>
                 ))}
             </div>
         ))}
         <div className="footer">
             <hr className="line" />
             <div className="socialIcon">
-                <img src="/vite.svg" alt="" />
-                <img src="/vite.svg" alt="" />
-                <img src="/vite.svg" alt="" />
-                <img src="/vite.svg" alt="" />
+                <img src="/icons/discord.svg" alt="" />
+                <img src="/icons/xtwitter.svg" alt="" />
+                <img src="/icons/facebook.svg" alt="" />
+                <img src="/icons/reddit.svg" alt="" />
             </div>
             <div className="content">
                 <div className="version">v2024.4.24</div>
