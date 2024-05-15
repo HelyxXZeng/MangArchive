@@ -68,7 +68,7 @@ function App() {
               element: <Profile/>,
               children: [
                 {
-                  path: "post",
+                  path: "",
                   element: <Post />
                 },
                 {
