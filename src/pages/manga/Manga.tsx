@@ -32,7 +32,7 @@ const Manga = () => {
       });
       // console.log("log2: ", resp.data.data);
       setMangaList(resp.data.data);
-      setSuggestManga(await suggestManga());
+      setSuggestManga(await suggestManga(10));
 
       if (!resp) {
         throw new Error("Mangas not found.");
@@ -140,13 +140,9 @@ const Manga = () => {
         </div>
       </div>
 
-      <div className="horizontal-manga-list">
-        {/* {mangaList && mangaList.map((manga, index) => (
-          <MangaCard key={index} manga={manga} />
-          // <TitleCardSkeleton></TitleCardSkeleton>
-        ))} */}
+      {/* <div className="horizontal-manga-list">
         {suggestMangas.length > 0 && <MangaCardSwiper mangas={suggestMangas} />}
-      </div>
+      </div> */}
     </div>
   );
 };
