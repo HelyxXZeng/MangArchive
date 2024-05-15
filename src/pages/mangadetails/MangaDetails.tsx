@@ -11,10 +11,12 @@ interface Props { }
 
 const MangaDetails: React.FC<Props> = () => {
     const { manga_id } = useParams<{ manga_id: string }>();
-    const [manga, setManga] = useState(null);
+    const [manga, setManga] = useState<any>(null);
     const [data, setData] = useState<any>(null);
 
-    const baseUrl = "https://api.mangadex.org";
+    const [containerType, setContainerType] = useState("chapter");
+
+    // const baseUrl = "https://api.mangadex.org";
     const getData = async () => {
         try {
             const {
@@ -40,6 +42,7 @@ const MangaDetails: React.FC<Props> = () => {
         getDataApi(manga_id)
             .then((returnData) => {
                 console.log(returnData);
+                returnData.chapterNumbers.sort((a: any, b: any) => b - a);
                 setData(returnData);
             })
             .catch((error) => {
@@ -52,13 +55,26 @@ const MangaDetails: React.FC<Props> = () => {
     }, []);
 
     return (
-        <div className="mainHomepage">
+        <div className="manga-details-page">
             {manga && <MangaBanner manga={manga} />}
-            <div>
-                {data &&
-                    data.chapterNumbers.map((chap: any) => (
-                        <Chapter chapterNumber={chap} data={data.chapters[chap]} />
-                    ))}
+
+            {manga && <p>{manga.attributes.description.en}</p>}
+
+            <div className="info-data-container">
+                <div className="more-info-container">
+                    <span style={{ color: "white" }}>More Infos</span>
+                </div>
+                <div className="chapter-container">
+                    {containerType === "chapter" && data && (
+                        <div style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                            {data.chapterNumbers.map((chap: any) => (
+                                <Chapter chapterNumber={chap} data={data.chapters[chap]} />
+                            ))}
+
+                            <p>Hello World</p>
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div>

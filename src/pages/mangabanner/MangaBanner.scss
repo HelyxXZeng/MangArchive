@@ -1,61 +1,63 @@
 @import "../../global-styles/Color.scss";
 
 .profile-manga-image {
-    height: 200px;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 8px;
-    display: flex;
+  height: 200px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  display: flex;
 
-    .cover-background {
-        width: 100%;
-        height: 100%; 
-        object-fit: cover;
-        object-position: center center;
-        opacity: 0.6;
-        background-color: rgba(0, 0, 0, 0.9);
-        // offset: ;
-        // transform: translateY(-50%);
-    }
+  .cover-background {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    opacity: 0.6;
+    background-color: rgba(0, 0, 0, 0.9);
+    // offset: ;
+    // transform: translateY(-50%);
+  }
 }
 
 .manga-banner-container {
-    display: flex;
-    align-items: flex-end;
-    padding-left: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 150px;
-    width: 100%;
-    // overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding-left: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 150px;
+  width: 100%;
+  // overflow: hidden;
 
-    background-size: cover;
-    background-position: center;
-    // opacity: 0.5; /* Adjust the opacity value as needed */
-  }
-  
-  .manga-banner-image {
-    flex: 0 0 auto;
-    margin-right: 20px;
-    width: 20%;
-    height: auto;
-    border-radius: 4px;
-  }
-  
-  .manga-banner-image img {
-    width: 100%; /* Adjust image width as needed */
-    height: auto;
-    border-radius: 4px;
-    z-index: 30;
-  }
+  background-color: $main-white;
+  background-size: cover;
+  background-position: center;
+  // opacity: 0.5; /* Adjust the opacity value as needed */
+}
 
-  .manga-banner-tags {
-    margin-top: 8px;
-    overflow: hidden;
-    height: auto;
-  }
-  
+.manga-banner-image {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  width: 20%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.manga-banner-image img {
+  width: 100%;
+  /* Adjust image width as needed */
+  height: auto;
+  border-radius: 4px;
+  z-index: 30;
+}
+
+.manga-banner-tags {
+  margin-top: 8px;
+  overflow: hidden;
+  height: auto;
+}
+
 //   .manga-banner-tags span {
 //     display: inline-block;
 //     margin-right: 4px;
@@ -64,29 +66,28 @@
 //     border-radius: 4px;
 //     font-size: 10px;
 //   }
-  
-  .manga-banner-info {
-    flex: 1 1 auto;
-    justify-content: flex-end;
-    height: fit-content;
-  }
-  
-  .manga-banner-info h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .manga-banner-info p {
-    font-size: 16px;
-    color: #555;
-    line-height: 1.4;
-    max-height: calc(5 * line-height);
-    overflow: hidden;
-  }
 
-  .manga-banner-info h5 {
-    justify-content: end;
-  }
-  
-  /* Add additional styling for other info sections as needed */
-  
+.manga-banner-info {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  height: fit-content;
+}
+
+.manga-banner-info h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.manga-banner-info p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.4;
+  max-height: calc(5 * line-height);
+  overflow: hidden;
+}
+
+.manga-banner-info h5 {
+  justify-content: end;
+}
+
+/* Add additional styling for other info sections as needed */

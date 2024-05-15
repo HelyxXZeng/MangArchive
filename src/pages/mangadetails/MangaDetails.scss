@@ -1,1 +1,31 @@
-@import '../../global-styles/Color.scss'
+@import "../../global-styles/Color.scss";
+
+.manga-details-page {
+    width: 100%;
+    // background-color: $main-white;
+    align-self: center;
+    justify-content: center;
+    height: auto;
+
+    p {
+        color: $text-white-new;
+        padding: 10px;
+        margin-left: 10px;
+    }
+}
+
+.info-data-container {
+    width: 100%;
+    display: flex;
+}
+
+.more-info-container {
+    width: 20%;
+    margin: 0px;
+}
+
+.chapter-container {
+    width: 80%;
+    margin: 0px;
+    padding: 20px;
+}
