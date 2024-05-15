@@ -16,6 +16,8 @@ import Post from "./pages/SocialPage/ProfileChild/Post/Post";
 import Media from "./pages/SocialPage/ProfileChild/Media/Media";
 import Setting from "./pages/setting/Setting";
 import MangaDetails from "./pages/mangadetails/MangaDetails";
+import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
+import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 
 function App() {
 
@@ -72,21 +74,21 @@ function App() {
               element: <Profile/>,
               children: [
                 {
-                  path: "post",
+                  path: "",
                   element: <Post />
                 },
                 {
                   path: "media",
                   element: <Media />
                 },
-                // {
-                //   path: "friend",
-                //   element: <Friend />
-                // },
-                // {
-                //   path: "group",
-                //   element: <Group />
-                // }
+                {
+                  path: "friends",
+                  element: <Friends />
+                },
+                {
+                  path: "groups",
+                  element: <Groups />
+                }
               ]
             }
           ]
