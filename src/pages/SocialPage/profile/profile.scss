@@ -2,7 +2,9 @@
 
 .profileFrame{
     display: flex;
-    
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
     color: $text-white-new;
     .main{
         width: 100%;
@@ -112,6 +114,9 @@
                     .level{
                         font-weight: 400;
                         font-style: italic;
+                        .textHighlightBlue{
+                            color: $blue-soft;
+                        }
                     }
                     .level,.Name{
                         font-size: 20px;

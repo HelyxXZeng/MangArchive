@@ -73,7 +73,7 @@ const Profile = () => {
           <div className="userNameInfo">
             <div className="userNameChild">
               <span className="Name">{name}</span>
-              <span className="level">LV <span className="textHighlight">{level}</span></span>
+              <span className="level">LV<span className="textHighlightBlue">{level}</span></span>
             </div>
             <span className="userName">@{name}</span>
           </div>
@@ -134,7 +134,7 @@ const Profile = () => {
               <Tab label="Post" to={`/profile/${username}`} value={`/profile/${username}`} component={Link}/>
               <Tab label="Media" to={`/profile/${username}/media`} value={`/profile/${username}/media`} component={Link}/>
               <Tab label="Friends" to={`/profile/${username}/friends`} value={`/profile/${username}/friends`} component={Link}/>
-              <Tab label="Groups" to={`/profile/${username}/group`} value={`/profile/${username}/group`} component={Link}/>
+              <Tab label="Groups" to={`/profile/${username}/groups`} value={`/profile/${username}/groups`} component={Link}/>
             </Tabs>
 
           </div>
