@@ -4,7 +4,7 @@
     color: $text-white-new;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
-    gap: 4px; /* Khoảng cách giữa các item */
+    grid-gap: 4px;
     padding: 4px 4px 0px;
     width: 100%;
     height: 100%;

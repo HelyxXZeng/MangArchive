@@ -1,0 +1,123 @@
+@import "../../../../global-styles/Color.scss";
+
+.postCardContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    border-bottom: 1px solid $gray-bg;
+
+    .cardHeader {
+        flex-direction: row;
+        display: flex;
+        margin-bottom: 12px;
+        .avatarContainer{
+            margin-right: 8px;
+        }
+        
+        .leftContainer{
+            flex-direction: row;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .nameNId {
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+            min-width: 80px;
+            width: auto;
+            max-width: 256px;
+            justify-content: flex-start;
+
+            .userNameChild {
+                align-items: center;
+                display: flex;
+                justify-content: flex-start;
+                gap: 20px;
+                flex-direction: row;
+
+                .level {
+                    font-weight: 400;
+                    font-style: italic;
+
+                    .bluetext {
+                        color: $blue-soft;
+                    }
+
+                    .redtext {
+                        color: $like-pink;
+                    }
+
+                    .yellowtext {
+                        color: $orange-yellow;
+                    }
+                }
+
+                .name {
+                    justify-content: center;
+                    font-weight: 700;
+                    display: -webkit-box;
+                    width: 100%;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            .idName {
+                justify-content: center;
+                font-weight: 400;
+                color: $text-gray-soft-new;
+            }
+
+        }
+    }
+
+    .cardContent {
+        display: flex;
+
+        .gallery {
+            border-radius: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+            grid-gap: 10px;
+            grid-auto-rows: 256px;
+            width: 522px;
+            height: 288px;
+
+            .gallery_item {
+                object-fit: cover;
+                width: 100%;
+                /* Chiều rộng tự động */
+                height: 100%;
+                /* Chiều cao tự động */
+                max-width: 256px;
+                /* Tối đa là 256px */
+                max-height: 288px;
+                /* Tối đa là 256px */
+                display: block;
+                /* Hiển thị dạng block */
+                transition: transform 0.2s ease-in-out;
+                display: block;
+            }
+        }
+
+        .textContent{
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            -webkit-line-clamp: 5;
+        }
+    }
+
+    // @media screen and (max-width: 767px) {
+    //     .cardContent {
+    //         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    //         grid-gap: 5px;
+    //     }
+    // }
+}
