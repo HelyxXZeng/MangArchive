@@ -3,7 +3,7 @@ import './MangaBanner.scss';
 import Tag from '../tag/Tag';
 
 import Image from '../image/Image';
-import { getDataApi } from '../../utils/MangaData';
+// import { getDataApi } from '../../utils/MangaData';
 
 interface BannerProps {
     manga: any,
@@ -20,13 +20,14 @@ const MangaBanner: React.FC<BannerProps> = ({ manga }) => {
         //         setCover(relate.attributes?.fileName);
         //     }
         // });
-        getDataApi(manga.id)
-            .then(returnData => {
-                console.log(returnData);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+
+        // getDataApi(manga.id)
+        //     .then(returnData => {
+        //         console.log(returnData);
+        //     })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //     });
 
         setCover(manga.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName);
         setAuthor(manga.relationships.find((r: any) => r.type === "author")?.attributes.name);
@@ -34,6 +35,7 @@ const MangaBanner: React.FC<BannerProps> = ({ manga }) => {
     }
 
     useEffect(() => {
+        // console.log(manga);
         getCover();
     }, []);
 

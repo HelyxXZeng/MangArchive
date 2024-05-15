@@ -63,6 +63,7 @@ const Homepage = () => {
   return (
     <div className="mainHomepage">
       <Manga />
+      {/* <MangaDetails manga_id='3cbc4293-3623-470a-9405-f46b328c83d4'/> */}
     </div>
   );
 }

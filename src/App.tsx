@@ -7,6 +7,7 @@ import "./global-styles/Font.scss"
 import AuthPage from "./pages/authpage/Authpage";
 import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
+import MangaDetails from "./pages/mangadetails/MangaDetails";
 
 function App() {
 
@@ -14,14 +15,14 @@ function App() {
     return (
       <div className="main">
         <div className="headerWarper">
-          <HeaderBar/>
+          <HeaderBar />
         </div>
         <div className="container">
           <div className="sideBarContainer">
-            <SideBar/>
+            <SideBar />
           </div>
           <div className="contentContainer">
-            <Outlet/>
+            <Outlet />
           </div>
         </div>
       </div>
@@ -34,10 +35,15 @@ function App() {
       element: <Layout />,
       children: [
         {
-          path:"/",
-          element: <Homepage/>
+          path: "/",
+          element: <Homepage />
         },
-        
+        {
+          path: "/manga/:manga_id",
+          element: <MangaDetails />,
+          children: []
+        },
+
       ]
     },
     {
