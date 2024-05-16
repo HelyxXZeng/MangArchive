@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import Manga from "../manga/Manga";
 import MangaBanner from "../mangabanner/MangaBanner";
 import "./MangaDetails.scss";
 import { getDataApi } from "../../utils/MangaData";
@@ -14,32 +13,28 @@ const MangaDetails: React.FC<Props> = () => {
     const [manga, setManga] = useState<any>(null);
     const [data, setData] = useState<any>(null);
     const [activeButton, setActiveButton] = useState("chapters");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageInput, setPageInput] = useState("1");
+    const chaptersPerPage = 10;
 
     const handleButtonClick = (buttonName: string) => {
         setActiveButton(buttonName);
     };
 
-    // const baseUrl = "https://api.mangadex.org";
     const getData = async () => {
         try {
-            const {
-                data: { data: fetchData },
-            } = await axios({
+            const { data: { data: fetchData } } = await axios({
                 method: "GET",
                 url: `https://api.mangadex.org/manga/${manga_id}?includes[]=cover_art&includes[]=author&includes[]=artist`,
-                // params: {
-                //   limit: 10,
-                //   offset: 0
-                // }
             });
-            console.log("Manga data fetch sucessfully: ", fetchData);
+            console.log("Manga data fetched successfully: ", fetchData);
             setManga(fetchData);
 
             if (!fetchData) {
-                throw new Error("Mangas not found.");
+                throw new Error("Manga not found.");
             }
         } catch (error) {
-            console.error("Error fetching mangas:", error);
+            console.error("Error fetching manga:", error);
         }
 
         getDataApi(manga_id)
@@ -55,7 +50,38 @@ const MangaDetails: React.FC<Props> = () => {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [manga_id]);
+
+    // Pagination logic
+    const indexOfLastChapter = currentPage * chaptersPerPage;
+    const indexOfFirstChapter = indexOfLastChapter - chaptersPerPage;
+    const currentChapters = data ? data.chapterNumbers.slice(indexOfFirstChapter, indexOfLastChapter) : [];
+
+    const totalPages = data ? Math.ceil(data.chapterNumbers.length / chaptersPerPage) : 1;
+
+    const paginate = (pageNumber: number) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+            setPageInput(String(pageNumber));
+        }
+    };
+
+    const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (value === "" || (/^\d+$/.test(value) && parseInt(value) <= totalPages)) {
+            setPageInput(value);
+        }
+    };
+
+    const handlePageInputBlur = () => {
+        if (pageInput === "" || parseInt(pageInput) < 1) {
+            setPageInput("1");
+        }
+        const pageNumber = parseInt(pageInput);
+        if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
 
     return (
         <div className="manga-details-page">
@@ -70,50 +96,56 @@ const MangaDetails: React.FC<Props> = () => {
                 <div className="chapter-container">
                     <div className="manga-details-nav-button-bar">
                         <div
-                            className={`chapters-nav-button ${activeButton === "chapters" ? "active" : ""
-                                }`}
+                            className={`chapters-nav-button ${activeButton === "chapters" ? "active" : ""}`}
                             onClick={() => handleButtonClick("chapters")}
                         >
                             Chapters
                         </div>
                         <div
-                            className={`comments-nav-button ${activeButton === "comments" ? "active" : ""
-                                }`}
+                            className={`comments-nav-button ${activeButton === "comments" ? "active" : ""}`}
                             onClick={() => handleButtonClick("comments")}
                         >
                             Comments
                         </div>
                         <div
-                            className={`posts-nav-button ${activeButton === "posts" ? "active" : ""
-                                }`}
+                            className={`posts-nav-button ${activeButton === "posts" ? "active" : ""}`}
                             onClick={() => handleButtonClick("posts")}
                         >
                             Posts
                         </div>
                     </div>
                     {activeButton === "chapters" && data && (
-                        <div
-                            style={{
-                                width: "100%",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
-                        >
-                            {data.chapterNumbers.map((chap: any) => (
-                                <Chapter chapterNumber={chap} data={data.chapters[chap]} />
+                        <div style={{ width: "100%", justifyContent: "center", alignItems: "center" }}>
+                            {currentChapters.map((chap: any) => (
+                                <Chapter key={chap} chapterNumber={chap} data={data.chapters[chap]} />
                             ))}
 
-                            <p>Hello World</p>
+                            <div className="chapter-pagination">
+                                {currentPage > 1 && (
+                                    <button className="previous-chapter-page" onClick={() => paginate(currentPage - 1)}>Previous</button>
+                                )}
+                                <input
+                                    type="text"
+                                    value={pageInput}
+                                    onChange={handlePageInputChange}
+                                    onBlur={handlePageInputBlur}
+                                    style={{ width: "40px", textAlign: "center", borderRadius: "4px" }}
+                                />
+                                <span> / {totalPages}</span>
+                                {currentPage < totalPages && (
+                                    <button className="next-chapter-page" onClick={() => paginate(currentPage + 1)}>Next</button>
+                                )}
+                            </div>
                         </div>
                     )}
 
-                    {activeButton === "comments" && data && (
+                    {activeButton === "comments" && (
                         <div className="manga-details-comments-container">
                             There is no comment yet
                         </div>
                     )}
 
-                    {activeButton === "posts" && data && (
+                    {activeButton === "posts" && (
                         <div className="manga-details-comments-container">
                             There is no post yet
                         </div>
@@ -136,4 +168,5 @@ const MangaDetails: React.FC<Props> = () => {
         </div>
     );
 };
+
 export default MangaDetails;
