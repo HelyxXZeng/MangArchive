@@ -61,6 +61,7 @@ const getDataApi = async (slug: any) => {
         if (manga_last_updated === "") manga_last_updated = thisChapterLastUpdate.toISOString();
         if ((new Date(manga_last_updated)).getTime() < thisChapterLastUpdate.getTime()) manga_last_updated = thisChapterLastUpdate.toISOString();
 
+        thisChapter.id = id;
         thisChapter.title = title;
         thisChapter.translatedLanguage = translatedLanguage;
 

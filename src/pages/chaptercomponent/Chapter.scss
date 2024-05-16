@@ -58,11 +58,20 @@
     }
 
     p {
-        width: 95%;
+        width: fit-content;
         font-size: 14px;
         white-space: nowrap;
         text-overflow: ellipsis;
         color: $text-black;
         padding: 0px;
+    }
+
+    h2 {
+        width: fit-content;
+        font-size: 14px;
+        padding-left: 10px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: $blue-soft;
     }
 }

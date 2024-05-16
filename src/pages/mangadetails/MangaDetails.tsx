@@ -13,8 +13,11 @@ const MangaDetails: React.FC<Props> = () => {
     const { manga_id } = useParams<{ manga_id: string }>();
     const [manga, setManga] = useState<any>(null);
     const [data, setData] = useState<any>(null);
+    const [activeButton, setActiveButton] = useState("chapters");
 
-    const [containerType, setContainerType] = useState("chapter");
+    const handleButtonClick = (buttonName: string) => {
+        setActiveButton(buttonName);
+    };
 
     // const baseUrl = "https://api.mangadex.org";
     const getData = async () => {
@@ -65,13 +68,54 @@ const MangaDetails: React.FC<Props> = () => {
                     <span style={{ color: "white" }}>More Infos</span>
                 </div>
                 <div className="chapter-container">
-                    {containerType === "chapter" && data && (
-                        <div style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                    <div className="manga-details-nav-button-bar">
+                        <div
+                            className={`chapters-nav-button ${activeButton === "chapters" ? "active" : ""
+                                }`}
+                            onClick={() => handleButtonClick("chapters")}
+                        >
+                            Chapters
+                        </div>
+                        <div
+                            className={`comments-nav-button ${activeButton === "comments" ? "active" : ""
+                                }`}
+                            onClick={() => handleButtonClick("comments")}
+                        >
+                            Comments
+                        </div>
+                        <div
+                            className={`posts-nav-button ${activeButton === "posts" ? "active" : ""
+                                }`}
+                            onClick={() => handleButtonClick("posts")}
+                        >
+                            Posts
+                        </div>
+                    </div>
+                    {activeButton === "chapters" && data && (
+                        <div
+                            style={{
+                                width: "100%",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
                             {data.chapterNumbers.map((chap: any) => (
                                 <Chapter chapterNumber={chap} data={data.chapters[chap]} />
                             ))}
 
                             <p>Hello World</p>
+                        </div>
+                    )}
+
+                    {activeButton === "comments" && data && (
+                        <div className="manga-details-comments-container">
+                            There is no comment yet
+                        </div>
+                    )}
+
+                    {activeButton === "posts" && data && (
+                        <div className="manga-details-comments-container">
+                            There is no post yet
                         </div>
                     )}
                 </div>
