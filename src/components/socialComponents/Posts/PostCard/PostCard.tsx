@@ -13,7 +13,20 @@ const PostCard = () => {
 
     const [name, setName] = useState<string>('test');
     const [level, setLevel] = useState<number>(3);
-    const [idName, setIdName] = useState<string>('@test')
+    const [idName, setIdName] = useState<string>('@test');
+    const [liked, setLiked] = useState<boolean>(false);
+    const [likes, setLikes] = useState<number>(1000);
+    const [comments, setComments] = useState<number>(3);
+
+    const handleLikeClick = () => {
+        setLiked(!liked);
+        setLikes(liked ? likes - 1 : likes + 1);
+    };
+
+    const handleCommentClick = () => {
+        console.log("mở post lên!")
+    }
+
     return (
         <div className="postCardContainer">
             <div className="cardHeader">
@@ -53,7 +66,21 @@ const PostCard = () => {
                 </div> */}
             </div>
             <div className="optionBar">
-                
+                <div className="likeSection">
+                    <div className="iconNnumber" onClick={handleLikeClick}>
+                        <div className={`heart-icon ${liked ? 'liked' : ''}`}>
+                            {/* <img className={`heart-icon ${liked ? 'liked' : ''}`} src="/heart.svg" alt="heart" /> */}
+                        </div>
+                    </div>
+                    <span className={`likes-amount ${liked ? 'liked' : ''}`}>{likes}</span>
+                </div>
+                <div className="line"></div>
+                <div className="commentSection" onClick={handleCommentClick}>
+                    <div className="imgwrapper">
+                        <img src="/icons/message.svg" alt="message" />
+                    </div>
+                    {comments}
+                </div>
             </div>
         </div>
     )

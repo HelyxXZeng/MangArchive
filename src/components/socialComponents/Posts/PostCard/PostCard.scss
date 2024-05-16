@@ -10,16 +10,18 @@
         flex-direction: row;
         display: flex;
         margin-bottom: 12px;
-        .avatarContainer{
+
+        .avatarContainer {
             margin-right: 8px;
         }
-        
-        .leftContainer{
+
+        .leftContainer {
             flex-direction: row;
             display: flex;
             justify-content: space-between;
             width: 100%;
         }
+
         .nameNId {
             font-size: 15px;
             display: flex;
@@ -107,7 +109,7 @@
             }
         }
 
-        .textContent{
+        .textContent {
             white-space: pre-wrap;
             word-wrap: break-word;
             -webkit-line-clamp: 5;
@@ -120,4 +122,96 @@
     //         grid-gap: 5px;
     //     }
     // }
+    .optionBar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        // margin-left: auto;
+        //     margin-right: auto;
+
+        .likeSection {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            .iconNnumber{
+                align-items: center;
+            background: rgba(255, 192, 200, 0);
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            transition: all 100ms ease;
+            
+
+            @keyframes like-anim {
+                to {
+                    background-position: right;
+                }
+            }
+
+
+
+            &:hover {
+                background: rgba(255, 192, 200, 0.034);
+            }
+
+
+            .heart-icon {
+                height: 40px;
+                width: 40px;
+                background: url("/icons/heart.png") no-repeat;
+                background-position: left;
+                background-size: cover;
+                cursor: pointer;
+                transition: transform 0.2s ease-in-out;
+
+                &.liked {
+                    animation: like-anim 0.7s steps(28) forwards;
+                }
+            }
+
+            .likes-amount {
+                font-size: 16px;
+                color: #888;
+                font-weight: 900;
+            }
+            }
+        }
+        .line{
+            height: 40px;
+            border: 1px solid $gray-bg;
+        }
+        .commentSection {
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            cursor: pointer;
+            pointer-events: auto;
+            gap: 8px;
+
+            .imgwrapper{
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                img {
+                    height: 24px;
+                    width: 24px;
+                    cursor: pointer;
+                }
+                &:hover{
+                    background-color: $gray-bg;
+                }
+            }
+        }
+    }
 }
