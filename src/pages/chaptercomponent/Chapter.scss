@@ -1,0 +1,77 @@
+@import "../../global-styles/Color.scss";
+
+.chapter-card {
+    display: flex;
+    flex-direction: column;
+    // background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+    overflow: hidden;
+    width: 100%;
+    height: fit-content;
+    max-height: 500px;
+    margin-bottom: 10px;
+    background-color: $main-white;
+    // background: linear-gradient(to bottom,
+    //         rgba(255, 255, 255, 0),
+    //         rgba(255, 255, 255, 1));
+}
+
+.chapter-number {
+    background-color: $blue-main;
+
+    h2 {
+        font-size: 12px;
+        padding-left: 10px;
+        color: $text-white-new;
+    }
+}
+
+.chapter-data {
+    display: flex;
+    // flex-direction: column;
+    // background-color: #fff;
+    // border-radius: 8px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 1);
+    width: 100%;
+    height: fit-content;
+    max-height: 500px;
+    margin-left: 20px;
+    padding-left: 10px;
+    align-self: flex-end;
+
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0;
+
+    &.show {
+        max-height: 200px; // Adjust this value based on the content
+        opacity: 1;
+    }
+
+    h3 {
+        width: 5%;
+        font-size: 14px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    p {
+        width: fit-content;
+        font-size: 14px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: $text-black;
+        padding: 0px;
+    }
+
+    h2 {
+        width: fit-content;
+        font-size: 14px;
+        padding-left: 10px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: $blue-soft;
+    }
+}

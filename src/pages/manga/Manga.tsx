@@ -6,9 +6,9 @@ import "./Manga.scss";
 import MangaCard from "../title/TitleCard2";
 import BannerSwiper from "../bannerswiper/BannerSwiper";
 import MangaCardSwiper from "../mangaswiper/MangaSwiper";
-import MangaBanner from "../mangabanner/MangaBanner";
-import { suggestManga } from "../../utils/SuggestManga";
+// import MangaBanner from "../mangabanner/MangaBanner";
 // import Banner from '../banner/Banner';
+import { suggestManga } from "../../utils/SuggestManga";
 
 const Manga = () => {
   const [mangaList, setMangaList] = useState([]);
@@ -30,9 +30,9 @@ const Manga = () => {
           },
         },
       });
-      console.log("log2: ", resp.data.data);
+      // console.log("log2: ", resp.data.data);
       setMangaList(resp.data.data);
-      setSuggestManga(await suggestManga());
+      setSuggestManga(await suggestManga(10));
 
       if (!resp) {
         throw new Error("Mangas not found.");
@@ -60,7 +60,10 @@ const Manga = () => {
       </div>
 
       <div className="textbox">
-        <h1 style={{ paddingLeft: "20px" }}>Recent Updated</h1>
+        <h1 style={{ paddingLeft: "20px" }}>
+          <span>Recent </span>
+          <span style={{ color: "#1B6FA8" }}>Updated</span>
+        </h1>
       </div>
 
       {/* {mangaList.length > 0 && <MangaBanner manga={mangaList[0]} />} */}
@@ -126,28 +129,20 @@ const Manga = () => {
               <MangaCard key={manga.id} manga={manga} />
             ))}
         </div>
-      </div>
-
-      <div className="horizontal-manga-list">
-        {/* {mangaList && mangaList.map((manga, index) => (
+        <div className="horizontal-manga-list">
+          {/* {mangaList && mangaList.map((manga, index) => (
           <MangaCard key={index} manga={manga} />
           // <TitleCardSkeleton></TitleCardSkeleton>
-        ))} */}
-        {suggestMangas.length > 0 && <MangaCardSwiper mangas={suggestMangas} />}
-      </div>
-
-      <div>
-        <button>
-          <span>Add To Library</span>
-        </button>
-        <div>
-          <div>
-            <button>
-              <span>Hello</span>
-            </button>
-          </div>
+          ))} */}
+          {suggestMangas.length > 0 && (
+            <MangaCardSwiper mangas={suggestMangas} />
+          )}
         </div>
       </div>
+
+      {/* <div className="horizontal-manga-list">
+        {suggestMangas.length > 0 && <MangaCardSwiper mangas={suggestMangas} />}
+      </div> */}
     </div>
   );
 };

@@ -1,0 +1,100 @@
+@import "../../global-styles/Color.scss";
+
+.manga-details-page {
+    width: 100%;
+    // background-color: $main-white;
+    align-self: center;
+    justify-content: center;
+    height: auto;
+
+    p {
+        color: $text-white-new;
+        padding: 10px;
+        margin-left: 10px;
+    }
+}
+
+.info-data-container {
+    width: 100%;
+    display: flex;
+}
+
+.manga-details-nav-button-bar {
+    width: 100%;
+    height: fit-content;
+    text-align: center;
+    display: flex;
+    background-color: $main-white;
+    margin-bottom: 20px;
+    border-radius: 8px;
+
+    .chapters-nav-button,
+    .comments-nav-button,
+    .posts-nav-button {
+        background-color: $blue-main;
+        color: $text-white-new;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 1);
+        flex: 1;
+        height: fit-content;
+        text-align: center;
+        padding: 5px;
+        box-sizing: border-box;
+        cursor: pointer; // Change cursor to pointer on hover
+        transition: background-color 0.3s, color 0.3s; // Smooth transition for color changes
+    }
+
+    .chapters-nav-button.active,
+    .comments-nav-button.active,
+    .posts-nav-button.active {
+        background-color: $blue-main;
+        color: $text-white-new;
+    }
+
+    .chapters-nav-button:not(.active),
+    .comments-nav-button:not(.active),
+    .posts-nav-button:not(.active) {
+        background-color: white;
+        color: black;
+    }
+}
+
+.more-info-container {
+    width: 20%;
+    margin: 0px;
+}
+
+.chapter-container {
+    width: 80%;
+    margin: 0px;
+    padding: 20px;
+}
+
+.chapter-pagination {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    gap: 20px;
+
+    .previous-chapter-page,
+    .next-chapter-page {
+        text-align: center;
+        width: 80px;
+        border-radius: 4px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    span {
+        color: $text-white-new;
+    }
+}
+
+.manga-details-comments-container {
+    // width: 80%;
+    margin: 0px;
+    // padding: 20px;
+    height: fit-content;
+    min-height: 500px;
+    text-align: center;
+    color: $text-white-new;
+}

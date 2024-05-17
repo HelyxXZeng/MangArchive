@@ -15,6 +15,7 @@ import Announcement from "./pages/announcement/Announcement";
 import Post from "./pages/SocialPage/ProfileChild/Post/Post";
 import Media from "./pages/SocialPage/ProfileChild/Media/Media";
 import Setting from "./pages/setting/Setting";
+import MangaDetails from "./pages/mangadetails/MangaDetails";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 
@@ -24,7 +25,7 @@ function App() {
     return (
       <div className="main">
         <div className="headerWarper">
-          <HeaderBar/>
+          <HeaderBar />
         </div>
         <div className="container">
           <div className="sideBarContainer customScrollbar">
@@ -56,8 +57,13 @@ function App() {
       element: <Layout />,
       children: [
         {
-          path:"/",
-          element: <Homepage/>
+          path: "/",
+          element: <Homepage />
+        },
+        {
+          path: "/manga/:manga_id",
+          element: <MangaDetails />,
+          children: []
         },
         {
           path:"/",
