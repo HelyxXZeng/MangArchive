@@ -5,7 +5,6 @@ import "./MangaDetails.scss";
 import { getDataApi } from "../../utils/MangaData";
 import Chapter from "../chaptercomponent/Chapter";
 import { useParams } from "react-router-dom";
-import { divide } from "lodash";
 
 interface Props { }
 

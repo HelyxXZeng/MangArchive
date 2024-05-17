@@ -1,9 +1,54 @@
 @import "../../global-styles/Color.scss";
 
+.loading-wave {
+  width: 300px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.loading-bar {
+  width: 20px;
+  height: 10px;
+  margin: 0 5px;
+  background-color: $blue-main;
+  border-radius: 5px;
+  animation: loading-wave-animation 1s ease-in-out infinite;
+}
+
+.loading-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.loading-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.loading-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+@keyframes loading-wave-animation {
+  0% {
+    height: 10px;
+  }
+
+  50% {
+    height: 50px;
+  }
+
+  100% {
+    height: 10px;
+  }
+}
+
 .manga-grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr); /* Five columns with equal width */
-  gap: 10px; /* Adjust the gap between items as needed */
+  grid-template-columns: repeat(1, 1fr);
+  /* Five columns with equal width */
+  gap: 10px;
+  /* Adjust the gap between items as needed */
   margin: 20px;
 }
 
@@ -24,16 +69,22 @@
 
 .horizontal-manga-list {
   width: 100%;
-  display: inline-flex; /* Display children in a single line */
-  overflow-x: auto; /* Allow horizontal scrolling */
-  padding: 10px; /* Add padding for better appearance */
+  display: inline-flex;
+  /* Display children in a single line */
+  overflow-x: auto;
+  /* Allow horizontal scrolling */
+  padding: 10px;
+  /* Add padding for better appearance */
   height: fit-content;
 }
 
 .manga-card {
-  flex: 1; /* Allow cards to shrink as needed */
-  height: 200px; /* Set a fixed width for each card */
-  margin-right: 20px; /* Add margin between grid items */
+  flex: 1;
+  /* Allow cards to shrink as needed */
+  height: 200px;
+  /* Set a fixed width for each card */
+  margin-right: 20px;
+  /* Add margin between grid items */
 }
 
 .banner {
@@ -43,37 +94,29 @@
 
 @media screen and (min-width: 512px) {
   .manga-grid {
-    grid-template-columns: repeat(
-      2,
-      1fr
-    ); /* Three columns on screens wider than 768px */
+    grid-template-columns: repeat(2, 1fr);
+    /* Three columns on screens wider than 768px */
   }
 }
 
 @media screen and (min-width: 768px) {
   .manga-grid {
-    grid-template-columns: repeat(
-      3,
-      1fr
-    ); /* Four columns on screens wider than 1024px */
+    grid-template-columns: repeat(3, 1fr);
+    /* Four columns on screens wider than 1024px */
   }
 }
 
 @media screen and (min-width: 1024px) {
   .manga-grid {
-    grid-template-columns: repeat(
-      4,
-      1fr
-    ); /* Five columns on screens wider than 1280px */
+    grid-template-columns: repeat(4, 1fr);
+    /* Five columns on screens wider than 1280px */
   }
 }
 
 @media screen and (min-width: 1280px) {
   .manga-grid {
-    grid-template-columns: repeat(
-      5,
-      1fr
-    ); /* Six columns on screens wider than 1600px */
+    grid-template-columns: repeat(5, 1fr);
+    /* Six columns on screens wider than 1600px */
   }
 }
 
@@ -120,5 +163,4 @@
   // padding: 20px;
   font-size: 12px;
   background-color: $main-white;
-
 }
