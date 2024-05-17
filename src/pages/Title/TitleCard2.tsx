@@ -4,7 +4,7 @@ import Image from '../image/Image';
 import './TitleCard2.scss';
 import Tag from '../tag/Tag';
 import { getDataApi } from '../../utils/MangaData';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 interface Props {
   manga: any;
@@ -114,12 +114,12 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
           </div>
           <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />
         </div>
-        <Link to={`/manga/${manga.id}`} style={{ textDecoration: 'none' }}>
+        <NavLink to={`/manga/${manga.id}`} style={{ textDecoration: 'none' }}>
           <div className="title-and-artist-container">
             <h2>{title}</h2>
             <p className='author-artist'>{(author === artist) ? (author) : (author + ', ' + artist)}</p>
           </div>
-        </Link>
+        </NavLink>
         <div className="manga-card-content">
           <div className="tags">
             {manga.attributes.tags.map((tag: any) => (
