@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SwiperCore from 'swiper';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -7,6 +7,7 @@ import MangaCard from '../title/TitleCard2'; // Assuming your MangaCard componen
 import './MangaSwiper.scss';
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
+// SwiperCore.use([Navigation]);
 
 interface Props {
   mangas: any[]; // Assuming mangas is an array of manga objects
@@ -15,19 +16,22 @@ interface Props {
 const MangaCardSwiper: React.FC<Props> = ({ mangas }) => {
   return (
     <div className='manga-swiper'>
-        <Swiper
-            spaceBetween={20}
-            slidesPerView={3} // Adjust as needed
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 3000 }}
-        >
-        {mangas.map((manga, index) => (
-            <SwiperSlide key={index}>
-            <MangaCard manga={manga} />
-            </SwiperSlide>
+      <Swiper
+        // ref={swiperRef}
+        spaceBetween={0} // Adjust as per your requirement
+        slidesPerView={'auto'}
+        navigation
+        autoplay={{ delay: 3000 }}
+        // loop={true}
+      >
+        {mangas.map((manga: any) => (
+          <SwiperSlide key={manga.id} style={{ width: 'fit-content' }}>
+            <div className="swiper-slide-content"> {/* Center the MangaCard horizontally */}
+              <MangaCard manga={manga} />
+            </div>
+          </SwiperSlide>
         ))}
-        </Swiper>
+      </Swiper>
     </div>
   );
 };

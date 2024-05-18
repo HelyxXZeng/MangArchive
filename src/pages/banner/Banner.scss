@@ -1,84 +1,89 @@
 @import "../../global-styles/Color.scss";
 
 .banner-container {
-    display: flex;
-    align-items: flex-start;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 300px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  height: 300px;
+  width: 100%;
+}
+
+.background-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  // opacity: 1;
+
+  img {
     width: 100%;
-    overflow: hidden;
+    height: 100%; 
+    object-fit: cover;
+    object-position: center center;
+    opacity: 0.5;
+  }
+}
+  
+.banner-content {
+  display: flex;
+  flex: 1;
+}
 
-    background-size: cover;
-    background-position: center;
-    // opacity: 0.5; /* Adjust the opacity value as needed */
-  }
+.banner-image {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  width: 20%;
+  height: auto;
+  border-radius: 4px;
+}
 
-  .banner-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8; /* Adjust the opacity value as needed */
-    z-index: -1; /* Ensure the pseudo-element stays behind the content */
-  }
-  
-  .banner-image {
-    flex: 0 0 auto;
-    margin-right: 20px;
-    width: 20%;
-    height: auto;
-    border-radius: 4px;
-  }
-  
-  .banner-image img {
-    width: 200px; /* Adjust image width as needed */
-    height: auto;
-    border-radius: 4px;
-  }
+.banner-image img {
+  width: 200px;
+  height: auto;
+  border-radius: 4px;
+}
 
-  .banner-tags {
-    margin-top: 8px;
-    overflow: hidden;
-    height: auto;
-  }
-  
-//   .banner-tags span {
-//     display: inline-block;
-//     margin-right: 4px;
-//     padding: 4px 4px;
-//     background-color: #f0f0f0;
-//     border-radius: 4px;
-//     font-size: 10px;
-//   }
-  
-  .banner-info {
-    flex: 1 1 auto;
-    justify-content: flex-end;
-    background-color: rgb(255, 255, 255, 0.8);
-  }
-  
-  .banner-info h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .banner-info p {
-    font-size: 16px;
-    color: #555;
-    line-height: 1.4;
-    max-height: 88px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.banner-tags {
+  margin-top: 8px;
+  overflow: hidden;
+  height: auto;
+}
 
-  .banner-info h5 {
-    justify-content: end;
-  }
+.banner-info {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  // background-color: rgb(255, 255, 255, 0.8);
+}
+
+.banner-info h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: $text-white;
+}
+
+.banner-info p {
+  font-size: 16px;
+  color: $text-white;
+  line-height: 1.4;
+  max-height: 88px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.banner-info h5 {
+  justify-content: end;
+  color: $text-white;
+}
   
   /* Add additional styling for other info sections as needed */
   

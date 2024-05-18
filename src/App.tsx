@@ -15,9 +15,11 @@ import Announcement from "./pages/announcement/Announcement";
 import Post from "./pages/SocialPage/ProfileChild/Post/Post";
 import Media from "./pages/SocialPage/ProfileChild/Media/Media";
 import Setting from "./pages/setting/Setting";
+import MangaDetails from "./pages/mangadetails/MangaDetails";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 import Feed from "./pages/SocialPage/feed/Feed";
+import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 
 function App() {
 
@@ -25,14 +27,14 @@ function App() {
     return (
       <div className="main">
         <div className="headerWarper">
-          <HeaderBar/>
+          <HeaderBar />
         </div>
         <div className="container">
           <div className="sideBarContainer customScrollbar">
-            <SideBar/>
+            <SideBar />
           </div>
           <div className="contentContainer customScrollbar">
-            <Outlet/>
+            <Outlet />
           </div>
         </div>
       </div>
@@ -46,7 +48,7 @@ function App() {
           <Outlet/>
         </div>
         <div className="suggestRightbar">
-          <RightBar/>
+          <RightBar />
         </div>
       </div>
     );
@@ -57,16 +59,26 @@ function App() {
       element: <Layout />,
       children: [
         {
-          path:"/",
-          element: <Homepage/>
+          path: "/",
+          element: <Homepage />
         },
         {
-          path:"/",
-          element: <SocialLayout/>,
+          path: "/manga/:manga_id",
+          element: <MangaDetails />,
+          children: []
+        },
+        {
+          path: "/search",
+          element: <SearchMangaPage />,
+          children: []
+        },
+        {
+          path: "/",
+          element: <SocialLayout />,
           children: [
             {
-              path:"profile/:username",
-              element: <Profile/>,
+              path: "profile/:username",
+              element: <Profile />,
               children: [
                 {
                   path: "",
@@ -93,20 +105,20 @@ function App() {
           ]
         },
         {
-          path:"/policies",
-          element:<RulePage/>
+          path: "/policies",
+          element: <RulePage />
         },
         {
-          path:"/aboutus",
-          element:<AboutUs/>
+          path: "/aboutus",
+          element: <AboutUs />
         },
         {
-          path:"/announcement",
-          element:<Announcement/>
+          path: "/announcement",
+          element: <Announcement />
         },
         {
-          path:"/setting",
-          element:<Setting/>
+          path: "/setting",
+          element: <Setting />
         }
       ]
     },
