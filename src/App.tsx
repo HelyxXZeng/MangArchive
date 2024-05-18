@@ -18,6 +18,7 @@ import Setting from "./pages/setting/Setting";
 import MangaDetails from "./pages/mangadetails/MangaDetails";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
+import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 
 function App() {
 
@@ -29,10 +30,10 @@ function App() {
         </div>
         <div className="container">
           <div className="sideBarContainer customScrollbar">
-            <SideBar/>
+            <SideBar />
           </div>
           <div className="contentContainer customScrollbar">
-            <Outlet/>
+            <Outlet />
           </div>
         </div>
       </div>
@@ -43,10 +44,10 @@ function App() {
     return (
       <div className="socialMain">
         <div className="masterFrame">
-          {<Outlet/>}
+          {<Outlet />}
         </div>
         <div className="suggestRightbar">
-          <RightBar/>
+          <RightBar />
         </div>
       </div>
     );
@@ -66,12 +67,17 @@ function App() {
           children: []
         },
         {
-          path:"/",
-          element: <SocialLayout/>,
+          path: "/search",
+          element: <SearchMangaPage />,
+          children: []
+        },
+        {
+          path: "/",
+          element: <SocialLayout />,
           children: [
             {
-              path:"profile/:username",
-              element: <Profile/>,
+              path: "profile/:username",
+              element: <Profile />,
               children: [
                 {
                   path: "",
@@ -94,20 +100,20 @@ function App() {
           ]
         },
         {
-          path:"/policies",
-          element:<RulePage/>
+          path: "/policies",
+          element: <RulePage />
         },
         {
-          path:"/aboutus",
-          element:<AboutUs/>
+          path: "/aboutus",
+          element: <AboutUs />
         },
         {
-          path:"/announcement",
-          element:<Announcement/>
+          path: "/announcement",
+          element: <Announcement />
         },
         {
-          path:"/setting",
-          element:<Setting/>
+          path: "/setting",
+          element: <Setting />
         }
       ]
     },

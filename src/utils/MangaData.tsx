@@ -29,7 +29,7 @@ const getDataApi = async (slug: any) => {
 
     const { data: { data: chaptersData } } = await axios({
         method: 'GET',
-        url: `https://api.mangadex.org/manga/${slug}/feed?order[chapter]=asc&order[updatedAt]=desc&includeFutureUpdates=1`, /* translatedLanguage[]=vi& */
+        url: `https://api.mangadex.org/manga/${slug}/feed?limit=500&includeFutureUpdates=1&order%5Bchapter%5D=asc&order%5BupdatedAt%5D=desc`, /* translatedLanguage[]=vi& */
     });
 
     const chapterArray = chaptersData.map((chapter: any) => ({

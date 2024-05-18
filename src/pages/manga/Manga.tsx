@@ -54,95 +54,108 @@ const Manga = () => {
 
   return (
     <div className="mainPage">
-      <div className="banner">
-        {/* <h1>Welcome to My Website</h1> */}
-        {suggestMangas.length > 0 && <BannerSwiper banners={suggestMangas} />}
-      </div>
-
-      <div className="textbox">
-        <h1 style={{ paddingLeft: "20px" }}>
-          <span>Recent </span>
-          <span style={{ color: "#1B6FA8" }}>Updated</span>
-        </h1>
-      </div>
-
-      {/* {mangaList.length > 0 && <MangaBanner manga={mangaList[0]} />} */}
-
-      <div className="category-selection">
-        <span>
-          <div className="category-selection-tag">All Category</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Shounen</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Shoujo</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Josei</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Action</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Mistery</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Adventure</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Fantasy</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Dark Fantasy</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Oneshot</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Slice of Life</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">School Life</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Romance</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Drama</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Comedy</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Harem</div>
-        </span>
-        <span>
-          <div className="category-selection-tag">Ecchi</div>
-        </span>
-      </div>
-
-      <div className="manga-grid-container">
-        <div className="manga-grid">
-          {mangaList &&
-            mangaList.map((manga: any) => (
-              <MangaCard key={manga.id} manga={manga} />
-            ))}
+      {!(mangaList && suggestMangas) ? (
+        <div className="loading-wave">
+          <div className="loading-bar"></div>
+          <div className="loading-bar"></div>
+          <div className="loading-bar"></div>
+          <div className="loading-bar"></div>
         </div>
-        <div className="horizontal-manga-list">
-          {/* {mangaList && mangaList.map((manga, index) => (
-          <MangaCard key={index} manga={manga} />
-          // <TitleCardSkeleton></TitleCardSkeleton>
-          ))} */}
-          {suggestMangas.length > 0 && (
-            <MangaCardSwiper mangas={suggestMangas} />
-          )}
-        </div>
-      </div>
+      ) : (
+        <div>
+          <div className="banner">
+            {/* <h1>Welcome to My Website</h1> */}
+            {suggestMangas.length > 0 && (
+              <BannerSwiper banners={suggestMangas} />
+            )}
+          </div>
 
-      {/* <div className="horizontal-manga-list">
-        {suggestMangas.length > 0 && <MangaCardSwiper mangas={suggestMangas} />}
-      </div> */}
+          <div className="textbox">
+            <h1 style={{ paddingLeft: "20px" }}>
+              <span>Recent </span>
+              <span style={{ color: "#1B6FA8" }}>Updated</span>
+            </h1>
+          </div>
+
+          {/* {mangaList.length > 0 && <MangaBanner manga={mangaList[0]} />} */}
+
+          <div className="category-selection">
+            <span>
+              <div className="category-selection-tag">All Category</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Shounen</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Shoujo</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Josei</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Action</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Mistery</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Adventure</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Fantasy</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Dark Fantasy</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Oneshot</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Slice of Life</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">School Life</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Romance</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Drama</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Comedy</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Harem</div>
+            </span>
+            <span>
+              <div className="category-selection-tag">Ecchi</div>
+            </span>
+          </div>
+
+          <div className="manga-grid-container">
+            <div className="manga-grid">
+              {mangaList &&
+                mangaList.map((manga: any) => (
+                  <MangaCard key={manga.id} manga={manga} />
+                ))}
+            </div>
+            <div className="horizontal-manga-list">
+              {/* {mangaList && mangaList.map((manga, index) => (
+                    <MangaCard key={index} manga={manga} />
+                    // <TitleCardSkeleton></TitleCardSkeleton>
+                    ))} */}
+              {suggestMangas.length > 0 && (
+                <MangaCardSwiper mangas={suggestMangas} />
+              )}
+            </div>
+          </div>
+
+          {/* <div className="horizontal-manga-list">
+                  {suggestMangas.length > 0 && <MangaCardSwiper mangas={suggestMangas} />}
+                </div> */}
+        </div>
+      )}
     </div>
   );
 };

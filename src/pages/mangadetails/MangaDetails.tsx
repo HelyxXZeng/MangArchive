@@ -23,7 +23,9 @@ const MangaDetails: React.FC<Props> = () => {
 
     const getData = async () => {
         try {
-            const { data: { data: fetchData } } = await axios({
+            const {
+                data: { data: fetchData },
+            } = await axios({
                 method: "GET",
                 url: `https://api.mangadex.org/manga/${manga_id}?includes[]=cover_art&includes[]=author&includes[]=artist`,
             });
@@ -55,9 +57,13 @@ const MangaDetails: React.FC<Props> = () => {
     // Pagination logic
     const indexOfLastChapter = currentPage * chaptersPerPage;
     const indexOfFirstChapter = indexOfLastChapter - chaptersPerPage;
-    const currentChapters = data ? data.chapterNumbers.slice(indexOfFirstChapter, indexOfLastChapter) : [];
+    const currentChapters = data
+        ? data.chapterNumbers.slice(indexOfFirstChapter, indexOfLastChapter)
+        : [];
 
-    const totalPages = data ? Math.ceil(data.chapterNumbers.length / chaptersPerPage) : 1;
+    const totalPages = data
+        ? Math.ceil(data.chapterNumbers.length / chaptersPerPage)
+        : 1;
 
     const paginate = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -68,7 +74,10 @@ const MangaDetails: React.FC<Props> = () => {
 
     const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        if (value === "" || (/^\d+$/.test(value) && parseInt(value) <= totalPages)) {
+        if (
+            value === "" ||
+            (/^\d+$/.test(value) && parseInt(value) <= totalPages)
+        ) {
             setPageInput(value);
         }
     };
@@ -85,86 +94,132 @@ const MangaDetails: React.FC<Props> = () => {
 
     return (
         <div className="manga-details-page">
-            {manga && <MangaBanner manga={manga} />}
-
-            {manga && <p>{manga.attributes.description.en}</p>}
-
-            <div className="info-data-container">
-                <div className="more-info-container">
-                    <span style={{ color: "white" }}>More Infos</span>
+            {!(manga && data) ? (
+                <div className="loading-wave">
+                    <div className="loading-bar"></div>
+                    <div className="loading-bar"></div>
+                    <div className="loading-bar"></div>
+                    <div className="loading-bar"></div>
                 </div>
-                <div className="chapter-container">
-                    <div className="manga-details-nav-button-bar">
-                        <div
-                            className={`chapters-nav-button ${activeButton === "chapters" ? "active" : ""}`}
-                            onClick={() => handleButtonClick("chapters")}
-                        >
-                            Chapters
+            ) : (
+                <div>
+                    {manga && <MangaBanner manga={manga} />}
+
+                    {manga && <p>{manga.attributes.description.en}</p>}
+
+                    <div className="info-data-container">
+                        <div className="more-info-container">
+                            <span style={{ color: "white" }}>More Infos</span>
                         </div>
-                        <div
-                            className={`comments-nav-button ${activeButton === "comments" ? "active" : ""}`}
-                            onClick={() => handleButtonClick("comments")}
-                        >
-                            Comments
-                        </div>
-                        <div
-                            className={`posts-nav-button ${activeButton === "posts" ? "active" : ""}`}
-                            onClick={() => handleButtonClick("posts")}
-                        >
-                            Posts
+                        <div className="chapter-container">
+                            <div className="manga-details-nav-button-bar">
+                                <div
+                                    className={`chapters-nav-button ${activeButton === "chapters" ? "active" : ""
+                                        }`}
+                                    onClick={() => handleButtonClick("chapters")}
+                                    style={{
+                                        borderTopLeftRadius: "8px",
+                                        borderBottomLeftRadius: "8px",
+                                    }}
+                                >
+                                    Chapters
+                                </div>
+                                <div
+                                    className={`comments-nav-button ${activeButton === "comments" ? "active" : ""
+                                        }`}
+                                    onClick={() => handleButtonClick("comments")}
+                                >
+                                    Comments
+                                </div>
+                                <div
+                                    className={`posts-nav-button ${activeButton === "posts" ? "active" : ""
+                                        }`}
+                                    onClick={() => handleButtonClick("posts")}
+                                    style={{
+                                        borderTopRightRadius: "8px",
+                                        borderBottomRightRadius: "8px",
+                                    }}
+                                >
+                                    Posts
+                                </div>
+                            </div>
+                            {activeButton === "chapters" && data && (
+                                <div
+                                    style={{
+                                        width: "100%",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    {currentChapters.map((chap: any) => (
+                                        <Chapter
+                                            key={chap}
+                                            chapterNumber={chap}
+                                            data={data.chapters[chap]}
+                                        />
+                                    ))}
+
+                                    <div className="chapter-pagination">
+                                        {currentPage > 1 && (
+                                            <button
+                                                className="previous-chapter-page"
+                                                onClick={() => paginate(currentPage - 1)}
+                                            >
+                                                Previous
+                                            </button>
+                                        )}
+                                        <input
+                                            type="text"
+                                            value={pageInput}
+                                            onChange={handlePageInputChange}
+                                            onBlur={handlePageInputBlur}
+                                            style={{
+                                                width: "40px",
+                                                textAlign: "center",
+                                                borderRadius: "4px",
+                                            }}
+                                        />
+                                        <span> / {totalPages}</span>
+                                        {currentPage < totalPages && (
+                                            <button
+                                                className="next-chapter-page"
+                                                onClick={() => paginate(currentPage + 1)}
+                                            >
+                                                Next
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeButton === "comments" && (
+                                <div className="manga-details-comments-container">
+                                    There is no comment yet
+                                </div>
+                            )}
+
+                            {activeButton === "posts" && (
+                                <div className="manga-details-comments-container">
+                                    There is no post yet
+                                </div>
+                            )}
                         </div>
                     </div>
-                    {activeButton === "chapters" && data && (
-                        <div style={{ width: "100%", justifyContent: "center", alignItems: "center" }}>
-                            {currentChapters.map((chap: any) => (
-                                <Chapter key={chap} chapterNumber={chap} data={data.chapters[chap]} />
-                            ))}
 
-                            <div className="chapter-pagination">
-                                {currentPage > 1 && (
-                                    <button className="previous-chapter-page" onClick={() => paginate(currentPage - 1)}>Previous</button>
-                                )}
-                                <input
-                                    type="text"
-                                    value={pageInput}
-                                    onChange={handlePageInputChange}
-                                    onBlur={handlePageInputBlur}
-                                    style={{ width: "40px", textAlign: "center", borderRadius: "4px" }}
-                                />
-                                <span> / {totalPages}</span>
-                                {currentPage < totalPages && (
-                                    <button className="next-chapter-page" onClick={() => paginate(currentPage + 1)}>Next</button>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {activeButton === "comments" && (
-                        <div className="manga-details-comments-container">
-                            There is no comment yet
-                        </div>
-                    )}
-
-                    {activeButton === "posts" && (
-                        <div className="manga-details-comments-container">
-                            There is no post yet
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            <div>
-                <button>
-                    <span>Add To Library</span>
-                </button>
-                <div>
                     <div>
                         <button>
-                            <span>Hello</span>
+                            <span>Add To Library</span>
                         </button>
+                        <div>
+                            <div>
+                                <button>
+                                    <span>Hello</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
