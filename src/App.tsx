@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Outlet, ScrollRestoration } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet  } from "react-router-dom";
 import Homepage from './pages/homepage/Homepage';
 
 import "./global-styles/App.scss";
@@ -27,22 +27,21 @@ function App() {
   const Layout = () => {
     return (
       <>
-      <ScrollToTop/>
-      <div className="main">
-      <ScrollRestoration/>
-        <div className="headerWarper">
-          <HeaderBar />
-        </div>
-        <div className="container">
-          <div className="sideBarContainer customScrollbar">
-            <SideBar />
+        <ScrollToTop />
+        <div className="main">
+
+          <div className="headerWarper">
+            <HeaderBar />
           </div>
-          <div className="contentContainer customScrollbar">
-          <ScrollRestoration/>
-            <Outlet />
+          <div className="container">
+            <div className="sideBarContainer customScrollbar">
+              <SideBar />
+            </div>
+            <div className="contentContainer customScrollbar">
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
       </>
     );
   }
@@ -50,12 +49,9 @@ function App() {
   const SocialLayout = () => {
     return (
       <div className="socialMain">
-      <ScrollToTop/><ScrollRestoration/>
-
+        <ScrollToTop />
         <div className="masterFrame">
-          <ScrollRestoration/>
-          <Outlet>
-          </Outlet>
+          <Outlet />
         </div>
         <div className="suggestRightbar">
           <RightBar />
@@ -109,8 +105,8 @@ function App() {
               ]
             },
             {
-              path:"feed",
-              element: <Feed/>
+              path: "feed",
+              element: <Feed />
             }
           ]
         },
