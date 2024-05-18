@@ -118,7 +118,7 @@ const SideBar = () => {
             <div className="item" key={item.id}>
                 <span className="title">{item.title}</span>
                 {item.listItems.map((listItem)=>(
-                    <NavLink to={listItem.url} className="listItem" key={listItem.id}>
+                    <NavLink to={listItem.url} className="listItem" key={listItem.id} preventScrollReset={true}>
                         <img src={listItem.icon} alt="" />
                         <span className="listItemTitles">{listItem.title}</span>
                     </NavLink>
