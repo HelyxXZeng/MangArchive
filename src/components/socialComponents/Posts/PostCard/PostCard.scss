@@ -223,7 +223,7 @@
                 &.halfWidth {
                     max-width: 384px;
                     width: 100%;
-                min-width: 256px;
+                    min-width: 256px;
 
                     height: 288px;
                     /* Height for each row */
@@ -263,8 +263,11 @@
                 // }
 
                 &.quarterWidth {
-                    width: 384px;
+                    max-width: 384px;
+                    width: 100%;
                     height: 144px;
+                    // min-width: 256px;
+
                     /* Height for each row */
                     &.image0 {
                         border-top-left-radius: 16px;
