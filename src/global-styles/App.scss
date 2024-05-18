@@ -4,6 +4,7 @@
   //   margin: 0;
   //   padding: 0;
   box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
 }
 
 body {
@@ -53,11 +54,14 @@ body {
     display: flex;
 
     .sideBarContainer {
-      width: 250px;
+      max-width: 250px;
       padding: 5px 20px;
       border-right: 1px solid #000;
       background: $blue-main;
-
+      @media (max-width: 1090px) {
+        padding: 0px;
+        display: block; /* tương đương với hidden lg:block */
+      }
       overscroll-behavior: contain;
       overflow-y: auto;
       height: calc(100vh - 56px);
@@ -83,7 +87,7 @@ body {
           width: 100%;
           position: relative;
           flex:1;
-          @media (max-width: 1024px) {
+          @media (max-width: 960px) {
             padding: 0px 1.5rem;
             display: block; /* tương đương với hidden lg:block */
           }
@@ -92,15 +96,13 @@ body {
           flex:0.25;
           width: 100%;
           position: relative;
-          @media (min-width: 1024px) {
+          @media (min-width: 960px) {
             display: block;
           }
         
-          @media (max-width: 1023px) {
+          @media (max-width: 959px) {
             display: none;
           }
-        
-          
 
           }
         }

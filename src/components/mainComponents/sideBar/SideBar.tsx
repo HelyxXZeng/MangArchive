@@ -32,7 +32,7 @@ const menu = [
             {
                 id:1,
                 title:"Feed",
-                url:"/",
+                url:"/feed",
                 icon:"/icons/feed.svg",
             },
             {

@@ -65,4 +65,22 @@
             }
         }
     }
+    @media (max-width: 1090px) {
+        .item{
+            padding: 12px 0px;
+            .title{
+                display: none;
+            }
+            .listItem{
+                .listItemTitles{
+                    display: none;
+                }
+            }
+        }
+        .footer{
+            display: none;
+            
+        }
+        display: block; /* tương đương với hidden lg:block */
+      }
 }

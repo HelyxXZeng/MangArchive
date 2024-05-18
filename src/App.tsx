@@ -18,6 +18,7 @@ import Setting from "./pages/setting/Setting";
 import MangaDetails from "./pages/mangadetails/MangaDetails";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
+import Feed from "./pages/SocialPage/feed/Feed";
 import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 
 function App() {
@@ -44,7 +45,7 @@ function App() {
     return (
       <div className="socialMain">
         <div className="masterFrame">
-          {<Outlet />}
+          <Outlet/>
         </div>
         <div className="suggestRightbar">
           <RightBar />
@@ -96,6 +97,10 @@ function App() {
                   element: <Groups />
                 }
               ]
+            },
+            {
+              path:"feed",
+              element: <Feed/>
             }
           ]
         },
