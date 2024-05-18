@@ -35,7 +35,7 @@ const Profile = () => {
     <div className="profileFrame">
       <div className="main">
         <section className="headernav">
-          <button className="backbutton" onClick={handleBack}>
+          <button className="backbutton" onClick={handleBack} title="back">
             <img src="/icons/arrow-left.svg" alt="" />
           </button>
           <div className="headerInfo">

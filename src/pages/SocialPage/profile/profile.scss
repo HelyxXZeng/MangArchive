@@ -36,19 +36,19 @@
                     background-color: $main-bg-hold;
                 }
             }
-        }
-        .headerInfo{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            .name{
-                font-size: 20px;
-                font-weight: 700;
-            }
-            .postCount{
-                font-size: 13px;
-                font-weight: 400;
-                color: $text-gray-soft-new;
+            .headerInfo{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                .name{
+                    font-size: 20px;
+                    font-weight: 700;
+                }
+                .postCount{
+                    font-size: 13px;
+                    font-weight: 400;
+                    color: $text-gray-soft-new;
+                }
             }
         }
 

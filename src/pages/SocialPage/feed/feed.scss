@@ -1,0 +1,53 @@
+@import '../../../global-styles/Color.scss';
+
+.feedContainer {
+    display: flex;
+    flex-direction: column;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    color: $text-white-new;
+
+    .mainFeed {
+        width: 100%;
+        height: 100%;
+        max-width: 960px;
+        justify-content: center;
+        align-items: center;
+        border-left: 1px solid $gray-bg;
+        border-right: 1px solid $gray-bg;
+
+        // display: flex;
+        // flex-direction: column;
+        .header {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            // height: 40px;
+            background-color: $gray-bg;
+
+            h2 {
+                margin-top: 8px;
+                margin-bottom: 8px;
+            }
+        }
+
+        .newFeedSection {
+            display: flex;
+
+            width: 100%;
+
+        }
+
+        .feedList {
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}

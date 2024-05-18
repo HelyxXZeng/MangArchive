@@ -17,6 +17,7 @@ import Media from "./pages/SocialPage/ProfileChild/Media/Media";
 import Setting from "./pages/setting/Setting";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
+import Feed from "./pages/SocialPage/feed/Feed";
 
 function App() {
 
@@ -42,7 +43,7 @@ function App() {
     return (
       <div className="socialMain">
         <div className="masterFrame">
-          {<Outlet/>}
+          <Outlet/>
         </div>
         <div className="suggestRightbar">
           <RightBar/>
@@ -84,6 +85,10 @@ function App() {
                   element: <Groups />
                 }
               ]
+            },
+            {
+              path:"feed",
+              element: <Feed/>
             }
           ]
         },

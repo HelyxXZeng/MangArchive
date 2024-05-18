@@ -3,7 +3,10 @@ import "./PostCard.scss"
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
-const PostCard = () => {
+interface props{
+    count : number
+}
+const PostCard = (data:props) => {
     const images = [
         'https://cdn.donmai.us/original/f2/dd/__acheron_honkai_and_1_more_drawn_by_szlljxk__f2dd492d1ef8fbaa4c8a0f0cabc280ed.jpg',
         'https://cdn.donmai.us/original/d2/1b/__robin_honkai_and_1_more_drawn_by_himey__d21bab2de5bbe278d34f85f42664b4fc.jpg',
@@ -22,11 +25,80 @@ const PostCard = () => {
         setLiked(!liked);
         setLikes(liked ? likes - 1 : likes + 1);
     };
+    const getRandomImages = (arr :any, count:number) => {
+        const shuffled = arr.sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    };
+    const limitedImages = getRandomImages(images, data.count);
 
     const handleCommentClick = () => {
         console.log("mở post lên!")
     }
+    let galleryItems = [];
 
+
+    switch (data.count) {
+        case 1:
+            galleryItems.push(
+                <img
+                    key={0}
+                    className="gallery_item fullWidth"
+                    src={images[0]}
+                    alt={`Image 1`}
+                />
+            );
+            break;
+        case 2: 
+            limitedImages.forEach((image:string, index:number) => {
+                galleryItems.push(
+                    <img
+                        key={index}
+                        className={`gallery_item halfWidth image${index}`}
+                        src={image}
+                        alt={`Image ${index + 1}`}
+                    />
+                );
+            });
+            break;
+            case 3:
+                galleryItems.push(
+                    <img
+                        key={0}
+                        className={`gallery_item halfWidth image0`}
+                        src={images[0]}
+                        alt={`Image 1`}
+                    />
+                );
+                galleryItems.push(
+                    <div key={1} className={`gallery_item halfWidth`}>
+                        <img
+                            className={`image1`}
+                            src={images[1]}
+                            alt={`Image 2`}
+                        />
+                        <img
+                            className={`image2`}
+                            src={images[2]}
+                            alt={`Image 3`}
+                        />
+                    </div>
+                );
+                break;
+        case 4:
+            for (let i = 0; i < images.length; i++) {
+                galleryItems.push(
+                    <img
+                        key={i}
+                        className={`gallery_item quarterWidth image${i}`}
+                        src={images[i]}
+                        alt={`Image ${i + 1}`}
+                    />
+                );
+            }
+            break;
+        default:
+            break;
+    }
     return (
         <div className="postCardContainer">
             <div className="cardHeader">
@@ -64,6 +136,9 @@ const PostCard = () => {
                         />
                     ))}
                 </div> */}
+                { data.count > 0 && 
+                    <div className="gallery">{galleryItems}</div>
+                }
             </div>
             <div className="optionBar">
                 <div className="likeSection">
