@@ -37,7 +37,7 @@ const menu = [
             },
             {
                 id:2,
-                title:"Group",
+                title:"Explore",
                 url:"/",
                 icon:"/icons/people.svg",
             },
