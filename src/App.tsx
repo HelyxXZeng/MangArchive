@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, ScrollRestoration } from "react-router-dom";
 import Homepage from './pages/homepage/Homepage';
 
 import "./global-styles/App.scss";
@@ -20,12 +20,16 @@ import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 import Feed from "./pages/SocialPage/feed/Feed";
 import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
+import ScrollToTop from "./hooks/useScrollToTop";
 
 function App() {
 
   const Layout = () => {
     return (
+      <>
+      <ScrollToTop/>
       <div className="main">
+      <ScrollRestoration/>
         <div className="headerWarper">
           <HeaderBar />
         </div>
@@ -34,18 +38,24 @@ function App() {
             <SideBar />
           </div>
           <div className="contentContainer customScrollbar">
+          <ScrollRestoration/>
             <Outlet />
           </div>
         </div>
       </div>
+      </>
     );
   }
 
   const SocialLayout = () => {
     return (
       <div className="socialMain">
+      <ScrollToTop/><ScrollRestoration/>
+
         <div className="masterFrame">
-          <Outlet/>
+          <ScrollRestoration/>
+          <Outlet>
+          </Outlet>
         </div>
         <div className="suggestRightbar">
           <RightBar />

@@ -5,7 +5,12 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const scrollableContainer = document.querySelector('.contentContainer');
+    if (scrollableContainer) {
+      scrollableContainer.scrollTo(0, 0);
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
 
   return null;
