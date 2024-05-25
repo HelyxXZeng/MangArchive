@@ -18,7 +18,6 @@ const HeaderBar = () => {
   const [status, setStatus] = useState<boolean>(false);
   useEffect(() => {
     if (session !== null) {
-      console.log("trigger session",session)
       setStatus(true);
     }
   }, [session]);

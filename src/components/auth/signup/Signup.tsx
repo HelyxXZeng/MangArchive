@@ -9,6 +9,7 @@ const Signup: FunctionComponent = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [checkPassword, setCheckPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   //const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -16,6 +17,7 @@ const Signup: FunctionComponent = () => {
 
 
   const onSignupButtonClick = useCallback(async () => {
+    console.log(password,checkPassword,email,username)
     const {
       data: { session },
       error,
@@ -87,20 +89,22 @@ const Signup: FunctionComponent = () => {
               placeholder="Email"
               variant="outlined"
               type="email"
+              onChange={(event) => { setEmail(event.target.value) }}
             />
             <TextField
               className="username-input-field"
               color="primary"
               placeholder="Username (không dấu, tối đa 32 ký tự)"
               variant="outlined"
-              type="email"
+              type="text"
+              onChange={(event) => { setUsername(event.target.value) }}
             />
             <TextField
               className="password-input-field"
               placeholder="Password"
               variant="outlined"
               type={showPassword ? "text" : "password"}
-              //onChange={}
+              onChange={(event) => { setPassword(event.target.value) }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -119,7 +123,7 @@ const Signup: FunctionComponent = () => {
               placeholder="Nhập lại Password"
               variant="outlined"
               type={showPassword ? "text" : "password"}
-              //onChange={}
+              onChange={(event) => { setCheckPassword(event.target.value) }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -132,8 +136,8 @@ const Signup: FunctionComponent = () => {
                     </IconButton>
                   </InputAdornment>
                 ),
-              }} />
-
+              }} 
+              />
           </div>
           <div className="buttonOption">
             <Button

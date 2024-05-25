@@ -33,7 +33,6 @@ const Login: FunctionComponent = () => {
         } else {
           try {
             const { data, error } = await supabase.from("User").select("email").eq("username", email)
-            console.log(password)
             if (error) throw error
             if (data) {
               const response = await supabase.auth.signInWithPassword({ email: data[0].email, password: password })

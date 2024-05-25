@@ -62,7 +62,9 @@
 
 .mainPage {
   // padding-bottom: 50px;
-  max-width: 1280px;
+  max-width: 1920px;
+  min-width: 640px;
+  width: auto;
   overflow: hidden;
   // align-content: center;
 }
