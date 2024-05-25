@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./headerBar.scss";
 import { Avatar, Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import useCheckSession from "../../../hooks/session";
 
 const HeaderBar = () => {
   const navigate = useNavigate();
@@ -12,8 +13,15 @@ const HeaderBar = () => {
   const onSignUpContainerClick = useCallback(() => {
     navigate("/auth/signup");
   }, [navigate]);
+  const session  = useCheckSession();
 
-  const [status, setStatus] = useState<boolean>(true);
+  const [status, setStatus] = useState<boolean>(false);
+  useEffect(() => {
+    if (session !== null) {
+      console.log("trigger session",session)
+      setStatus(true);
+    }
+  }, [session]);
   const [notificationCount, setNotificationCount] = useState(1);
   const [searchInput, setSearchInput] = useState<string>("");
 
