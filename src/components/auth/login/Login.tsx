@@ -3,48 +3,100 @@ import { useNavigate } from "react-router-dom";
 import { TextField, InputAdornment, IconButton, Button } from "@mui/material";
 import "./login.scss";
 import { supabase } from "../../../utils/supabase";
-import { values } from "lodash";
 
 const Login: FunctionComponent = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  //const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   const onLoginButtonClick = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({ email: "", password: "" }); // Clear previous errors
+
     try {
-      e.preventDefault()
       if (email && password) {
-        const isEmail = email.includes("@")
+        const isEmail = email.includes("@");
 
         if (isEmail) {
           try {
-            const response = await supabase.auth.signInWithPassword({ email: email, password: password })
-            if (response.error) throw response.error
+            const response = await supabase.auth.signInWithPassword({
+              email: email,
+              password: password,
+            });
+            if (response.error) throw response.error;
 
             if (response.data.user) {
-              navigate(`/`, { replace: true })
+              navigate(`/`, { replace: true });
+            } else {
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                email: "Invalid email or password",
+              }));
             }
           } catch (error) {
-            console.log(58, "error - ", error)
+            console.error("Error:", error);
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email: "Invalid email or password",
+            }));
           }
         } else {
           try {
-            const { data, error } = await supabase.from("User").select("email").eq("username", email)
-            if (error) throw error
-            if (data) {
-              const response = await supabase.auth.signInWithPassword({ email: data[0].email, password: password })
-              if (response.error) throw response.error+" email"
+            const { data, error } = await supabase
+              .from("User")
+              .select("email")
+              .eq("username", email);
+
+            if (error) throw error;
+            if (data && data.length > 0) {
+              const response = await supabase.auth.signInWithPassword({
+                email: data[0].email,
+                password: password,
+              });
+
+              if (response.error) throw response.error;
 
               if (response.data.user) {
-                navigate(`/`, { replace: true })
+                navigate(`/`, { replace: true });
+              } else {
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  email: "Invalid username or password",
+                }));
               }
-            } else throw "LoginPage.tsx - no data"
+            } else {
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                email: "Username does not exist",
+              }));
+            }
           } catch (error) {
-            console.error(78, "login - ", error)
+            console.error("Error:", error);
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email: "Invalid username or password",
+            }));
           }
+        }
+      } else {
+        if (!email) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "Email or Username is required",
+          }));
+        }
+        if (!password) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            password: "Password is required",
+          }));
         }
       }
     } catch (error: any) {
@@ -91,27 +143,41 @@ const Login: FunctionComponent = () => {
               placeholder="Email or Username"
               variant="outlined"
               type="email"
-              onChange={(event) => { setEmail(event.target.value) }}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
+              }}
+              error={!!errors.email}
+              helperText={errors.email}
             />
             <TextField
               className="password-input-field"
               placeholder="Password"
               variant="outlined"
               type={showPassword ? "text" : "password"}
-              onChange={(event) => { setPassword(event.target.value) }}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
-                    // onMouseDown={handleMouseDownPassword}
                     >
-                      {showPassword ? (<img src="/icons/eye.svg" />) : (<img src="/icons/eye-slash.svg" />)}
+                      {showPassword ? (
+                        <img src="/icons/eye.svg" alt="show" />
+                      ) : (
+                        <img src="/icons/eye-slash.svg" alt="hide" />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 ),
-              }} />
+              }}
+              error={!!errors.password}
+              helperText={errors.password}
+            />
             <div className="loginOption">
               <div className="remember-me-button">
                 <input className="checkbox" type="checkbox" />
@@ -126,10 +192,10 @@ const Login: FunctionComponent = () => {
               onClick={onLoginButtonClick}
               sx={{
                 '&.MuiButton-contained': {
-                  backgroundColor: '#1b6fa8', // Màu nền của button
-                  color: '#fff', // Màu chữ của button
+                  backgroundColor: '#1b6fa8',
+                  color: '#fff',
                   '&:hover': {
-                    backgroundColor: '#4296cf', // Màu nền khi hover
+                    backgroundColor: '#4296cf',
                   },
                 },
               }}
@@ -141,11 +207,11 @@ const Login: FunctionComponent = () => {
               onClick={onGoogleLoginContainerClick}
               sx={{
                 '&.MuiButton-contained': {
-                  backgroundColor: 'transparent', // Nền trong suốt
-                  color: '#1F1F1F', // Màu chữ của button
-                  border: '1px solid #1F1F1F',// Viền của button
+                  backgroundColor: 'transparent',
+                  color: '#1F1F1F',
+                  border: '1px solid #1F1F1F',
                   '&:hover': {
-                    backgroundColor: '#f0f0f0', // Màu nền khi hover
+                    backgroundColor: '#f0f0f0',
                   },
                 },
               }}
