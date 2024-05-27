@@ -38,7 +38,7 @@
 
 .manga-banner-image {
   flex: 0 0 auto;
-  margin-right: 20px;
+  margin-right: 0px;
   width: 20%;
   height: auto;
   border-radius: 4px;
@@ -71,6 +71,12 @@
   flex: 1 1 auto;
   justify-content: flex-end;
   height: fit-content;
+  padding-left: 20px;
+  padding-right: 10px;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: $main-white;
+  z-index: 99;
 }
 
 .manga-banner-info h2 {

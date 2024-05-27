@@ -102,7 +102,7 @@ const MangaDetails: React.FC<Props> = () => {
                     <div className="loading-bar"></div>
                 </div>
             ) : (
-                <div>
+                <div style={{ width: "100%" }}>
                     {manga && <MangaBanner manga={manga} />}
 
                     {manga && <p>{manga.attributes.description.en}</p>}
