@@ -40,8 +40,8 @@ const menu = [
             },
             {
                 id: 2,
-                title: "Explore",
-                url: "/",
+                title: "Discover",
+                url: "/discover",
                 icon: "/icons/people.svg",
             },
             {

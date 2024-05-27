@@ -29,7 +29,7 @@ const RightBar = () => {
             <UserCardSmall name={name.toString()} />
           </div>
         ))}
-        <NavLink to="/i/connect_people" className="seeMoreLink">
+        <NavLink to="/discover/connect_people" className="seeMoreLink">
           See more
         </NavLink>
       </div>
@@ -40,7 +40,7 @@ const RightBar = () => {
             <UserCardSmall name={name} />
           </div>
         ))}
-        <NavLink to="/i/connect_group" className="seeMoreLink">
+        <NavLink to="/discover/connect_group" className="seeMoreLink">
           See more
         </NavLink>
       </div>

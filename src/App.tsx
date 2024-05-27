@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Outlet  } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Homepage from './pages/homepage/Homepage';
 
 import "./global-styles/App.scss";
@@ -21,6 +21,7 @@ import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 import Feed from "./pages/SocialPage/feed/Feed";
 import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 import ScrollToTop from "./hooks/useScrollToTop";
+import Discorver from "./pages/SocialPage/discorver/Discorver";
 
 function App() {
 
@@ -107,6 +108,10 @@ function App() {
             {
               path: "feed",
               element: <Feed />
+            },
+            {
+              path: "discover/",
+              element: <Discorver />
             }
           ]
         },
