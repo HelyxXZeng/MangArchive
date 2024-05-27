@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ReadChapter.scss";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import SwiperCore from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -15,8 +15,8 @@ const MangaDetails: React.FC<Props> = () => {
     const { chapter_id } = useParams<{ chapter_id: string }>();
     const [data, setData] = useState<any>(null);
     const [imgStyle, setImgStyle] = useState<"style1" | "style2">("style1");
-    const [imgStyleText, setImgStyleText] = useState<"Fit Width" | "Fit Height">("Fit Width");
     const swiperRef = useRef<SwiperCore | null>(null);
+    const navigate = useNavigate(); // Use history for navigation
 
     const getData = async () => {
         try {
@@ -24,7 +24,7 @@ const MangaDetails: React.FC<Props> = () => {
                 method: "GET",
                 url: `https://api.mangadex.org/at-home/server/${chapter_id}`,
             });
-            console.log("Chapter data fetched successFity: ", resp.data.chapter);
+            console.log("Chapter data fetched successfully: ", resp.data.chapter);
             setData(resp.data);
 
             if (!resp.data) {
@@ -45,7 +45,11 @@ const MangaDetails: React.FC<Props> = () => {
                 if (e.key === "ArrowLeft") {
                     swiperRef.current.slidePrev();
                 } else if (e.key === "ArrowRight") {
-                    swiperRef.current.slideNext();
+                    if (swiperRef.current.isEnd) {
+                        navigate(-1); // Go back to the previous URL
+                    } else {
+                        swiperRef.current.slideNext();
+                    }
                 }
             }
         };
@@ -55,11 +59,10 @@ const MangaDetails: React.FC<Props> = () => {
         return () => {
             document.removeEventListener("keydown", handleKeydown);
         };
-    }, []);
+    }, [history]);
 
     const toggleImgStyle = () => {
         setImgStyle((prevStyle) => (prevStyle === "style1" ? "style2" : "style1"));
-        setImgStyleText((prevStyle) => (prevStyle === "Fit Width" ? "Fit Height" : "Fit Width"));
     };
 
     return (
@@ -91,6 +94,13 @@ const MangaDetails: React.FC<Props> = () => {
                                 });
                             }
                         }}
+                        onSlideChange={(swiper) => {
+                            if (swiper.isEnd) {
+                                document.body.classList.add('swiper-at-end');
+                            } else {
+                                document.body.classList.remove('swiper-at-end');
+                            }
+                        }}
                         spaceBetween={0}
                         slidesPerView={1}
                         navigation={true}
@@ -116,7 +126,7 @@ const MangaDetails: React.FC<Props> = () => {
                     </Swiper>
                     <div className="chapter-swiper-pagination"></div>
                     <button className="toggle-style-button" onClick={toggleImgStyle}>
-                        Change To {imgStyleText}
+                        Toggle Image Style
                     </button>
                 </div>
             )}
