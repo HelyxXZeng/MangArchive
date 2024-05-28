@@ -15,6 +15,7 @@ const MangaDetails: React.FC<Props> = () => {
     const { chapter_id } = useParams<{ chapter_id: string }>();
     const [data, setData] = useState<any>(null);
     const [imgStyle, setImgStyle] = useState<"style1" | "style2">("style1");
+    const [imgStyleText, setImgStyleText] = useState<"Full Width" | "Full Height">("Full Width");
     const swiperRef = useRef<SwiperCore | null>(null);
     const navigate = useNavigate(); // Use history for navigation
 
@@ -63,6 +64,7 @@ const MangaDetails: React.FC<Props> = () => {
 
     const toggleImgStyle = () => {
         setImgStyle((prevStyle) => (prevStyle === "style1" ? "style2" : "style1"));
+        setImgStyleText((prevStyle) => (prevStyle === "Full Width" ? "Full Height" : "Full Width"));
     };
 
     return (
@@ -126,7 +128,7 @@ const MangaDetails: React.FC<Props> = () => {
                     </Swiper>
                     <div className="chapter-swiper-pagination"></div>
                     <button className="toggle-style-button" onClick={toggleImgStyle}>
-                        Toggle Image Style
+                        Change to {imgStyleText}
                     </button>
                 </div>
             )}

@@ -12,10 +12,14 @@ const MangaDetails: React.FC<Props> = () => {
     const { manga_id } = useParams<{ manga_id: string }>();
     const [manga, setManga] = useState<any>(null);
     const [data, setData] = useState<any>(null);
+
     const [activeButton, setActiveButton] = useState("chapters");
+
     const [currentPage, setCurrentPage] = useState(1);
     const [pageInput, setPageInput] = useState("1");
     const chaptersPerPage = 10;
+
+    const [collection, setCollection] = useState('');
 
     const handleButtonClick = (buttonName: string) => {
         setActiveButton(buttonName);
@@ -53,6 +57,23 @@ const MangaDetails: React.FC<Props> = () => {
     useEffect(() => {
         getData();
     }, [manga_id]);
+
+    const addCollection = async () => {
+        // if (collection) {
+        //     let { data, error } = await supabase
+        //         .rpc('add_to_collection', {
+        //             this_collection_name: collection,
+        //             this_slug: manga_id,
+        //             this_user_id: 1,
+        //         })
+        //     if (error) console.error(error)
+        //     else console.log(data)
+        // }
+    }
+
+    useEffect(() => {
+        addCollection();
+    }, [collection]);
 
     // Pagination logic
     const indexOfLastChapter = currentPage * chaptersPerPage;
@@ -104,6 +125,21 @@ const MangaDetails: React.FC<Props> = () => {
             ) : (
                 <div style={{ width: "100%" }}>
                     {manga && <MangaBanner manga={manga} />}
+
+                    <div className="choose-collection">
+                        <select
+                            value={collection}
+                            onChange={(e) => setCollection(e.target.value)}
+                        >
+                            <option value="">ADD TO COLLECTION</option>
+                            <option value="READING">READING</option>
+                            <option value="COMPLETED">COMPLETED</option>
+                            <option value="ON-HOLD">ON HOLD</option>
+                            <option value="DROPPED">DROPPED</option>
+                            <option value="PLAN-TO-READ">PLAN TO READ</option>
+                            <option value="RE-READING">RE-READING</option>
+                        </select>
+                    </div>
 
                     {manga && <p>{manga.attributes.description.en}</p>}
 
