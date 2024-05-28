@@ -107,6 +107,43 @@
     }
 }
 
+.choose-collection {
+    // width: 100%;
+    // text-align: center;
+    // margin-bottom: 20px;
+    margin-left: 20px;
+    margin-top: 10px;
+
+    select {
+        background-color: $blue-main;
+        color: $text-white-new;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        text-align: center;
+        transition: background-color 0.3s, color 0.3s;
+
+        option {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: $blue-soft;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        &:focus {
+            outline: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: $blue-soft-hover;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+    }
+}
+
 .more-info-container {
     width: 20%;
     margin: 0px;

@@ -5,6 +5,8 @@ import "./MangaDetails.scss";
 import { getDataApi } from "../../utils/MangaData";
 import Chapter from "../chaptercomponent/Chapter";
 import { useParams } from "react-router-dom";
+import { supabase } from "../../utils/supabase";
+import CustomSelect from "../../components/mangaComponents/customSelection/CustomSelect";
 
 interface Props { }
 
@@ -59,21 +61,37 @@ const MangaDetails: React.FC<Props> = () => {
     }, [manga_id]);
 
     const addCollection = async () => {
-        // if (collection) {
-        //     let { data, error } = await supabase
-        //         .rpc('add_to_collection', {
-        //             this_collection_name: collection,
-        //             this_slug: manga_id,
-        //             this_user_id: 1,
-        //         })
-        //     if (error) console.error(error)
-        //     else console.log(data)
-        // }
+        if (collection) {
+            let { data, error } = await supabase
+                .rpc('add_to_collection', {
+                    this_collection_name: collection,
+                    this_slug: manga_id,
+                    this_user_id: 1,
+                })
+            if (error) console.error(error);
+            else getCollection();
+        }
+        else getCollection();
+    }
+
+    const getCollection = async () => {
+        let { data, error } = await supabase
+            .rpc('get_collection_for_manga', {
+                this_slug: manga_id,
+                this_user_id: 1,
+            })
+        if (error) console.error(error);
+        else console.log('this collection is: ', data);
+        setCollection(data);
     }
 
     useEffect(() => {
         addCollection();
     }, [collection]);
+
+    useEffect(() => {
+        getCollection();
+    }, []);
 
     // Pagination logic
     const indexOfLastChapter = currentPage * chaptersPerPage;
@@ -127,25 +145,27 @@ const MangaDetails: React.FC<Props> = () => {
                     {manga && <MangaBanner manga={manga} />}
 
                     <div className="choose-collection">
-                        <select
-                            value={collection}
-                            onChange={(e) => setCollection(e.target.value)}
-                        >
-                            <option value="">ADD TO COLLECTION</option>
-                            <option value="READING">READING</option>
-                            <option value="COMPLETED">COMPLETED</option>
-                            <option value="ON-HOLD">ON HOLD</option>
-                            <option value="DROPPED">DROPPED</option>
-                            <option value="PLAN-TO-READ">PLAN TO READ</option>
-                            <option value="RE-READING">RE-READING</option>
-                        </select>
+                        <CustomSelect
+                            options={[
+                                'ADD TO COLLECTION',
+                                'READING',
+                                'COMPLETED',
+                                'ON-HOLD',
+                                'DROPPED',
+                                'PLAN-TO-READ',
+                                'RE-READING',
+                            ]}
+                            value={collection === '' ? 'ADD TO COLLECTION' : collection}
+                            onChange={(option: any) => (option === 'ADD TO COLLECTION') ? setCollection('') : setCollection(option)}
+                        />
                     </div>
 
                     {manga && <p>{manga.attributes.description.en}</p>}
 
                     <div className="info-data-container">
                         <div className="more-info-container">
-                            <span style={{ color: "white" }}>More Infos</span>
+                            <span style={{ color: "white", marginLeft: "20px" }}>More Infos</span>
+                            <span style={{ color: "white", marginLeft: "20px" }}>Status: {manga.attributes.status}</span>
                         </div>
                         <div className="chapter-container">
                             <div className="manga-details-nav-button-bar">
