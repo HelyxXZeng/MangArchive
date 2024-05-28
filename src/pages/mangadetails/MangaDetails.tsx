@@ -23,6 +23,8 @@ const MangaDetails: React.FC<Props> = () => {
 
     const [collection, setCollection] = useState('');
 
+    const [userID, setUserID] = useState(null);
+
     const handleButtonClick = (buttonName: string) => {
         setActiveButton(buttonName);
     };
@@ -60,30 +62,33 @@ const MangaDetails: React.FC<Props> = () => {
         getData();
     }, [manga_id]);
 
-    const addCollection = async () => {
-        if (collection) {
-            let { data, error } = await supabase
-                .rpc('add_to_collection', {
-                    this_collection_name: collection,
-                    this_slug: manga_id,
-                    this_user_id: 1,
-                })
-            if (error) console.error(error);
-            else getCollection();
-        }
-        else getCollection();
-    }
+    useEffect(() => {
+        async function getUser() {
+            try {
+                const { data: sessionData, error: sessionError } = await supabase.auth.refreshSession();
+                if (sessionError) {
+                    console.error(sessionError);
+                    return;
+                }
+                if (sessionData && sessionData.user) {
+                    console.log(sessionData.user.email);
 
-    const getCollection = async () => {
-        let { data, error } = await supabase
-            .rpc('get_collection_for_manga', {
-                this_slug: manga_id,
-                this_user_id: 1,
-            })
-        if (error) console.error(error);
-        else console.log('this collection is: ', data);
-        setCollection(data);
-    }
+                    let { data, error } = await supabase
+                        .rpc('get_user_id_by_email', {
+                            p_email: sessionData.user.email
+                        })
+                    if (error) console.error(error)
+                    else {
+                        setUserID(data)
+                        console.log('User ID: ', data);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        }
+        getUser();
+    }, []);
 
     useEffect(() => {
         addCollection();
@@ -91,7 +96,32 @@ const MangaDetails: React.FC<Props> = () => {
 
     useEffect(() => {
         getCollection();
-    }, []);
+    }, [userID]);
+
+    async function addCollection() {
+        if (collection) {
+            let { data, error } = await supabase
+                .rpc('add_to_collection', {
+                    this_collection_name: collection,
+                    this_slug: manga_id,
+                    this_user_id: userID,
+                })
+            if (error) console.error(error);
+            else getCollection();
+        }
+        else getCollection();
+    }
+
+    async function getCollection() {
+        let { data, error } = await supabase
+            .rpc('get_collection_for_manga', {
+                this_slug: manga_id,
+                this_user_id: userID,
+            })
+        if (error) console.error(error);
+        else console.log('this collection is: ', data);
+        setCollection(data);
+    }
 
     // Pagination logic
     const indexOfLastChapter = currentPage * chaptersPerPage;
