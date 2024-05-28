@@ -71,6 +71,10 @@
         .password-input-field .MuiButtonBase-root.MuiIconButton-root:focus-visible {
           outline: none;
         }
+        .password-input-field input::-ms-reveal,
+        .password-input-field input::-ms-clear {
+          display: none;
+        }
         .loginOption {
           display: flex;
           align-self: stretch;
