@@ -9,7 +9,7 @@
   overflow: hidden;
   display: inline-block;
   height: inherit;
-  width: auto;
+  width: 200px;
   max-width: 200px;
   flex: 1 1 auto;
 }
@@ -88,7 +88,7 @@
     text-overflow: ellipsis;
     color: $text-white;
   }
-  
+
   p {
     // width: 100%;
     margin-top: 8px;
