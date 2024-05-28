@@ -1,0 +1,61 @@
+@import './../../../global-styles/Color.scss';
+
+.discoverFrame{
+    color: $text-white-new;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    border-left: 1px solid $gray-bg;
+    border-right: 1px solid $gray-bg;
+    .headernav{    
+        align-items: center; 
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 4px 16px;
+        
+        .backbutton{
+            background-color: transparent;
+            border-radius: 100%;
+            outline: none;
+            border: none;
+            border-color: $main-bg;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            align-items: center;
+            &:hover{
+                background-color: $main-bg-hover;
+            }
+            &:active{
+                background-color: $main-bg-hold;
+            }
+        }
+        .headerInfo{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            
+        }
+    }
+    .mainContent{
+        .navigationBar{
+            border-bottom: 1px solid $gray-bg;
+
+        }
+        
+    }
+}
+
+.notFound
+{
+    color: $text-white-new;
+    justify-self: center;
+    align-items: center;
+    text-align: center;
+    a{
+        text-decoration: none;
+        color: $blue-soft;
+    }
+}
