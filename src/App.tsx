@@ -21,30 +21,37 @@ import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 import Feed from "./pages/SocialPage/feed/Feed";
 import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 import ReadChapter from "./pages/readchapter/ReadChapter";
+import ScrollToTop from "./hooks/useScrollToTop";
+import Discorver from "./pages/SocialPage/discorver/Discorver";
 
 function App() {
 
   const Layout = () => {
     return (
-      <div className="main">
-        <div className="headerWarper">
-          <HeaderBar />
-        </div>
-        <div className="container">
-          <div className="sideBarContainer customScrollbar">
-            <SideBar />
+      <>
+        <ScrollToTop />
+        <div className="main">
+
+          <div className="headerWarper">
+            <HeaderBar />
           </div>
-          <div className="contentContainer customScrollbar">
-            <Outlet />
+          <div className="container">
+            <div className="sideBarContainer customScrollbar">
+              <SideBar />
+            </div>
+            <div className="contentContainer customScrollbar">
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
   const SocialLayout = () => {
     return (
       <div className="socialMain">
+        <ScrollToTop />
         <div className="masterFrame">
           <Outlet />
         </div>
@@ -107,6 +114,10 @@ function App() {
             {
               path: "feed",
               element: <Feed />
+            },
+            {
+              path: "discover/",
+              element: <Discorver />
             }
           ]
         },
