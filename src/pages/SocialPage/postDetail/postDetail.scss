@@ -3,12 +3,16 @@
 .postDetailContainer{
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    // align-items: center;
     width: 100%;
-    max-width: 960px;
-    padding: 0 16px;
-    margin-left: auto;
-    margin-right: auto;
+    // padding: 0 4px;
+    // margin-left: auto;
+    // margin-right: auto;
     height: 100%;
+    @media (max-width: 959px) {
+        flex-direction: column;
+    }
     .imageDisplay{
         background-color: $gray-bg;
         flex: 1;
@@ -16,30 +20,48 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        @media (max-width: 959px) {
+            flex: 0.5;
+        }
     }
     .postContent
     {
-        flex: 0.4;
-        background-color: $text-gray-soft-new;
+        flex: 0.5;
+        // background-color: $text-gray-soft-new;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content:space-between;
         display: flex;
         color: $text-white-new;
+        // flex-shrink: 0;
+
         .commentEditable{
             display: flex;
             align-items: flex-end; // Đặt textarea ở dưới cùng của container
             width: 100%;
             z-index: 10;
+            @media (max-width: 959px) {
+                flex-shrink: 0;
+            }
         }        
     }
     .postContentFull{
         // background-color: $text-gray-soft-new;
         flex-direction: column;
         justify-content: space-between;
+        align-items: center;
         display: flex;
         color: $text-white-new;
         width: 100%;
-
+        // margin-left: auto;
+        // margin-right: auto;
+        .post
+        {
+            align-items: center;
+            display: flex;
+            width: 100%;
+            
+        }
+        
         .commentEditable{
             display: flex;
             align-items: flex-end; // Đặt textarea ở dưới cùng của container

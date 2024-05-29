@@ -5,7 +5,7 @@ import CommentBox from '../../../components/commentFunc/CommentFunc';
 import PostImageViewer from '../../postImageViewer/PostImageViewer';
 
 const PostDetail = () => {
-    const [himage,setHImage] =useState<boolean>(false);
+    const [himage,setHImage] =useState<boolean>(true);
   return (
     <div className="postDetailContainer">
         { himage && (
@@ -21,8 +21,7 @@ const PostDetail = () => {
 
           </div>
           <div className="commentEditable">
-            <CommentBox
-              className="text"/>
+            <CommentBox/>
           </div>
         </div>
     </div>
