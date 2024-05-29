@@ -84,6 +84,7 @@ const HeaderBar = () => {
               <Button
                 variant="contained"
                 onClick={onLoginButtonClick}
+                className="button"
                 sx={{
                   '&.MuiButton-contained': {
                     backgroundColor: '#1b6fa8',
@@ -99,6 +100,7 @@ const HeaderBar = () => {
               <Button
                 variant="contained"
                 onClick={onSignUpContainerClick}
+                className="button"
                 sx={{
                   '&.MuiButton-contained': {
                     backgroundColor: 'transparent',
