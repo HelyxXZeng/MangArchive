@@ -23,6 +23,7 @@ import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 import ReadChapter from "./pages/readchapter/ReadChapter";
 import ScrollToTop from "./hooks/useScrollToTop";
 import Discorver from "./pages/SocialPage/discorver/Discorver";
+import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 
 function App() {
 
@@ -120,6 +121,10 @@ function App() {
               element: <Discorver />
             }
           ]
+        },
+        {
+          path:"/profile/:username/post/:id",
+          element: <PostDetail/>
         },
         {
           path: "/policies",

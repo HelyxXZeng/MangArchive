@@ -1,0 +1,137 @@
+@import './../../global-styles/Color.scss';
+
+.comment-box {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 8px;
+    position: relative;
+}
+
+.comment-header {
+    display: flex;
+    align-items: flex-start; // Thay đổi từ flex-start thành center
+    margin-bottom: 10px;
+}
+
+.comment-avatar {
+    margin-right: 10px;
+    transform: translateY(8px);
+}
+
+.textarea-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $gray-bg; // Tùy chỉnh màu nền
+    border-radius: 20px;
+
+    .icon {
+        height: 20px;
+        width: 20px;
+    }
+}
+
+.comment-textarea {
+    width: 100%;
+    border: none; // Loại bỏ border
+    font-size: 16px; // Tùy chỉnh kích thước font
+    color: $text-white-new; // Tùy chỉnh màu chữ
+    font-family: 'Lato', sans-serif; // Tùy chỉnh font family
+    border-radius: 20px; // Tùy chỉnh border radius
+    padding: 10px; // Tùy chỉnh padding
+}
+
+.comment-textarea .MuiOutlinedInput-root {
+    border-radius: 20px; // Tùy chỉnh border radius
+}
+
+.comment-textarea .MuiOutlinedInput-notchedOutline {
+    border: none; // Loại bỏ border
+}
+
+.comment-textarea .MuiInputLabel-root {
+    color: $text-white-new; // Tùy chỉnh màu của label
+}
+
+.comment-textarea .MuiInputBase-input {
+    font-family: 'Lato', sans-serif; // Tùy chỉnh font family
+    color: $text-white-new; // Tùy chỉnh màu chữ
+}
+
+.comment-actions {
+    display: flex; // Thêm dòng này
+    align-items: center; // Thêm dòng này
+
+    .send-button {
+        color: $text-white-new;
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        text-transform: none;
+        margin: 0 4px;
+        background-color: $blue-soft;
+        border-radius: 20px;
+
+        &:hover {
+            background-color: $blue-soft-hover;
+        }
+
+        &:disabled {
+            background-color: $text-gray-soft;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.emoji-button,
+.image-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.emoji-picker {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 8px;
+    z-index: 10;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.image-preview {
+    position: absolute;
+    top: -110px; // Thay đổi từ -110px thành 0
+    right: 0px; // Thay đổi từ 0 thành 8px
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    z-index: 10;
+}
+
+.image-preview img {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.remove-image-button {
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 50%;
+    transform: translateX(-20px) translateY(5px);
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,50 @@
+@import './../../../global-styles/Color.scss';
+
+.postDetailContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 960px;
+    padding: 0 16px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    .imageDisplay{
+        background-color: $gray-bg;
+        flex: 1;
+        // min-height: 92.5vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .postContent
+    {
+        flex: 0.4;
+        background-color: $text-gray-soft-new;
+        flex-direction: column;
+        justify-content: space-between;
+        display: flex;
+        color: $text-white-new;
+        .commentEditable{
+            display: flex;
+            align-items: flex-end; // Đặt textarea ở dưới cùng của container
+            width: 100%;
+            z-index: 10;
+        }        
+    }
+    .postContentFull{
+        // background-color: $text-gray-soft-new;
+        flex-direction: column;
+        justify-content: space-between;
+        display: flex;
+        color: $text-white-new;
+        width: 100%;
+
+        .commentEditable{
+            display: flex;
+            align-items: flex-end; // Đặt textarea ở dưới cùng của container
+            width: 100%;
+            z-index: 10;
+        }        
+    }
+}
