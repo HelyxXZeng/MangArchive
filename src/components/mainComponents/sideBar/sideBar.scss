@@ -10,7 +10,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        font-size: 16px;
+        font-size: clamp(12px, 1.5vw, 16px);
         line-height: normal;
         letter-spacing: 0.8px;
         padding:8px 0;
@@ -29,8 +29,28 @@
             text-decoration: none;
             &:hover{
                 background-color: $orange-yellow;
-                border-radius: 5px;
-            }    
+                border-radius: 8px;
+            }
+            &.active{
+                background-color: $orange-yellow; // Change to your desired color
+                border-radius: 8px;
+            }
+            .announ{
+                font-size: 13px;
+            }
+            // .listItemTitles {
+            //     flex: 1;
+            //     overflow: hidden;
+            //     text-overflow: ellipsis;
+            //     // white-space: nowrap;
+            //     display: inline-block;
+            //     vertical-align: top;
+            //     font-size: 16px;
+            //     @media screen and (max-width: 250px) {
+            //         font-size: calc(16px + (14 - 16) * ((100vw - 250px) / (300 - 250)));
+            //     }
+            //     // margin-left: 8px; // Adjust margin as needed
+            // }    
         }
         
     }
