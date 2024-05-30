@@ -164,55 +164,55 @@ const MangaLibrary: React.FC<Props> = () => {
                     </div>
                 </NavLink>
                 <NavLink
-                    to={`/library/COMPLETED`}
-                    style={{ textDecoration: "none", width: "100%" }}
-                >
-                    <div
-                        className={`comments-nav-button ${activeButton === "COMPLETED" ? "active" : ""
-                            }`}
-                        onClick={() => handleButtonClick("COMPLETED")}
-                    >
-                        COMPLETED
-                    </div>
-                </NavLink>
-                <NavLink
-                    to={`/library/COMPLETED`}
-                    style={{ textDecoration: "none", width: "100%" }}
-                >
-                    <div
-                        className={`comments-nav-button ${activeButton === "COMPLETED" ? "active" : ""
-                            }`}
-                        onClick={() => handleButtonClick("COMPLETED")}
-                    >
-                        COMPLETED
-                    </div>
-                </NavLink>
-                <NavLink
-                    to={`/library/COMPLETED`}
-                    style={{ textDecoration: "none", width: "100%" }}
-                >
-                    <div
-                        className={`comments-nav-button ${activeButton === "COMPLETED" ? "active" : ""
-                            }`}
-                        onClick={() => handleButtonClick("COMPLETED")}
-                    >
-                        COMPLETED
-                    </div>
-                </NavLink>
-                <NavLink
                     to={`/library/ON-HOLD`}
                     style={{ textDecoration: "none", width: "100%" }}
                 >
                     <div
-                        className={`posts-nav-button ${activeButton === "ON-HOLD" ? "active" : ""
+                        className={`comments-nav-button ${activeButton === "ON-HOLD" ? "active" : ""
                             }`}
                         onClick={() => handleButtonClick("ON-HOLD")}
+                    >
+                        ON HOLD
+                    </div>
+                </NavLink>
+                <NavLink
+                    to={`/library/DROPPED`}
+                    style={{ textDecoration: "none", width: "100%" }}
+                >
+                    <div
+                        className={`comments-nav-button ${activeButton === "DROPPED" ? "active" : ""
+                            }`}
+                        onClick={() => handleButtonClick("DROPPED")}
+                    >
+                        DROPPED
+                    </div>
+                </NavLink>
+                <NavLink
+                    to={`/library/PLAN-TO-READ`}
+                    style={{ textDecoration: "none", width: "100%" }}
+                >
+                    <div
+                        className={`comments-nav-button ${activeButton === "PLAN-TO-READ" ? "active" : ""
+                            }`}
+                        onClick={() => handleButtonClick("PLAN-TO-READ")}
+                    >
+                        PLAN TO READ
+                    </div>
+                </NavLink>
+                <NavLink
+                    to={`/library/RE-READING`}
+                    style={{ textDecoration: "none", width: "100%" }}
+                >
+                    <div
+                        className={`posts-nav-button ${activeButton === "RE-READING" ? "active" : ""
+                            }`}
+                        onClick={() => handleButtonClick("RE-READING")}
                         style={{
                             borderTopRightRadius: "8px",
                             borderBottomRightRadius: "8px",
                         }}
                     >
-                        ON-HOLD
+                        RE-READING
                     </div>
                 </NavLink>
             </div>
