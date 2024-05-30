@@ -71,7 +71,7 @@ const menu = [
             {
                 id: 2,
                 title: "Library",
-                url: "/",
+                url: "/library/READING",
                 icon: "/icons/save-2.svg",
             },
             {
@@ -119,30 +119,30 @@ const SideBar = () => {
     const session = useCheckSession();
     useEffect(() => {
         const fetchUsername = async () => {
-          if (session !== null) {
-            try {
-              const { user } = session;
-              const { data, error } = await supabase
-                .from('User')
-                .select('username')
-                .eq('email', user.email)
-                .single();
-    
-              if (error) {
-                throw error;
-              }
-    
-              if (data) {
-                setUsername(data.username);
-              }
-            } catch (error) {
-              console.error('Error fetching username:', error);
+            if (session !== null) {
+                try {
+                    const { user } = session;
+                    const { data, error } = await supabase
+                        .from('User')
+                        .select('username')
+                        .eq('email', user.email)
+                        .single();
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    if (data) {
+                        setUsername(data.username);
+                    }
+                } catch (error) {
+                    console.error('Error fetching username:', error);
+                }
             }
-          }
         };
-    
+
         fetchUsername();
-      }, [session]);
+    }, [session]);
 
     return (
         <div className="menu">

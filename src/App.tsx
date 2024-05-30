@@ -23,6 +23,7 @@ import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 import ReadChapter from "./pages/readchapter/ReadChapter";
 import ScrollToTop from "./hooks/useScrollToTop";
 import Discorver from "./pages/SocialPage/discorver/Discorver";
+import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 
 function App() {
 
@@ -78,6 +79,11 @@ function App() {
         {
           path: "/search",
           element: <SearchMangaPage />,
+          children: []
+        },
+        {
+          path: "/library/:page",
+          element: <MangaLibrary />,
           children: []
         },
         {

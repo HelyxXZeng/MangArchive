@@ -91,14 +91,14 @@ const MangaDetails: React.FC<Props> = () => {
     }, []);
 
     useEffect(() => {
-        addCollection();
+        addCollection(collection);
     }, [collection]);
 
     useEffect(() => {
         getCollection();
     }, [userID]);
 
-    async function addCollection() {
+    async function addCollection(collection: any) {
         if (collection) {
             let { data, error } = await supabase
                 .rpc('add_to_collection', {
@@ -106,7 +106,7 @@ const MangaDetails: React.FC<Props> = () => {
                     this_slug: manga_id,
                     this_user_id: userID,
                 })
-            if (error) console.error(error);
+            if (error) console.error('Error in add collection: ', error);
             else getCollection();
         }
         else getCollection();
@@ -118,7 +118,7 @@ const MangaDetails: React.FC<Props> = () => {
                 this_slug: manga_id,
                 this_user_id: userID,
             })
-        if (error) console.error(error);
+        if (error) console.error('Error in get collection: ', error);
         else console.log('this collection is: ', data);
         setCollection(data);
     }
