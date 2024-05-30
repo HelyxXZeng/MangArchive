@@ -1,11 +1,10 @@
 import React, { useState, useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
 import { TextField, Avatar, IconButton, Box, Button } from '@mui/material';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
-import './commentFunc.scss';
+import './commentFunc.scss'; // Import your component-specific styles
 
 interface CommentBoxProps {
     avatarUrl?: string;
-    // Các prop khác nếu cần
 }
 
 interface CommentBoxRef {
@@ -27,7 +26,6 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
     }));
 
     useEffect(() => {
-        // Xử lý sự kiện click bên ngoài emoji picker để tự động đóng nó
         const handleClickOutside = (event: MouseEvent) => {
             if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
                 setShowEmojiPicker(false);
@@ -102,7 +100,7 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
             )}
             <Box className="comment-header">
                 <Avatar src={props.avatarUrl} className="comment-avatar" />
-                <Box className="textarea-wrapper">
+                <Box className="textarea-wrapper customScrollbar">
                     <TextField
                         multiline
                         minRows={1}
@@ -112,16 +110,18 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
                         onChange={(e) => setComment(e.target.value)}
                         placeholder="Nhập bình luận..."
                         inputRef={textareaRef}
-                        className="comment-textarea"
+                        className="comment-textarea customScrollbar"
                         fullWidth
                     />
                     <Box className="comment-actions">
-                        <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="emoji-button">
-                            <img src="/icons/emoji-happy.svg" alt="" className="icon" />
-                        </IconButton>
-                        <IconButton onClick={() => fileInputRef.current?.click()} className="image-button">
-                            <img src="/icons/camera.svg" alt="" className="icon" />
-                        </IconButton>
+                        <Box>
+                            <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="emoji-button">
+                                <img src="/icons/emoji-happy.svg" alt="" className="icon" />
+                            </IconButton>
+                            <IconButton onClick={() => fileInputRef.current?.click()} className="image-button">
+                                <img src="/icons/camera.svg" alt="" className="icon" />
+                            </IconButton>
+                        </Box>
                         <input
                             type="file"
                             accept="image/*"

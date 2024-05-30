@@ -20,6 +20,7 @@ const PostCard = (data:props) => {
     const [liked, setLiked] = useState<boolean>(false);
     const [likes, setLikes] = useState<number>(1000);
     const [comments, setComments] = useState<number>(3);
+    const [dateTime, setdateTime] = useState<Date>(new Date("01/06/2024"));
 
     const handleLikeClick = () => {
         setLiked(!liked);
@@ -117,7 +118,10 @@ const PostCard = (data:props) => {
                             <span className="name">{name}</span>
                             <span className="level">LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span></span>
                         </div>
-                        <span className="idName">{idName}</span>
+                        <div className="idNameAndDate">
+                            <span className="idName">{idName} · </span>
+                            <span className="datetime">{dateTime.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
+                        </div>
                     </div>
                     <div className="moreOption">...</div>
                 </div>

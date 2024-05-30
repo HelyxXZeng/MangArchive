@@ -1,0 +1,95 @@
+@import './../../global-styles/Color.scss';
+
+.commentCardContainer{
+    display: flex;
+    flex-direction: row;
+    .avatar{
+        align-items: flex-start;
+        margin-right: 8px;
+    }
+    .leftContainer{
+        flex-direction: column;
+        .header{
+            cursor: pointer;
+            pointer-events: auto;
+            .nameNId {
+                font-size: 13px;
+                display: flex;
+                // flex-direction: column;
+                min-width: 80px;
+                width: auto;
+                max-width: 256px;
+                justify-content: flex-start;
+    
+                .userNameChild {
+                    align-items: center;
+                    display: flex;
+                    justify-content: flex-start;
+                    gap: 4px;
+                    flex-direction: row;
+    
+                    .level {
+                        font-weight: 400;
+                        font-style: italic;
+                        font-size: 15px;
+    
+                        .bluetext {
+                            color: $blue-soft;
+                        }
+    
+                        .redtext {
+                            color: $like-pink;
+                        }
+    
+                        .yellowtext {
+                            color: $orange-yellow;
+                        }
+                    }
+    
+                    .name {
+                        justify-content: center;
+                        font-weight: 700;
+                        display: -webkit-box;
+                        width: 100%;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+    
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                    .idName{
+                        &:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+    
+                .idName {
+                    justify-content: center;
+                    font-weight: 400;
+                    color: $text-gray-soft-new;
+                }
+    
+            }
+        }
+        .option{
+            font-size: 12px;
+            gap: 10px;
+            flex-direction: row;
+            display: flex;
+            .datetime{
+                font-weight: 400;
+                color: $text-gray-soft-new;
+            }
+            > * {
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+}

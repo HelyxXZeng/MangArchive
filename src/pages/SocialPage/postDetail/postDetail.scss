@@ -6,13 +6,16 @@
     justify-content: center;
     // align-items: center;
     width: 100%;
+    
     // padding: 0 4px;
     // margin-left: auto;
     // margin-right: auto;
     height: 100%;
-    @media (max-width: 959px) {
-        flex-direction: column;
-    }
+    // @media (max-width: 959px) {
+    //     // flex-direction: column;
+    //     max-height: 100vh;
+
+    // }
     .imageDisplay{
         background-color: $gray-bg;
         flex: 1;
@@ -20,6 +23,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: 0.5s ease;
         @media (max-width: 959px) {
             flex: 0.5;
         }
@@ -32,23 +36,57 @@
         justify-content:space-between;
         display: flex;
         color: $text-white-new;
+        
         // flex-shrink: 0;
 
+        .postNComment{
+            overflow-y: auto;
+            overscroll-behavior: contain;
+
+            .comments{
+                padding: 4px 16px;
+                .commentCard {
+                    margin-top: 4px; // Adjust the bottom margin as needed
+                  }
+          
+                  .commentCard:last-child {
+                    margin-bottom: 0; // Remove margin from the last item
+                  }
+            }
+        }
         .commentEditable{
             display: flex;
             align-items: flex-end; // Đặt textarea ở dưới cùng của container
             width: 100%;
+            position: relative;
             z-index: 10;
             @media (max-width: 959px) {
                 flex-shrink: 0;
             }
         }        
     }
-    .postContentFull{
+}
+
+.postDetailContainerFull{
+    display: flex;
+    // flex-direction: row;
+    justify-content: center;
+    // align-items: center;
+    width: 100%;
+    max-width: 960px;
+    // padding: 0 4px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    // @media (max-width: 959px) {
+    //     flex-direction: column;
+    // }
+    
+    .postContent{
         // background-color: $text-gray-soft-new;
         flex-direction: column;
         justify-content: space-between;
-        align-items: center;
+        // align-items: center;
         display: flex;
         color: $text-white-new;
         width: 100%;
@@ -61,7 +99,10 @@
             width: 100%;
             
         }
-        
+        .postNComment{
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
         .commentEditable{
             display: flex;
             align-items: flex-end; // Đặt textarea ở dưới cùng của container
