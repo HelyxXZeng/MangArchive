@@ -125,18 +125,20 @@ const SideBar = () => {
       if (session !== null) {
         try {
           const { user } = session;
-          const { data, error } = await supabase
-            .from("User")
-            .select("username")
-            .eq("email", user.email)
-            .single();
+          if(user){  
+            const { data, error } = await supabase
+              .from("User")
+              .select("username")
+              .eq("email", user.email)
+              .single();
 
-          if (error) {
-            throw error;
-          }
+            if (error) {
+              throw error;
+            }
 
-          if (data) {
-            setUsername(data.username);
+            if (data) {
+              setUsername(data.username);
+            }
           }
         } catch (error) {
           console.error("Error fetching username:", error);
@@ -155,12 +157,12 @@ const SideBar = () => {
           {item.listItems.map((listItem) => (
             <NavLink
               to={listItem.title === "Profile" && username ? `/profile/${username}` : listItem.url}
-              className={`listItem ${location.pathname === listItem.url ? 'active' : ''} `}
+              className={`listItem ${location.pathname === listItem.url ? 'active' : ''}`}
               key={listItem.id}
               preventScrollReset={true}
             >
               <img src={listItem.icon} alt="" />
-              <span className={`"listItemTitles" ${listItem.title === "Announcements"? 'announ' : ''}`}>{listItem.title}</span>
+              <span className={`listItemTitles ${listItem.title === "Announcements"? 'announ' : ''}`}>{listItem.title}</span>
             </NavLink>
           ))}
         </div>

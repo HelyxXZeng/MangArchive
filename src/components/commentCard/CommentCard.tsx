@@ -49,8 +49,14 @@ const CommentCard: React.FC<CommentCardProps> = ({ className }) => {
           <div className="datetime">
             {dateTime.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}
           </div>
-          <div className="like">1</div>
-          <div className="reply">3</div>
+          <div className="like">
+            <img src="/icons/heart.svg" alt="" />  
+            <span className="number">1</span>
+          </div>
+          <div className="reply">
+            <img src="/icons/message.svg" alt="" />  
+            <span className="number">1</span>
+          </div>
         </div>
       </div>
     </div>

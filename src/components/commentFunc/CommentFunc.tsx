@@ -7,7 +7,7 @@ interface CommentBoxProps {
     avatarUrl?: string;
 }
 
-interface CommentBoxRef {
+export interface CommentBoxRef {
     focusTextarea: () => void;
 }
 
