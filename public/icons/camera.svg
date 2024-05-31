@@ -1,0 +1,12 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="camera 1" clip-path="url(#clip0_437_240)">
+<path id="Vector" d="M1.84674 12.1668C1.92674 13.5402 2.66674 14.6668 4.50674 14.6668H11.4934C13.3334 14.6668 14.0668 13.5402 14.1534 12.1668L14.5001 6.66016C14.5934 5.22016 13.4468 4.00016 12.0001 4.00016C11.5934 4.00016 11.2201 3.76683 11.0334 3.40683L10.5534 2.44016C10.2468 1.8335 9.44676 1.3335 8.76676 1.3335H7.24009C6.5534 1.3335 5.7534 1.8335 5.44674 2.44016L4.96674 3.40683C4.78007 3.76683 4.40674 4.00016 4.00007 4.00016C2.5534 4.00016 1.40674 5.22016 1.50007 6.66016L1.6734 9.3735" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M7 5.3335H9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M8.00004 11.9998C9.19337 11.9998 10.1667 11.0265 10.1667 9.83317C10.1667 8.63984 9.19337 7.6665 8.00004 7.6665C6.80671 7.6665 5.83337 8.63984 5.83337 9.83317C5.83337 11.0265 6.80671 11.9998 8.00004 11.9998Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_437_240">
+<rect width="16" height="16" fill="white"/>
+</clipPath>
+</defs>
+</svg>
