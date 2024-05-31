@@ -43,24 +43,24 @@
     }
 }
 
-.manga-details-page {
-    width: 100%;
-    // background-color: $main-white;
-    align-self: center;
-    align-items: center;
-    justify-content: center;
-    min-height: 500px;
-    height: auto;
-    display: flex;
+// .manga-details-page {
+//     width: 100%;
+//     // background-color: $main-white;
+//     align-self: center;
+//     align-items: center;
+//     justify-content: center;
+//     min-height: 500px;
+//     height: auto;
+//     display: flex;
 
-    p {
-        color: $text-white-new;
-        padding: 10px;
-        margin-left: 10px;
-        width: 100%;
-        max-width: 100%;
-    }
-}
+//     p {
+//         color: $text-white-new;
+//         padding: 10px;
+//         margin-left: 10px;
+//         width: 100%;
+//         max-width: 100%;
+//     }
+// }
 
 .info-data-container {
     width: 100%;
@@ -141,11 +141,6 @@
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
     }
-}
-
-.more-info-container {
-    width: 20%;
-    margin: 0px;
 }
 
 .chapter-container {
