@@ -315,6 +315,8 @@ const MangaDetails: React.FC<Props> = () => {
                                             key={chap}
                                             chapterNumber={chap}
                                             data={data.chapters[chap]}
+                                            mangaID={manga_id}
+                                            userID={userID}
                                         />
                                     ))}
 
