@@ -9,6 +9,13 @@
     }
     .leftContainer{
         flex-direction: column;
+
+        .mainCommentContainer{
+            border-radius: 18px;
+            background-color: $gray-bg;
+            padding: 4px 8px;
+        }
+        
         .header{
             cursor: pointer;
             pointer-events: auto;
@@ -82,7 +89,7 @@
             display: flex;
             cursor: pointer;
             pointer-events: auto;
-            
+            margin: 4px 0px 2px 8px;
             .datetime{
                 font-weight: 400;
                 color: $text-gray-soft-new;

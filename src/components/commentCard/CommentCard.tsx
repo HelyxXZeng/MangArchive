@@ -5,19 +5,28 @@ import './commentCard.scss';
 
 interface CommentCardProps {
   className?: string;
+  commentBoxRef?: any;
+  onReplyClick?: (name: string) => void;
   key?: number;
 }
 
-const CommentCard: React.FC<CommentCardProps> = ({ className }) => {
+const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onReplyClick }) => {
   const [name, setName] = useState<string>('test');
   const [level, setLevel] = useState<number>(3);
   const [dateTime, setdateTime] = useState<Date>(new Date("01/06/2024"));
   const [idName, setIdName] = useState<string>('@test');
   const navigate = useNavigate();
-  
+
   const handleProfileNavigate = () => {
     navigate("/profile/test");
-  }
+  };
+
+  const handleReply = () => {
+    if (onReplyClick) {
+      onReplyClick(name);
+    }
+  };
+
   return (
     <div className={`commentCardContainer ${className}`}>
       <div className="avatar">
@@ -31,30 +40,32 @@ const CommentCard: React.FC<CommentCardProps> = ({ className }) => {
         </NavLink>
       </div>
       <div className="leftContainer">
-        <div className="header" onClick={handleProfileNavigate}>
-          <div className="nameNId">
-            <div className="userNameChild">
-              <span className="name">{name}</span>
-              <span className="idName">{idName}</span>
-              <span className="level">
-                LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span>
-              </span>
+        <div className="mainCommentContainer">
+          <div className="header" onClick={handleProfileNavigate}>
+            <div className="nameNId">
+              <div className="userNameChild">
+                <span className="name">{name}</span>
+                <span className="idName">{idName}</span>
+                <span className="level">
+                  LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="CommentContent">
-          <span>text content ở đây hơi bị dài để mà test thử coi nó có xuống dòng không</span>
+          <div className="CommentContent">
+            <span>text content ở đây hơi bị dài để mà test thử coi nó có xuống dòng không</span>
+          </div>
         </div>
         <div className="option">
           <div className="datetime">
             {dateTime.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}
           </div>
           <div className="like">
-            <img src="/icons/heart.svg" alt="" />  
+            <img src="/icons/heart.svg" alt="" />
             <span className="number">1</span>
           </div>
-          <div className="reply">
-            <img src="/icons/message.svg" alt="" />  
+          <div className="reply" onClick={handleReply}>
+            <img src="/icons/message.svg" alt="" />
             <span className="number">1</span>
           </div>
         </div>

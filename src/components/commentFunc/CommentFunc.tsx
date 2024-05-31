@@ -1,13 +1,14 @@
-import React, { useState, useRef, useImperativeHandle, forwardRef, useEffect } from 'react';
+import React, { useState, useRef, useImperativeHandle, forwardRef } from 'react';
 import { TextField, Avatar, IconButton, Box, Button } from '@mui/material';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import './commentFunc.scss'; // Import your component-specific styles
 
 interface CommentBoxProps {
     avatarUrl?: string;
+    placeholder?: string;
 }
 
-export interface CommentBoxRef {
+interface CommentBoxRef {
     focusTextarea: () => void;
 }
 
@@ -17,7 +18,6 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
     const [image, setImage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const emojiPickerRef = useRef<HTMLDivElement>(null);
 
     useImperativeHandle(ref, () => ({
         focusTextarea: () => {
@@ -25,70 +25,30 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
         }
     }));
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
-                setShowEmojiPicker(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const handleEmojiClick = (emojiData: EmojiClickData) => {
-        setComment(prev => prev + emojiData.emoji);
-    };
-
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             const reader = new FileReader();
-            reader.onload = (e) => setImage(e.target?.result as string);
+            reader.onload = (e) => {
+                setImage(e.target?.result as string);
+            };
             reader.readAsDataURL(file);
         }
     };
 
     const handleRemoveImage = () => {
         setImage(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
     };
 
     const handleSend = () => {
-        console.log('Comment:', comment);
-        console.log('Image:', image);
-
-        // Fake post function
-        /* 
-        const postComment = async () => {
-            const postData = {
-                comment,
-                image,
-            };
-
-            // Simulate an API call
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            console.log('Posted data:', postData);
-        };
-
-        postComment();
-        */
-
-        // Clear state after posting
-        setComment('');
-        setImage(null);
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-        setShowEmojiPicker(false);
+        // Handle send comment logic
     };
 
-    const isSendButtonDisabled = !comment && !image;
+    const handleEmojiClick = (emojiData: EmojiClickData) => {
+        setComment(prevComment => prevComment + emojiData.emoji);
+    };
+
+    const isSendButtonDisabled = comment.trim() === '' && !image;
 
     return (
         <Box className="comment-box">
@@ -108,7 +68,7 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
                         variant="outlined"
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
-                        placeholder="Nhập bình luận..."
+                        placeholder={props.placeholder || "Nhập bình luận..."}
                         inputRef={textareaRef}
                         className="comment-textarea customScrollbar"
                         fullWidth
@@ -140,7 +100,7 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
                 </Box>
             </Box>
             {showEmojiPicker && (
-                <Box className="emoji-picker" ref={emojiPickerRef}>
+                <Box className="emoji-picker">
                     <EmojiPicker disableAutoFocus onEmojiClick={handleEmojiClick} />
                 </Box>
             )}

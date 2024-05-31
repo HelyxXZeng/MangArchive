@@ -1,12 +1,12 @@
 @import './../../../global-styles/Color.scss';
 
-.postDetailContainer{
+.postDetailContainer {
     display: flex;
     flex-direction: row;
     justify-content: center;
     // align-items: center;
     width: 100%;
-    
+
     // padding: 0 4px;
     // margin-left: auto;
     // margin-right: auto;
@@ -16,7 +16,7 @@
     //     max-height: 100vh;
 
     // }
-    .imageDisplay{
+    .imageDisplay {
         background-color: $gray-bg;
         flex: 1;
         // min-height: 92.5vh;
@@ -24,50 +24,76 @@
         justify-content: center;
         align-items: center;
         transition: 0.5s ease;
+
         @media (max-width: 959px) {
             flex: 0.5;
         }
     }
-    .postContent
-    {
+
+    .postContent {
         flex: 0.5;
         // background-color: $text-gray-soft-new;
         flex-direction: column;
-        justify-content:space-between;
+        justify-content: space-between;
         display: flex;
         color: $text-white-new;
-        
+
         // flex-shrink: 0;
 
-        .postNComment{
+        .postNComment {
             overflow-y: auto;
             overscroll-behavior: contain;
 
-            .comments{
+            .comments {
                 padding: 4px 16px;
+                
                 .commentCard {
                     margin-top: 4px; // Adjust the bottom margin as needed
-                  }
-          
-                  .commentCard:last-child {
+                    transition: 0.5s ease-out;
+                    
+                    .replyCommentCard{
+                        margin-left: 48px;
+                    }
+                }
+                .seemore{
+                    display: flex;
+                    align-items: center;
+                    margin-left: 48px;
+                    gap: 4px;
+                    cursor: pointer;
+                    pointer-events: auto;
+                    img{
+                        width: 16px;
+                        height: 16px;
+                        // fill: $text-gray-soft-new;
+                    }
+                    .seeMoreText{
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: $text-gray-soft-new;
+                    }
+                }
+                .commentCard:last-child {
                     margin-bottom: 0; // Remove margin from the last item
-                  }
+                }
             }
         }
-        .commentEditable{
+
+        .commentEditable {
             display: flex;
             align-items: flex-end; // Đặt textarea ở dưới cùng của container
             width: 100%;
             position: relative;
             z-index: 10;
+
             @media (max-width: 959px) {
                 flex-shrink: 0;
             }
-        }        
+        }
     }
 }
 
-.postDetailContainerFull{
+.postDetailContainerFull {
     display: flex;
     // flex-direction: row;
     justify-content: center;
@@ -81,8 +107,8 @@
     // @media (max-width: 959px) {
     //     flex-direction: column;
     // }
-    
-    .postContent{
+
+    .postContent {
         // background-color: $text-gray-soft-new;
         flex-direction: column;
         justify-content: space-between;
@@ -90,24 +116,59 @@
         display: flex;
         color: $text-white-new;
         width: 100%;
+
         // margin-left: auto;
         // margin-right: auto;
-        .post
-        {
+        .post {
             align-items: center;
             display: flex;
             width: 100%;
-            
+
         }
-        .postNComment{
+
+        .postNComment {
             overflow-y: auto;
             overscroll-behavior: contain;
+
+            .comments {
+                padding: 4px 16px;
+
+                .commentCard {
+                    margin-top: 4px; // Adjust the bottom margin as needed
+                    transition: 0.5s ease-out;
+                    .replyCommentCard{
+                        margin-left: 48px;
+                    }
+                }
+                .seemore{
+                    display: flex;
+                    align-items: center;
+                    margin-left: 48px;
+                    gap: 4px;
+                    cursor: pointer;
+                    pointer-events: auto;
+                    img{
+                        width: 16px;
+                        height: 16px;
+                        // fill: $text-gray-soft-new;
+                    }
+                    .seeMoreText{
+                        font-size: 14px;
+                        font-weight: 600;
+                        color: $text-gray-soft-new;
+                    }
+                }
+                .commentCard:last-child {
+                    margin-bottom: 0; // Remove margin from the last item
+                }
+            }
         }
-        .commentEditable{
+
+        .commentEditable {
             display: flex;
             align-items: flex-end; // Đặt textarea ở dưới cùng của container
             width: 100%;
             z-index: 10;
-        }        
+        }
     }
 }
