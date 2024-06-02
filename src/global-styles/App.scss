@@ -58,6 +58,8 @@ body {
       padding: 5px 20px;
       border-right: 1px solid #000;
       background: $blue-main;
+      transition: 1s ease;
+
       @media (max-width: 1090px) {
         padding: 0px;
         display: block; /* tương đương với hidden lg:block */
@@ -87,6 +89,8 @@ body {
           width: 100%;
           position: relative;
           flex:1;
+          transition: 0.5s ease;
+
           @media (max-width: 960px) {
             padding: 0px 1.5rem;
             display: block; /* tương đương với hidden lg:block */
