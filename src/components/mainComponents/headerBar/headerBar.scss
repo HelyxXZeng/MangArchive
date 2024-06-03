@@ -12,11 +12,19 @@
     justify-content: space-between;
     gap: 20px;
     background-color: $main-white;
-    padding: 0px 16px 0px 16px;
-    
+    padding: 0px 16px;
+    // margin: 0px 8px;
     .logo{
         justify-content: center;
         align-items: center;
+        @media (max-width: 959px) {
+            img{
+                max-width: 96px;
+            }
+        }
+        @media (max-width: 767px) {
+            display: none;
+        }
     }
 
     .leftContainer
@@ -108,8 +116,18 @@
                           width: 108px;
                           height: 44px;
                           font-weight: 700;
+                          @media (max-width: 767px) {
+                              width: 48px;
+                              height: 44px;
+                              align-self: flex-end;
+                            }
                         }
                       }
+                }
+                .button{
+                    @media (max-width: 767px) {
+                        width: 96px;
+                    }
                 }
             }
         }

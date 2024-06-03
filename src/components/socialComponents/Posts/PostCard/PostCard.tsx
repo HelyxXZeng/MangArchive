@@ -2,11 +2,15 @@ import { Avatar } from "@mui/material";
 import "./PostCard.scss"
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { CommentBoxRef } from "../../../commentFunc/CommentFunc";
 
-interface props{
-    count : number
+interface PostCardProps {
+    count: number; // Số lượng ảnh trong bài đăng
+    isInDetailPage: boolean; // Xác định xem PostCard được sử dụng trong trang chi tiết hay không
+    onCommentSectionClick?: () => void; // Hàm xử lý khi CommentSection được click (chỉ cần định nghĩa nếu isInDetailPage là true)
+    commentBoxRef?: React.RefObject<CommentBoxRef>; // Ref để truy cập vào CommentBox từ PostDetail
 }
-const PostCard = (data:props) => {
+const PostCard = (data: PostCardProps) => {
     const images = [
         'https://cdn.donmai.us/original/f2/dd/__acheron_honkai_and_1_more_drawn_by_szlljxk__f2dd492d1ef8fbaa4c8a0f0cabc280ed.jpg',
         'https://cdn.donmai.us/original/d2/1b/__robin_honkai_and_1_more_drawn_by_himey__d21bab2de5bbe278d34f85f42664b4fc.jpg',
@@ -20,6 +24,7 @@ const PostCard = (data:props) => {
     const [liked, setLiked] = useState<boolean>(false);
     const [likes, setLikes] = useState<number>(1000);
     const [comments, setComments] = useState<number>(3);
+    const [dateTime, setdateTime] = useState<Date>(new Date("01/06/2024"));
 
     const handleLikeClick = () => {
         setLiked(!liked);
@@ -32,8 +37,12 @@ const PostCard = (data:props) => {
     const limitedImages = getRandomImages(images, data.count);
 
     const handleCommentClick = () => {
-        console.log("mở post lên!")
-    }
+        if (data.isInDetailPage && data.onCommentSectionClick) {
+            data.onCommentSectionClick();
+        } else {
+            console.log("mở post lên!");
+        }
+    };
     let galleryItems = [];
 
 
@@ -117,7 +126,10 @@ const PostCard = (data:props) => {
                             <span className="name">{name}</span>
                             <span className="level">LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span></span>
                         </div>
-                        <span className="idName">{idName}</span>
+                        <div className="idNameAndDate">
+                            <span className="idName">{idName} · </span>
+                            <span className="datetime">{dateTime.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
+                        </div>
                     </div>
                     <div className="moreOption">...</div>
                 </div>
