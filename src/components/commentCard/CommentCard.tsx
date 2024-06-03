@@ -15,6 +15,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
   const [level, setLevel] = useState<number>(3);
   const [dateTime, setdateTime] = useState<Date>(new Date("01/06/2024"));
   const [idName, setIdName] = useState<string>('@test');
+  const [image, Setimage] = useState<string>('https://cdn.donmai.us/original/e4/c9/__yinlin_wuthering_waves_drawn_by_krin_krinnin__e4c98e144385e7339ac09712f28e623f.jpg');
   const navigate = useNavigate();
 
   const handleProfileNavigate = () => {
@@ -56,6 +57,11 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
             <span>text content ở đây hơi bị dài để mà test thử coi nó có xuống dòng không</span>
           </div>
         </div>
+        {image !== "" &&
+          <div className="commentImage">
+            <img src={image} alt="hình ảnh trong comment của ai đó" />
+          </div>
+        }
         <div className="option">
           <div className="datetime">
             {dateTime.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}
