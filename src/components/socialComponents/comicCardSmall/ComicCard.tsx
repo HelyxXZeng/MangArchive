@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Image from '../../../pages/image/Image';
 import './comicCard.scss'
 
@@ -10,11 +11,13 @@ interface props {
 }
 
 const ComicCard: React.FC<props> = (prop: props) => {
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate(`/manga/${prop.id}`)
+    }
     return (
-        <div className="comicCard">
+        <div className="comicCard" onClick={handleClick}>
             <div className="image">
-
-
                 <Image className='cover' src={'https://uploads.mangadex.org/covers/' + prop.id + '/' + prop.cover + '.512.jpg'} alt={prop.title} ratio='3/4' />
                 {/* <img src={'https://uploads.mangadex.org/covers/' + prop.id + '/' + prop.cover + '.512.jpg'} alt={prop.title} /> */}
             </div>

@@ -11,21 +11,25 @@ import './postModal.scss'; // Import your component-specific styles
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
+import ComicCard from '../socialComponents/comicCardSmall/ComicCard';
+import axios from 'axios';
 
 interface PostModalProps {
     open: boolean;
     handleClose: () => void;
+    mangaid?: string;
 }
 
-
-
-const PostModal = ((props: PostModalProps) => {
+const PostModal = (props: PostModalProps) => {
     const [postContent, setPostContent] = useState('');
-    const [mangaSuggestContent, setMangaSuggestContent] = useState('');
+    const [mangaSuggestContent, setMangaSuggestContent] = useState(props.mangaid || '');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [images, setImages] = useState<string[]>([]);
+    const [idValid, setIdValid] = useState<boolean>(true);
+    const [comic, setComic] = useState<any>(null);
+    const [idError, setIdError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const emojiPickerRef = useRef(null);
+    const emojiPickerRef = useRef<HTMLDivElement>(null);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -39,23 +43,26 @@ const PostModal = ((props: PostModalProps) => {
                 };
                 reader.readAsDataURL(file);
             });
+            event.target.value = '';
         }
     };
 
     const handleRemoveImage = (index: number) => {
-        setImages(prevImages => prevImages.filter((_, i) => i !== index));
+        setImages(prevImages => {
+            const newImages = [...prevImages];
+            newImages.splice(index, 1);
+            return newImages;
+        });
     };
 
     const handleSend = () => {
         console.log("Content 1:", postContent);
-        console.log("Content 2:", mangaSuggestContent); // In nội dung text vào console log
+        console.log("Content 2:", mangaSuggestContent);
         images.forEach((image, index) => {
-            console.log(`Image ${index + 1} file name:`, image); // In tên file của các ảnh đã tải lên vào console log
+            console.log(`Image ${index + 1} file name:`, image);
         });
         setPostContent('');
         setMangaSuggestContent('');
-
-        // Xóa state của hình ảnh
         setImages([]);
         props.handleClose();
     };
@@ -63,20 +70,42 @@ const PostModal = ((props: PostModalProps) => {
     const handleEmojiClick = (emojiData: EmojiClickData) => {
         setPostContent(prevContent => prevContent + emojiData.emoji);
     };
+
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
-                setShowEmojiPicker(false); // Ẩn emoji picker khi click ra ngoài
+        const handleClickOutside = (event: MouseEvent) => {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
+                setShowEmojiPicker(false);
             }
         };
 
         window.addEventListener('mousedown', handleClickOutside);
-
         return () => {
             window.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-    const isSendButtonDisabled = postContent.trim() === '' && images.length === 0;
+
+    useEffect(() => {
+        if (mangaSuggestContent.trim() !== '') {
+            axios.get(`https://api.mangadex.org/manga/${mangaSuggestContent}?includes[]=cover_art&includes[]=artist&includes[]=author`)
+                .then(response => {
+                    setComic(response.data.data);
+                    setIdValid(true);
+                    setIdError(null);
+                })
+                .catch(error => {
+                    console.error("Invalid manga ID:", error);
+                    setIdValid(false);
+                    setComic(null);
+                    setIdError("ID truyện không đúng, copy từ link truyện để dùng. VD: 09b80517-f0d6-44bd-94a6-0794da2e18d8");
+                });
+        } else {
+            setIdValid(true);  // Allow posting when ID is empty
+            setComic(null);
+            setIdError(null);
+        }
+    }, [mangaSuggestContent]);
+
+    const isSendButtonDisabled = (postContent.trim() === '' && images.length === 0) || (!idValid && mangaSuggestContent.trim() !== '');
 
     return (
         <Modal
@@ -104,7 +133,18 @@ const PostModal = ((props: PostModalProps) => {
                         value={mangaSuggestContent}
                         onChange={(e) => setMangaSuggestContent(e.target.value)}
                         className="mangaSuggestField"
+                        error={Boolean(idError)}
+                        helperText={idError}
                     />
+                    {idValid && comic && (
+                        <ComicCard
+                            cover={comic.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName}
+                            title={comic.attributes.title.en}
+                            comictype={comic.type}
+                            maintag={comic.attributes.tags[0].attributes.name.en}
+                            id={comic.id}
+                        />
+                    )}
                 </div>
                 <div className="content">
                     <TextField
@@ -118,7 +158,6 @@ const PostModal = ((props: PostModalProps) => {
                         onChange={(e) => setPostContent(e.target.value)}
                         sx={{ mt: 2, mb: 2 }}
                         className='customScrollbar contentField'
-
                     />
                 </div>
                 {images.length > 0 && (
@@ -126,10 +165,12 @@ const PostModal = ((props: PostModalProps) => {
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
                         spaceBetween={10}
                         slidesPerView={1}
+                        slidesPerGroup={1}
                         navigation
                         pagination={{ clickable: true }}
                         scrollbar={{ draggable: true }}
                         className='previewImageContainer'
+                        loop={true}
                     >
                         {images.map((image, index) => (
                             <SwiperSlide key={index} className='previewImage'>
@@ -194,6 +235,6 @@ const PostModal = ((props: PostModalProps) => {
             </div>
         </Modal>
     );
-});
+};
 
 export default PostModal;
