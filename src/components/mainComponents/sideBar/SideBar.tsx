@@ -72,7 +72,7 @@ const menu = [
       {
         id: 2,
         title: "Library",
-        url: "/libary",
+        url: "/library/READING",
         icon: "/icons/save-2.svg",
       },
       {
@@ -116,6 +116,7 @@ const menu = [
 ];
 
 const SideBar = () => {
+
   const [username, setUsername] = useState(null);
   const session = useCheckSession();
   const location = useLocation(); // Get the current path
