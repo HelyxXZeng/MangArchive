@@ -91,10 +91,6 @@ function App() {
           element:<AboutUs/>,
         },
         {
-          path:"/libary",
-          element:<AboutUs/>,
-        },
-        {
           path:"/history",
           element:<AboutUs/>,
         },
