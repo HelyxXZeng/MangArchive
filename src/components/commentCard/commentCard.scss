@@ -82,6 +82,15 @@
     
             }
         }
+        .commentImage{
+            img{
+                border-radius: 18px;
+                width: auto;
+                height: auto;
+                max-width: 256px;
+                max-height: 256px;
+            }
+        }
         .option{
             font-size: 12px;
             gap: 10px;

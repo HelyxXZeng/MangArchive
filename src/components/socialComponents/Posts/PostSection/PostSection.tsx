@@ -1,11 +1,17 @@
 import { Avatar, Button } from '@mui/material';
 import "./postSection.scss"
 import { NavLink } from 'react-router-dom'; // Ensure you've imported NavLink
+import PostModal from '../../../modal/PostModal';
+import { useState } from 'react';
 
 const PostSection = () => {
     const onButtonClick =()=>{
         console.log("Open Post Model")
     }
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpen = () => setIsModalOpen(true);
+    const handleClose = () => setIsModalOpen(false);
   return (
     <div className="postSectionComponent">
         <div className="postpress">
@@ -21,10 +27,11 @@ const PostSection = () => {
             <div className="press">
                 <Button className="click"
                     variant='contained'
-                    onClick={onButtonClick}>
+                    onClick={handleOpen}>
 
                 <span className="text">What's your take? Share to enlighten others!</span>
                 </Button>
+                <PostModal open={isModalOpen} handleClose={handleClose}/>
             </div>
         </div>
         <h4> Or you can </h4>

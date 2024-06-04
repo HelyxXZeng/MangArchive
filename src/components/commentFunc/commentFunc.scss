@@ -142,13 +142,13 @@
     width: 96px;
     height: 96px;
     object-fit: cover;
-    border: 1px solid #ccc;
+    border: 1px solid $main-white;
     border-radius: 4px;
 }
 
 .remove-image-button {
-    background: red;
-    color: white;
+    background: $like-pink;
+    color: $text-white-new;
     border: none;
     cursor: pointer;
     font-size: 16px;

@@ -24,7 +24,7 @@ const menu = [
       {
         id: 3,
         title: "Advance Search",
-        url: "/auth/login",
+        url: "/search",
         icon: "/icons/search.svg",
       },
     ],
@@ -48,13 +48,13 @@ const menu = [
       {
         id: 3,
         title: "Translation",
-        url: "/",
+        url: "/translation",
         icon: "/icons/translate.svg",
       },
       {
         id: 4,
         title: "Notification",
-        url: "/",
+        url: "/nofitication",
         icon: "/icons/notification.svg",
       },
     ],

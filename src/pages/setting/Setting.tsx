@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 const Setting = () => {
     const navigate = useNavigate();
     const handleBack = () => navigate(-1);
+    const handleAskAdmin = () => {
+        window.open('https://forms.gle/AL1U8eWXCMFTtbkEA', '_blank');
+    };
     return (
         <div className="settingFrame">
             <div className="headernav">
@@ -23,7 +26,7 @@ const Setting = () => {
                 </div>
                 <div className="changeRoles">
                     <span>Ask Admin to upgrade your Role to a Translation Group?<br/><span className='smalldescription'>This process <span className='red'>can not be undone</span> after you send form to us. The form will take care in 24-72h.</span></span>
-                    <Button className="clickhere"> Click here</Button>
+                    <Button className="clickhere" onClick={handleAskAdmin}>Click here</Button>
                 </div>
             </div>
             <h3 className="danger">Danger Zone</h3>
