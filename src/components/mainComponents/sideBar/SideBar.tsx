@@ -24,7 +24,7 @@ const menu = [
       {
         id: 3,
         title: "Advance Search",
-        url: "/auth/login",
+        url: "/search",
         icon: "/icons/search.svg",
       },
     ],
@@ -48,13 +48,13 @@ const menu = [
       {
         id: 3,
         title: "Translation",
-        url: "/",
+        url: "/translation",
         icon: "/icons/translate.svg",
       },
       {
         id: 4,
         title: "Notification",
-        url: "/",
+        url: "/nofitication",
         icon: "/icons/notification.svg",
       },
     ],
@@ -72,13 +72,13 @@ const menu = [
       {
         id: 2,
         title: "Library",
-        url: "/",
+        url: "/libary",
         icon: "/icons/save-2.svg",
       },
       {
         id: 3,
         title: "Recent History",
-        url: "/",
+        url: "/history",
         icon: "/icons/clock.svg",
       },
     ],
