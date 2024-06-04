@@ -12,7 +12,29 @@ interface Props {
 
 const Chapter: React.FC<Props> = ({ data, chapterNumber, mangaID, userID }) => {
     const [show, setShow] = useState(true);
+    const [bookmarks, setBookmarks] = useState<{ [key: number]: boolean }>({});
     const navigate = useNavigate();
+
+    const getBookmark = async (chapterNumber: any, translatedLanguage: any) => {
+        if (userID) {
+            const { data, error } = await supabase
+                .rpc("get_bookmark", {
+                    this_user_id: userID,
+                    this_chap: chapterNumber,
+                    this_language: translatedLanguage,
+                    this_truyen: mangaID,
+                });
+
+            if (error) {
+                console.error(error);
+                return false;
+            }
+
+            return data ? true : false;
+        }
+
+        return false;
+    };
 
     const addBookmark = async (chapterNumber: any, translatedLanguage: any) => {
         if (userID) {
@@ -20,12 +42,11 @@ const Chapter: React.FC<Props> = ({ data, chapterNumber, mangaID, userID }) => {
                 `Bookmark added for Chapter ${chapterNumber} in ${translatedLanguage}`
             );
             const { error } = await supabase
-                .from("Bookmark")
-                .insert({
-                    user: userID,
-                    chap: chapterNumber,
-                    language: translatedLanguage,
-                    truyen: mangaID,
+                .rpc("add_bookmark", {
+                    this_user_id: userID,
+                    this_chap: chapterNumber,
+                    this_language: translatedLanguage,
+                    this_truyen: mangaID,
                 });
 
             if (error) console.error(error);
@@ -46,8 +67,11 @@ const Chapter: React.FC<Props> = ({ data, chapterNumber, mangaID, userID }) => {
     };
 
     useEffect(() => {
-
-    }, []);
+        data.forEach(async (chap: any) => {
+            const isBookmarked = await getBookmark(chapterNumber, chap.translatedLanguage);
+            setBookmarks(prev => ({ ...prev, [chap.id]: isBookmarked }));
+        });
+    }, [chapterNumber, data, mangaID, userID]);
 
     return (
         <div className="chapter-card">
@@ -86,7 +110,7 @@ const Chapter: React.FC<Props> = ({ data, chapterNumber, mangaID, userID }) => {
                         </div>
                     </div>
                     <img
-                        src="/icons/eye.svg"
+                        src={bookmarks[chap.id] ? "/icons/eye-slash.svg" : "/icons/eye.svg"}
                         alt="icon"
                         style={{ marginLeft: "10%", marginRight: "5px" }}
                     />
