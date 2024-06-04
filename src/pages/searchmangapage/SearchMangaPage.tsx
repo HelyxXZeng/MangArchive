@@ -9,6 +9,7 @@ const MangaSearchPage: React.FC = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const title = queryParams.get("title") || "";
+    const tags = queryParams.getAll("tags");
 
     const [mangaList, setMangaList] = useState<any[]>([]);
     const [limit] = useState<number>(20); // Number of items per page
@@ -19,11 +20,10 @@ const MangaSearchPage: React.FC = () => {
     const [pageInput, setPageInput] = useState("1");
     const [totalPages, setTotalPages] = useState(1);
 
-    const getMangaData = async (this_title: string, limit: number, offset: number) => {
-        // if (!title) return; // Ensure title is present
-
-        const mangas = await searchManga(this_title, limit, offset);
+    const getMangaData = async (this_title: string, limit: number, offset: number, tags: string[]) => {
+        const mangas = await searchManga(this_title, limit, offset, '', [], [], 0, [], [], [], [], [], [], 'AND', tags);
         setMangaList(mangas.data);
+        // if (!title) return; // Ensure title is present
 
         if (mangas.data.length > 0) {
             setTotalCount(parseInt(mangas.total, 10)); // Update total count
@@ -78,8 +78,8 @@ const MangaSearchPage: React.FC = () => {
     };
 
     useEffect(() => {
-        getMangaData(title, limit, offset);
-    }, [title, limit, offset]);
+        getMangaData(title, limit, offset, tags);
+    }, [title, limit, offset, tags]);
 
     const handleNext = () => {
         if (offset + limit < totalCount) {
