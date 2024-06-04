@@ -18,7 +18,7 @@ const menu = [
       {
         id: 2,
         title: "Latest",
-        url: "/latest",
+        url: "/search?page=latest",
         icon: "/icons/discover.svg",
       },
       {
@@ -126,7 +126,7 @@ const SideBar = () => {
       if (session !== null) {
         try {
           const { user } = session;
-          if(user){  
+          if (user) {
             const { data, error } = await supabase
               .from("User")
               .select("username")
@@ -163,7 +163,7 @@ const SideBar = () => {
               preventScrollReset={true}
             >
               <img src={listItem.icon} alt="" />
-              <span className={`listItemTitles ${listItem.title === "Announcements"? 'announ' : ''}`}>{listItem.title}</span>
+              <span className={`listItemTitles ${listItem.title === "Announcements" ? 'announ' : ''}`}>{listItem.title}</span>
             </NavLink>
           ))}
         </div>

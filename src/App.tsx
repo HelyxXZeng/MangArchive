@@ -25,6 +25,7 @@ import ScrollToTop from "./hooks/useScrollToTop";
 import Discorver from "./pages/SocialPage/discorver/Discorver";
 import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
+import MangaHistory from "./pages/mangahistory/History";
 
 function App() {
 
@@ -93,16 +94,12 @@ function App() {
           children: []
         },
         {
-          path:"/latest",
-          element:<AboutUs/>,
+          path: "/history",
+          element: <MangaHistory />,
         },
         {
-          path:"/history",
-          element:<AboutUs/>,
-        },
-        {
-          path:"/translation",
-          element:<AboutUs/>,
+          path: "/translation",
+          element: <AboutUs />,
         },
         {
           path: "/",
@@ -141,8 +138,8 @@ function App() {
           ]
         },
         {
-          path:"/profile/:username/post/:id",
-          element: <PostDetail/>
+          path: "/profile/:username/post/:id",
+          element: <PostDetail />
         },
         {
           path: "/policies",

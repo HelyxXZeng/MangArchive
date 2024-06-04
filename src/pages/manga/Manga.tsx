@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Manga.scss";
+import { useNavigate } from "react-router-dom";
 // import searchManga from './MangaSearch.js';
 
 import MangaCard from "../title/TitleCard2";
@@ -14,6 +15,25 @@ const Manga = () => {
   const [mangaList, setMangaList] = useState([]);
   const [suggestMangas, setSuggestManga] = useState([]);
   // const [mangaSlugs, setMangaSlugs] = useState({});
+  const navigate = useNavigate();
+
+  const handleRandomClick = async () => {
+    try {
+      const resp = await axios({
+        method: "GET",
+        url: `${baseUrl}/manga/random`
+      });
+      console.log("random: ", resp.data.data);
+      navigate(`/manga/${resp.data.data.id}`);
+
+      if (!resp) {
+        throw new Error("Manga not found.");
+      }
+    } catch (error) {
+      console.error("Error fetching manga:", error);
+    }
+    // navigate(`/chapter/${chapID}`);
+  };
 
   const baseUrl = "https://api.mangadex.org";
   // const title = 'Kanojyo to Himitsu to Koimoyou';
@@ -139,6 +159,12 @@ const Manga = () => {
                 mangaList.map((manga: any) => (
                   <MangaCard key={manga.id} manga={manga} />
                 ))}
+            </div>
+            <div className="textbox" onClick={() => handleRandomClick()}>
+              <h1 style={{ paddingLeft: "20px" }}>
+                <span style={{ color: "#E7E9EA" }}>Random </span>
+                <span style={{ color: "#4296cf" }}>Manga</span>
+              </h1>
             </div>
             <div className="horizontal-manga-list">
               {/* {mangaList && mangaList.map((manga, index) => (
