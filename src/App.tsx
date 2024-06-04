@@ -87,6 +87,22 @@ function App() {
           children: []
         },
         {
+          path:"/latest",
+          element:<AboutUs/>,
+        },
+        {
+          path:"/libary",
+          element:<AboutUs/>,
+        },
+        {
+          path:"/history",
+          element:<AboutUs/>,
+        },
+        {
+          path:"/translation",
+          element:<AboutUs/>,
+        },
+        {
           path: "/",
           element: <SocialLayout />,
           children: [
