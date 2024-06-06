@@ -23,7 +23,9 @@ import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 import ReadChapter from "./pages/readchapter/ReadChapter";
 import ScrollToTop from "./hooks/useScrollToTop";
 import Discorver from "./pages/SocialPage/discorver/Discorver";
+import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
+import MangaHistory from "./pages/mangahistory/History";
 
 function App() {
 
@@ -82,21 +84,22 @@ function App() {
           children: []
         },
         {
+          path: "/library/:page",
+          element: <MangaLibrary />,
+          children: []
+        },
+        {
           path: "/chapter/:chapter_id",
           element: <ReadChapter />,
           children: []
         },
         {
-          path:"/latest",
-          element:<AboutUs/>,
+          path: "/history",
+          element: <MangaHistory />,
         },
         {
-          path:"/history",
-          element:<AboutUs/>,
-        },
-        {
-          path:"/translation",
-          element:<AboutUs/>,
+          path: "/translation",
+          element: <AboutUs />,
         },
         {
           path: "/",
@@ -135,8 +138,8 @@ function App() {
           ]
         },
         {
-          path:"/profile/:username/post/:id",
-          element: <PostDetail/>
+          path: "/profile/:username/post/:id",
+          element: <PostDetail />
         },
         {
           path: "/policies",

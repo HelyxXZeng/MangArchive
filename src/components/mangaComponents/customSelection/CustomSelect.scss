@@ -1,0 +1,44 @@
+@import "../../../global-styles/Color.scss";
+
+.custom-select-container {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+}
+
+.custom-select-header {
+    background-color: $blue-main;
+    color: $text-white-new;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.custom-select-options {
+    position: absolute;
+    background-color: $main-white;
+    color: $text-gray-trans;
+    width: 100%;
+    border: 1px solid $blue-main;
+    border-radius: 5px;
+    margin-top: 5px;
+    z-index: 10;
+}
+
+.custom-select-option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: $blue-main;
+        color: $text-white-new;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 5px; // Increase gap between options
+    }
+}

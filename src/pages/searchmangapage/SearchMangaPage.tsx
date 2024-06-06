@@ -19,10 +19,10 @@ const MangaSearchPage: React.FC = () => {
     const [pageInput, setPageInput] = useState("1");
     const [totalPages, setTotalPages] = useState(1);
 
-    const getMangaData = async (title: string, limit: number, offset: number) => {
-        if (!title) return; // Ensure title is present
+    const getMangaData = async (this_title: string, limit: number, offset: number) => {
+        // if (!title) return; // Ensure title is present
 
-        const mangas = await searchManga(title, limit, offset);
+        const mangas = await searchManga(this_title, limit, offset);
         setMangaList(mangas.data);
 
         if (mangas.data.length > 0) {
