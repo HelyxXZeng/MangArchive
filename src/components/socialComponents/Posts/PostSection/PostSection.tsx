@@ -1,7 +1,7 @@
 import { Avatar, Button } from '@mui/material';
 import "./postSection.scss"
 import { NavLink } from 'react-router-dom'; // Ensure you've imported NavLink
-import PostModal from '../../../modal/PostModal';
+import PostModal from '../../../modal/postModal/PostModal';
 import { useState } from 'react';
 
 const PostSection = () => {
