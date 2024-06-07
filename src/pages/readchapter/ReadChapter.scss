@@ -27,6 +27,24 @@
             background-color: $blue-soft-hover;
         }
     }
+
+    .download-chapter-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background-color: $blue-main;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 40;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: $blue-soft-hover;
+        }
+    }
 }
 
 .loading-wave {

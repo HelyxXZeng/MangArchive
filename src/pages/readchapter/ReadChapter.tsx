@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ReadChapter.scss";
 import { useParams, useNavigate } from "react-router-dom";
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
+import Modal from "../messagemodal/Modal";
 
 import SwiperCore from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -16,6 +19,8 @@ const MangaDetails: React.FC<Props> = () => {
     const [data, setData] = useState<any>(null);
     const [imgStyle, setImgStyle] = useState<"style1" | "style2">("style1");
     const [imgStyleText, setImgStyleText] = useState<"Full Width" | "Full Height">("Full Width");
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
     const swiperRef = useRef<SwiperCore | null>(null);
     const navigate = useNavigate(); // Use history for navigation
 
@@ -60,11 +65,44 @@ const MangaDetails: React.FC<Props> = () => {
         return () => {
             document.removeEventListener("keydown", handleKeydown);
         };
-    }, [history]);
+    }, [navigate]);
 
     const toggleImgStyle = () => {
         setImgStyle((prevStyle) => (prevStyle === "style1" ? "style2" : "style1"));
         setImgStyleText((prevStyle) => (prevStyle === "Full Width" ? "Full Height" : "Full Width"));
+    };
+
+    const downloadChapter = async () => {
+        setIsDownloading(true);
+        setModalMessage("Downloading chapter, please wait...");
+
+        const zip = new JSZip();
+        const folder = zip.folder(`MangArchive/${chapter_id}`);
+
+        if (data && data.chapter && data.chapter.data) {
+            try {
+                for (const page of data.chapter.data) {
+                    const response = await axios({
+                        method: 'GET',
+                        url: `${data.baseUrl}/data/${data.chapter.hash}/${page}`,
+                        responseType: 'arraybuffer'
+                    });
+
+                    if (folder) folder.file(page, response.data);
+                }
+
+                const content = await zip.generateAsync({ type: 'blob' });
+                saveAs(content, `MangArchive_${chapter_id}.zip`);
+                setModalMessage("Download complete!");
+            } catch (error) {
+                setModalMessage("An error occurred during download.");
+            } finally {
+                setIsDownloading(false);
+            }
+        } else {
+            setModalMessage("No data available to download.");
+            setIsDownloading(false);
+        }
     };
 
     return (
@@ -130,8 +168,12 @@ const MangaDetails: React.FC<Props> = () => {
                     <button className="toggle-style-button" onClick={toggleImgStyle}>
                         Change to {imgStyleText}
                     </button>
+                    <button className="download-chapter-button" onClick={downloadChapter}>
+                        Download chapter
+                    </button>
                 </div>
             )}
+            {isDownloading && <Modal message={modalMessage} onClose={() => setIsDownloading(false)} />}
         </div>
     );
 };

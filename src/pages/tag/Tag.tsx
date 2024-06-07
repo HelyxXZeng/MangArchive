@@ -8,7 +8,7 @@ interface Props {
 
 const Tag: React.FC<Props> = ({ tag }) => {
   // const navigate = useNavigate();
-  const [tagParam, setTagParam] = useState('');
+  // const [tagParam, setTagParam] = useState('');
 
   // const handleRandomClick = async () => {
   //   const tags = [tag.id];
@@ -17,17 +17,17 @@ const Tag: React.FC<Props> = ({ tag }) => {
   //   navigate(`/search?${params.toString()}`);
   // };
 
-  useEffect(() => {
-    const tags = [tag.id];
-    const params = new URLSearchParams();
-    tags.forEach(tag => params.append("tags", tag));
-    setTagParam(params.toString());
-    // navigate(`/search?${params.toString()}`);
-  }, []);
+  // useEffect(() => {
+  //   const tags = [tag.id];
+  //   const params = new URLSearchParams();
+  //   tags.forEach(tag => params.append("tags", tag));
+  //   setTagParam(params.toString());
+  //   // navigate(`/search?${params.toString()}`);
+  // }, []);
 
   return (
     <NavLink
-      to={`/search?${tagParam}`}
+      to={`/search?tags=${tag.id}`}
       style={{ textDecoration: "none", width: "fit-content" }}
     >
       <span className="tag" key={tag.id}>

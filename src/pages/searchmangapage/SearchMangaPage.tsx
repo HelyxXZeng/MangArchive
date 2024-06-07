@@ -20,16 +20,37 @@ const MangaSearchPage: React.FC = () => {
     const [pageInput, setPageInput] = useState("1");
     const [totalPages, setTotalPages] = useState(1);
 
-    const getMangaData = async (this_title: string, limit: number, offset: number, tags: string[]) => {
-        const mangas = await searchManga(this_title, limit, offset, '', [], [], 0, [], [], [], [], [], [], 'AND', tags);
+    const getMangaData = async (
+        this_title: string,
+        limit: number,
+        offset: number,
+        tags: string[]
+    ) => {
+        if (mangaList && mangaList.length > 0) return;
+        const mangas = await searchManga(
+            this_title,
+            limit,
+            offset,
+            "",
+            [],
+            [],
+            0,
+            [],
+            [],
+            [],
+            [],
+            ["safe", "suggestive", "erotica", "pornographic"],
+            [],
+            "AND",
+            tags
+        );
         setMangaList(mangas.data);
         // if (!title) return; // Ensure title is present
 
         if (mangas.data.length > 0) {
             setTotalCount(parseInt(mangas.total, 10)); // Update total count
             setTotalPages(Math.ceil(parseInt(mangas.total, 10) / limit));
-        }
-        else {
+        } else {
             setTotalCount(0); // Update total count
             setTotalPages(0);
         }
@@ -66,6 +87,7 @@ const MangaSearchPage: React.FC = () => {
     };
 
     const handlePageInputBlur = () => {
+        setMangaList([]);
         if (pageInput === "" || parseInt(pageInput) < 1) {
             setPageInput("1");
             setOffset(0);
@@ -82,6 +104,7 @@ const MangaSearchPage: React.FC = () => {
     }, [title, limit, offset, tags]);
 
     const handleNext = () => {
+        setMangaList([]);
         if (offset + limit < totalCount) {
             setOffset((prevOffset) => prevOffset + limit);
             setCurrentPage(currentPage + 1);
@@ -90,6 +113,7 @@ const MangaSearchPage: React.FC = () => {
     };
 
     const handlePrevious = () => {
+        setMangaList([]);
         if (offset > 0) {
             setOffset((prevOffset) => prevOffset - limit);
             setCurrentPage(currentPage - 1);
