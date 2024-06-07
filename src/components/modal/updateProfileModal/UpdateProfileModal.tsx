@@ -1,4 +1,4 @@
-import { Button, IconButton, Modal, Typography } from '@mui/material'
+import { Avatar, Button, IconButton, Modal, TextField, Typography } from '@mui/material'
 import './updateProfileModal.scss'
 import { useRef } from 'react';
 interface UPModalProps {
@@ -6,9 +6,9 @@ interface UPModalProps {
     handleClose: () => void;
     userid?: string;
 }
-const UpdateProfileModal = ( props: UPModalProps) => {
+const UpdateProfileModal = (props: UPModalProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const handleImageChange = () =>{
+    const handleImageChange = () => {
         console.log("none");
     }
     const handleSend = () => {
@@ -19,8 +19,8 @@ const UpdateProfileModal = ( props: UPModalProps) => {
         props.handleClose();
     };
     const isSendButtonDisabled = true;//sửa logic nếu không có gì thay đổi thì disable
-  return (
-    <Modal
+    return (
+        <Modal
             open={props.open}
             onClose={props.handleClose}
             aria-labelledby="up-modal-title"
@@ -37,20 +37,8 @@ const UpdateProfileModal = ( props: UPModalProps) => {
                     </IconButton>
                 </div>
                 <div className="imageInput">
-                    <div className="background"></div>
-                    <div className="avatar"></div>
-                </div>
-                <div className="textInput">
-                    <div className="name"></div>
-                    <div className="bio"></div>
-                    <div className="link"></div>
-                </div>
-                <div className='option'>
-                    <div>
-                        
-                        <IconButton onClick={() => fileInputRef.current?.click()} className="image-button">
-                            <img src="/icons/camera.svg" alt="" className="icon" />
-                        </IconButton>
+                    <div className="background">
+                        <img src="" alt="" />
                         <input
                             type="file"
                             accept="image/*"
@@ -60,20 +48,73 @@ const UpdateProfileModal = ( props: UPModalProps) => {
                             multiple
                         />
                     </div>
-                    <div>
-                        <Button
-                            className="send-button"
-                            variant="contained"
-                            onClick={handleSend}
-                            disabled={isSendButtonDisabled}
-                        >
-                            up
-                        </Button>
+                    <div className="avatar">
+                        <Avatar
+                            className="Avatar"
+                            src="https://cdn.donmai.us/original/5f/ea/__firefly_honkai_and_1_more_drawn_by_baba_ba_ba_mb__5feaaa99527187a3db0e437380ec3932.jpg"
+                            alt="avatar"
+                            sx={{ width: "128px", height: "128px", border: "4px solid #1F1F1F" }} />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                            hidden
+                            multiple
+                        />
                     </div>
+                </div>
+                <div className="textInput">
+                    <div className="name">
+                        <TextField
+                            placeholder="Enter comicId here (copy series code from link)"
+                            variant="outlined"
+                            fullWidth
+                            rows={1}
+                            value={mangaSuggestContent}
+                            onChange={(e) => setMangaSuggestContent(e.target.value)}
+                            className="mangaSuggestField"
+                        />
+                    </div>
+                    <div className="bio">
+                        <TextField
+                            placeholder="What's on your mind?"
+                            variant="outlined"
+                            fullWidth
+                            multiline
+                            minRows={3}
+                            maxRows={10}
+                            value={postContent}
+                            onChange={(e) => setPostContent(e.target.value)}
+                            sx={{ mt: 2, mb: 2 }}
+                            className='customScrollbar contentField'
+                        />
+                    </div>
+                    <div className="link">
+                        <TextField
+                            placeholder="Enter comicId here (copy series code from link)"
+                            variant="outlined"
+                            fullWidth
+                            rows={1}
+                            value={mangaSuggestContent}
+                            onChange={(e) => setMangaSuggestContent(e.target.value)}
+                            className="mangaSuggestField"
+                        />
+                    </div>
+                </div>
+                <div className='option'>
+                    <Button
+                        className="send-button"
+                        variant="contained"
+                        onClick={handleSend}
+                        disabled={isSendButtonDisabled}
+                    >
+                        Update
+                    </Button>
                 </div>
             </div>
         </Modal>
-  )
+    )
 }
 
 export default UpdateProfileModal
