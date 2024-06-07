@@ -171,6 +171,9 @@ const MangaDetails: React.FC<Props> = () => {
                     <button className="download-chapter-button" onClick={downloadChapter}>
                         Download chapter
                     </button>
+                    <div className="chapter-info">
+                        Chapter:
+                    </div>
                 </div>
             )}
             {isDownloading && <Modal message={modalMessage} onClose={() => setIsDownloading(false)} />}
