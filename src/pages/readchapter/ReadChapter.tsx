@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./ReadChapter.scss";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 import Modal from "../messagemodal/Modal";
@@ -16,6 +16,11 @@ interface Props { }
 
 const MangaDetails: React.FC<Props> = () => {
     const { chapter_id } = useParams<{ chapter_id: string }>();
+    const { chap } = useParams<{ chap: string }>();
+    // const location = useLocation();
+    // const queryParams = new URLSearchParams(location.search);
+    // const chap = queryParams.get("chap") || "";
+
     const [data, setData] = useState<any>(null);
     const [imgStyle, setImgStyle] = useState<"style1" | "style2">("style1");
     const [imgStyleText, setImgStyleText] = useState<"Full Width" | "Full Height">("Full Width");
@@ -172,7 +177,7 @@ const MangaDetails: React.FC<Props> = () => {
                         Download chapter
                     </button>
                     <div className="chapter-info">
-                        Chapter:
+                        Chapter: {chap}
                     </div>
                 </div>
             )}

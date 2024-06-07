@@ -89,7 +89,7 @@ function App() {
           children: []
         },
         {
-          path: "/chapter/:chapter_id",
+          path: "/chapter/:chap/:chapter_id",
           element: <ReadChapter />,
           children: []
         },
