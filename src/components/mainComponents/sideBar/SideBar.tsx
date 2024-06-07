@@ -18,7 +18,7 @@ const menu = [
       {
         id: 2,
         title: "Latest",
-        url: "/search?page=latest",
+        url: "/latest",
         icon: "/icons/discover.svg",
       },
       {

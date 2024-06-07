@@ -84,6 +84,11 @@ function App() {
           children: []
         },
         {
+          path: "/latest",
+          element: <SearchMangaPage />,
+          children: []
+        },
+        {
           path: "/library/:page",
           element: <MangaLibrary />,
           children: []
