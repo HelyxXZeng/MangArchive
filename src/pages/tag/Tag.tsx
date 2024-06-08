@@ -27,7 +27,7 @@ const Tag: React.FC<Props> = ({ tag }) => {
 
   return (
     <NavLink
-      to={`/search?tags=${tag.id}`}
+      to={`/search?includedTags=${tag.id}`}
       style={{ textDecoration: "none", width: "fit-content" }}
     >
       <span className="tag" key={tag.id}>

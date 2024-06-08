@@ -14,7 +14,7 @@ const searchManga = async (
     ids: string[] = [],
     contentRating: string[] = ['safe', 'suggestive', 'erotica', 'pornographic'],
     excludedTagNames: string[] = [],
-    excludedTagsMode: string = 'AND',
+    excludedTagsMode: string = 'OR',
     includedTagNames: string[] = [],
     includedTagsMode: string = 'AND',
     status: string = '',
@@ -53,7 +53,7 @@ const searchManga = async (
 
         const resp = await axios.get(`${baseUrl}/manga?includes[]=cover_art&includes[]=author&includes[]=artist`, { params });
 
-        console.log(resp.data)
+        console.log(params);
         return resp.data;
 
     } catch (error) {

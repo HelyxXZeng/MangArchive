@@ -1,30 +1,38 @@
 import { useState, useEffect } from "react";
-// import axios from "axios";
-import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./SearchMangaPage.scss";
 import MangaCard from "../title/TitleCard2";
 import searchManga from "../../utils/MangaSearch";
+import TriStateCheckbox from "./TriStateCheckbox"; // Adjust the path as necessary
 
 const MangaSearchPage: React.FC = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const title = queryParams.get("title") || "";
-    const tags = queryParams.getAll("tags");
+    const includedTags = queryParams.getAll("includedTags");
+    const excludedTags = queryParams.getAll("excludedTags");
+
+    const [mangaTags, setMangaTags] = useState<any[]>([]);
+    const [thisIncludedTags, setThisIncludedTags] = useState<string[]>(includedTags);
+    const [thisExcludedTags, setThisExcludedTags] = useState<string[]>(excludedTags);
 
     const [mangaList, setMangaList] = useState<any[]>([]);
     const [limit] = useState<number>(20); // Number of items per page
     const [offset, setOffset] = useState<number>(0); // Current offset
     const [totalCount, setTotalCount] = useState<number>(0); // Total number of items
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageInput, setPageInput] = useState("1");
-    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageInput, setPageInput] = useState<string>("1");
+    const [totalPages, setTotalPages] = useState<number>(1);
 
     const getMangaData = async (
         this_title: string,
         limit: number,
         offset: number,
-        tags: string[]
+        includedTags: string[],
+        excludedTags: string[]
     ) => {
         if (mangaList && mangaList.length > 0) return;
         const mangas = await searchManga(
@@ -40,47 +48,62 @@ const MangaSearchPage: React.FC = () => {
             [],
             [],
             ["safe", "suggestive", "erotica", "pornographic"],
-            [],
-            "AND",
-            tags
+            excludedTags,
+            "OR",
+            includedTags,
+            "AND"
         );
         setMangaList(mangas.data);
-        // if (!title) return; // Ensure title is present
 
         if (mangas.data.length > 0) {
-            setTotalCount(parseInt(mangas.total, 10)); // Update total count
-            setTotalPages(Math.ceil(parseInt(mangas.total, 10) / limit));
+            const total = parseInt(mangas.total, 10);
+            setTotalCount(total); // Update total count
+            setTotalPages(Math.ceil(total / limit));
         } else {
             setTotalCount(0); // Update total count
             setTotalPages(0);
         }
 
-        // try {
-        //     const responses = await Promise.all(
-        //         mangaIds.map((id: any) =>
-        //             axios.get(`https://api.mangadex.org/manga/${id}?includes[]=cover_art&includes[]=author&includes[]=artist`)
-        //         )
-        //     );
+        const baseUrl = 'https://api.mangadex.org';
+        const tags = await axios.get(`${baseUrl}/manga/tag`);
 
-        //     const fetchedMangas = responses.map((response: any) => response.data.data);
-        //     setMangaList(fetchedMangas);
-
-        //     if (!fetchedMangas.length) {
-        //         throw new Error("Mangas not found.");
-        //     }
-        // } catch (error) {
-        //     console.error("Error fetching mangas:", error);
-        // }
+        setMangaTags(tags.data.data);
+        // console.log('Tags:', tags.data.data);
     };
 
-    // Pagination logic
+    const handleSearchPress = () => {
+        const params = new URLSearchParams();
+        params.append("title", title);
+        thisIncludedTags.forEach(tag => params.append("includedTags", tag));
+        thisExcludedTags.forEach(tag => params.append("excludedTags", tag));
+        setMangaList([]);
+        navigate(`/search?${params.toString()}`);
+    };
+
+    const handleTagChange = (id: string, state: 'yes' | 'no' | 'unchecked') => {
+        if (state === 'yes') {
+            setThisIncludedTags(prev => [...prev, id]);
+            setThisExcludedTags(prev => prev.filter(tagId => tagId !== id));
+        } else if (state === 'no') {
+            setThisExcludedTags(prev => [...prev, id]);
+            setThisIncludedTags(prev => prev.filter(tagId => tagId !== id));
+        } else {
+            setThisIncludedTags(prev => prev.filter(tagId => tagId !== id));
+            setThisExcludedTags(prev => prev.filter(tagId => tagId !== id));
+        }
+    };
+
+    useEffect(() => {
+        setMangaList([]);
+    }, [location]);
+
+    useEffect(() => {
+        getMangaData(title, limit, offset, includedTags, excludedTags);
+    }, [title, limit, offset, includedTags, excludedTags, mangaList]);
 
     const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        if (
-            value === "" ||
-            (/^\d+$/.test(value) && parseInt(value) <= totalPages)
-        ) {
+        if (value === "" || (/^\d+$/.test(value) && parseInt(value) <= totalPages)) {
             setPageInput(value);
             setOffset((parseInt(value) - 1) * limit || 0);
         }
@@ -88,49 +111,54 @@ const MangaSearchPage: React.FC = () => {
 
     const handlePageInputBlur = () => {
         setMangaList([]);
-        if (pageInput === "" || parseInt(pageInput) < 1) {
-            setPageInput("1");
-            setOffset(0);
-        }
         const pageNumber = parseInt(pageInput);
         if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
             setOffset((pageNumber - 1) * limit);
+        } else {
+            setPageInput("1");
+            setOffset(0);
         }
     };
-
-    useEffect(() => {
-        getMangaData(title, limit, offset, tags);
-    }, [title, limit, offset, tags]);
 
     const handleNext = () => {
         setMangaList([]);
         if (offset + limit < totalCount) {
-            setOffset((prevOffset) => prevOffset + limit);
-            setCurrentPage(currentPage + 1);
-            setPageInput(String(parseInt(pageInput) + 1));
+            setOffset(prevOffset => prevOffset + limit);
+            setCurrentPage(prevPage => prevPage + 1);
+            setPageInput(prev => String(parseInt(prev) + 1));
         }
     };
 
     const handlePrevious = () => {
         setMangaList([]);
         if (offset > 0) {
-            setOffset((prevOffset) => prevOffset - limit);
-            setCurrentPage(currentPage - 1);
-            setPageInput(String(parseInt(pageInput) - 1));
+            setOffset(prevOffset => prevOffset - limit);
+            setCurrentPage(prevPage => prevPage - 1);
+            setPageInput(prev => String(parseInt(prev) - 1));
         }
     };
 
-    // const handlePageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const newPage = parseInt(e.target.value, 10);
-    //     if (!isNaN(newPage) && newPage > 0 && newPage <= Math.ceil(totalCount / limit)) {
-    //         setOffset((newPage - 1) * limit);
-    //     }
-    // };
-
     return (
         <div className="search-page">
-            {!mangaList ? (
+            {mangaList && mangaList.length > 0 &&
+                <div className="tag-checkboxes">
+                    {mangaTags.map(tag => (
+                        <TriStateCheckbox
+                            key={tag.id}
+                            tag={tag}
+                            includedTags={thisIncludedTags}
+                            excludedTags={thisExcludedTags}
+                            onChange={handleTagChange}
+                        />
+                    ))}
+                    <button className="search-button" onClick={handleSearchPress}>
+                        Search
+                    </button>
+                </div>
+            }
+
+            {!(mangaList && mangaList.length > 0) ? (
                 <div className="loading-wave">
                     <div className="loading-bar"></div>
                     <div className="loading-bar"></div>
@@ -151,7 +179,7 @@ const MangaSearchPage: React.FC = () => {
                         {currentPage > 1 && (
                             <button
                                 className="previous-chapter-page"
-                                onClick={() => handlePrevious()}
+                                onClick={handlePrevious}
                             >
                                 Previous
                             </button>
@@ -171,7 +199,7 @@ const MangaSearchPage: React.FC = () => {
                         {currentPage < totalPages && (
                             <button
                                 className="next-chapter-page"
-                                onClick={() => handleNext()}
+                                onClick={handleNext}
                             >
                                 Next
                             </button>

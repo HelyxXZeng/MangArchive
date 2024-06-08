@@ -1,10 +1,81 @@
+@import "../../global-styles/Color.scss";
+
 .search-page {
     width: 100%;
-    // background-color: $main-white;
     align-self: center;
     align-items: center;
     justify-content: center;
     min-height: 500px;
     height: auto;
     display: flex;
+    flex-direction: column; // Ensure the layout is vertical
+
+    .manga-grid-container {
+        width: 100%; // Ensure the manga grid container takes full width
+    }
+
+    .tag-checkboxes {
+        width: 90%;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 20px;
+        margin-bottom: 20px;
+        padding: 10px;
+        // background-color: $main-white;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        justify-content: center;
+
+        .search-button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: #0056b3;
+            }
+        }
+    }
+
+    .tri-state-checkbox {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        .checkbox {
+            width: fit-content;
+            height: fit-content;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 2px;
+            padding-right: 5px;
+            padding-left: 5px;
+            color: $text-white-new;
+            background-color: transparent;
+        }
+
+        &.yes .checkbox {
+            border: 1px solid #17bd3b;
+            // background-color: #2ec91d;
+            color: #17bd3b;
+        }
+
+        &.no .checkbox {
+            border: 1px solid #fa3e21;
+            // background-color: #df371e;
+            color: #fa3e21;
+        }
+
+        &.unchecked .checkbox {
+            border: 1px solid #ccc;
+            // background-color: transparent;
+            // color: ;
+        }
+    }
 }

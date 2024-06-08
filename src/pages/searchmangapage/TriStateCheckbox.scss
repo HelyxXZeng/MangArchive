@@ -1,0 +1,25 @@
+.tri-state-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    &.yes .checkbox {
+        background-color: green;
+    }
+
+    &.no .checkbox {
+        background-color: red;
+    }
+
+    &.unchecked .checkbox {
+        background-color: transparent;
+    }
+}
