@@ -26,6 +26,7 @@ import Discorver from "./pages/SocialPage/discorver/Discorver";
 import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 import MangaHistory from "./pages/mangahistory/History";
+import ProtectedRoute from "./hooks/protectRouter";
 
 function App() {
 
@@ -53,15 +54,17 @@ function App() {
 
   const SocialLayout = () => {
     return (
-      <div className="socialMain">
-        <ScrollToTop />
-        <div className="masterFrame">
-          <Outlet />
+      <ProtectedRoute>
+        <div className="socialMain">
+          <ScrollToTop />
+          <div className="masterFrame">
+            <Outlet />
+          </div>
+          <div className="suggestRightbar">
+            <RightBar />
+          </div>
         </div>
-        <div className="suggestRightbar">
-          <RightBar />
-        </div>
-      </div>
+      </ProtectedRoute>
     );
   }
   const router = createBrowserRouter([
@@ -102,6 +105,10 @@ function App() {
           element: <AboutUs />,
         },
         {
+          path:"/nofitication",
+          element:<AboutUs/>
+        },
+        {
           path: "/",
           element: <SocialLayout />,
           children: [
@@ -134,12 +141,16 @@ function App() {
             {
               path: "discover/",
               element: <Discorver />
+            },
+            {
+              path:"profile",
+              element: <ProtectedRoute/>
             }
           ]
         },
         {
           path: "/profile/:username/post/:id",
-          element: <PostDetail />
+          element: <ProtectedRoute><PostDetail /></ProtectedRoute>
         },
         {
           path: "/policies",
@@ -155,7 +166,7 @@ function App() {
         },
         {
           path: "/setting",
-          element: <Setting />
+          element: <ProtectedRoute><Setting/></ProtectedRoute>
         }
       ]
     },

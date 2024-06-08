@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../utils/supabase'; // Import supabaseClient từ file khác
 
 const useCheckSession = () => {
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
     const sessionListener = supabase.auth.onAuthStateChange((_event, newSession) => {

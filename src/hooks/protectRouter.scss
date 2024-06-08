@@ -1,0 +1,41 @@
+@import "../global-styles/Color.scss";
+
+.protectContainer {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lato', sans-serif;
+    color: $text-white-new;
+    flex-direction: column;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 10px;
+    .logIn {
+        color: $text-white-new;
+        width: 50%;
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        text-transform: none;
+        margin: 0 4px;
+        background-color: $blue-soft;
+        border-radius: 20px;
+        &:hover {
+            background-color: $blue-soft-hover;
+        }
+    }
+    .signUp {
+        color: $text-black;
+        width: 50%;
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        text-transform: none;
+        margin: 0 4px;
+        background-color: $main-white;
+        border-radius: 20px;
+        &:hover {
+            background-color: $main-white-hover;
+        }
+    }
+}
