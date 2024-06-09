@@ -15,10 +15,8 @@ const MangaSearchPage: React.FC = () => {
     const excludedTags = queryParams.getAll("excludedTags");
 
     const [mangaTags, setMangaTags] = useState<any[]>([]);
-    const [thisIncludedTags, setThisIncludedTags] =
-        useState<string[]>(includedTags);
-    const [thisExcludedTags, setThisExcludedTags] =
-        useState<string[]>(excludedTags);
+    const [thisIncludedTags, setThisIncludedTags] = useState<string[]>(includedTags);
+    const [thisExcludedTags, setThisExcludedTags] = useState<string[]>(excludedTags);
 
     const [mangaList, setMangaList] = useState<any[]>([]);
     const [limit] = useState<number>(20); // Number of items per page
@@ -33,52 +31,63 @@ const MangaSearchPage: React.FC = () => {
     const [pageInput, setPageInput] = useState<string>("1");
     const [totalPages, setTotalPages] = useState<number>(1);
 
-    const getMangaData = async (
-        this_title: string,
-        limit: number,
-        offset: number,
-        includedTags: string[],
-        excludedTags: string[]
-    ) => {
-        try {
-            const mangas = await searchManga(
-                this_title,
-                limit,
-                offset,
-                "",
-                [],
-                [],
-                0,
-                [],
-                [],
-                [],
-                [],
-                ["safe", "suggestive", "erotica", "pornographic"],
-                excludedTags,
-                "OR",
-                includedTags,
-                "AND"
-            );
-            setMangaList(mangas.data);
-
-            if (mangas.data.length > 0) {
-                const total = parseInt(mangas.total, 10);
-                setTotalCount(total); // Update total count
-                setTotalPages(Math.ceil(total / limit));
-            } else {
-                setTotalCount(0); // Update total count
-                setTotalPages(0);
+    // Fetch tags only once
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const baseUrl = "https://api.mangadex.org";
+                const tags = await axios.get(`${baseUrl}/manga/tag`);
+                setMangaTags(tags.data.data);
+                setError(null);
+            } catch (err) {
+                setError("Error fetching tags. Please refresh the page.");
             }
+        };
 
-            const baseUrl = "https://api.mangadex.org";
-            const tags = await axios.get(`${baseUrl}/manga/tag`);
+        fetchTags();
+    }, []);
 
-            setMangaTags(tags.data.data);
-            setError(null);
-        } catch (err) {
-            setError("Error fetching data. Please refresh the page.");
-        }
-    };
+    // Fetch manga data based on location and pagination changes
+    useEffect(() => {
+        const fetchMangaData = async () => {
+            try {
+                const mangas = await searchManga(
+                    title,
+                    limit,
+                    offset,
+                    "",
+                    [],
+                    [],
+                    0,
+                    [],
+                    [],
+                    [],
+                    [],
+                    ["safe", "suggestive", "erotica", "pornographic"],
+                    excludedTags,
+                    "OR",
+                    includedTags,
+                    "AND"
+                );
+                setMangaList(mangas.data);
+
+                if (mangas.data.length > 0) {
+                    const total = parseInt(mangas.total, 10);
+                    setTotalCount(total); // Update total count
+                    setTotalPages(Math.ceil(total / limit));
+                } else {
+                    setTotalCount(0); // Update total count
+                    setTotalPages(0);
+                }
+
+                setError(null);
+            } catch (err) {
+                setError("Error fetching data. Please refresh the page.");
+            }
+        };
+
+        fetchMangaData();
+    }, [title, limit, offset, location]);
 
     const handleSearchPress = () => {
         const params = new URLSearchParams();
@@ -110,35 +119,15 @@ const MangaSearchPage: React.FC = () => {
         }
     };
 
-    // useEffect(() => {
-    //     setSearchInput(title);
-    //     setThisIncludedTags(includedTags);
-    //     setThisExcludedTags(excludedTags);
-    //     setMangaList([]);
-    // }, [location]);
-
-    useEffect(() => {
-        setSearchInput(title);
-        setThisIncludedTags(includedTags);
-        setThisExcludedTags(excludedTags);
-        setMangaList([]);
-        getMangaData(title, limit, offset, includedTags, excludedTags);
-    }, [location]);
-    // }, [title, limit, offset, includedTags, excludedTags]);
-
     const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        if (
-            value === "" ||
-            (/^\d+$/.test(value) && parseInt(value) <= totalPages)
-        ) {
+        if (value === "" || (/^\d+$/.test(value) && parseInt(value) <= totalPages)) {
             setPageInput(value);
             setOffset((parseInt(value) - 1) * limit || 0);
         }
     };
 
     const handlePageInputBlur = () => {
-        setMangaList([]);
         const pageNumber = parseInt(pageInput);
         if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
             setCurrentPage(pageNumber);
@@ -150,7 +139,6 @@ const MangaSearchPage: React.FC = () => {
     };
 
     const handleNext = () => {
-        setMangaList([]);
         if (offset + limit < totalCount) {
             setOffset((prevOffset) => prevOffset + limit);
             setCurrentPage((prevPage) => prevPage + 1);
@@ -159,7 +147,6 @@ const MangaSearchPage: React.FC = () => {
     };
 
     const handlePrevious = () => {
-        setMangaList([]);
         if (offset > 0) {
             setOffset((prevOffset) => prevOffset - limit);
             setCurrentPage((prevPage) => prevPage - 1);
@@ -169,12 +156,8 @@ const MangaSearchPage: React.FC = () => {
 
     return (
         <div className="search-page">
-            {error && (
-                <div className="error-message">
-                    {error}
-                </div>
-            )}
-            {mangaList && mangaList.length > 0 && mangaTags && mangaTags.length > 0 && !error && (
+            {error && <div className="error-message">{error}</div>}
+            {mangaTags && mangaTags.length > 0 && (
                 <>
                     <div className={`tag-checkboxes ${show ? "show" : ""}`}>
                         {mangaTags.map((tag) => (
@@ -206,10 +189,13 @@ const MangaSearchPage: React.FC = () => {
                             <img src="/icons/filter.svg" alt="Filter Icon" onClick={onShow} />
                         </button>
                     </div>
+                    <button className="search-button" onClick={handleSearchPress}>
+                        Search
+                    </button>
                 </>
             )}
 
-            {!(mangaList && mangaList.length > 0) ? (
+            {mangaList && mangaList.length === 0 && !error ? (
                 <div className="loading-wave">
                     <div className="loading-bar"></div>
                     <div className="loading-bar"></div>
@@ -220,7 +206,7 @@ const MangaSearchPage: React.FC = () => {
                 <div>
                     <div className="manga-grid-container">
                         <div className="manga-grid">
-                            {mangaList.map((manga) => (
+                            {mangaList && mangaList.map((manga) => (
                                 <MangaCard key={manga.id} manga={manga} />
                             ))}
                         </div>
