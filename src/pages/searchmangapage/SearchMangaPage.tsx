@@ -85,6 +85,9 @@ const MangaSearchPage: React.FC = () => {
                 setError("Error fetching data. Please refresh the page.");
             }
         };
+        setThisIncludedTags(excludedTags);
+        setThisIncludedTags(includedTags);
+        setSearchInput(title);
 
         fetchMangaData();
     }, [title, limit, offset, location]);
