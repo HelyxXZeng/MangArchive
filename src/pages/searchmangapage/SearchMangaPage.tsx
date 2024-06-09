@@ -110,16 +110,21 @@ const MangaSearchPage: React.FC = () => {
         }
     };
 
+    // useEffect(() => {
+    //     setSearchInput(title);
+    //     setThisIncludedTags(includedTags);
+    //     setThisExcludedTags(excludedTags);
+    //     setMangaList([]);
+    // }, [location]);
+
     useEffect(() => {
         setSearchInput(title);
         setThisIncludedTags(includedTags);
         setThisExcludedTags(excludedTags);
         setMangaList([]);
-    }, [location]);
-
-    useEffect(() => {
         getMangaData(title, limit, offset, includedTags, excludedTags);
-    }, [title, limit, offset, includedTags, excludedTags]);
+    }, [location]);
+    // }, [title, limit, offset, includedTags, excludedTags]);
 
     const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
