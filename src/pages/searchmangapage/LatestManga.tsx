@@ -1,22 +1,13 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "./SearchMangaPage.scss";
 import MangaCard from "../title/TitleCard2";
 import searchManga from "../../utils/MangaSearch";
-import TriStateCheckbox from "./TriStateCheckbox"; // Adjust the path as necessary
 
-const MangaSearchPage: React.FC = () => {
-    const navigate = useNavigate();
+const LatestManga: React.FC = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const title = queryParams.get("title") || "";
-    const includedTags = queryParams.getAll("includedTags");
-    const excludedTags = queryParams.getAll("excludedTags");
-
-    const [mangaTags, setMangaTags] = useState<any[]>([]);
-    const [thisIncludedTags, setThisIncludedTags] = useState<string[]>(includedTags);
-    const [thisExcludedTags, setThisExcludedTags] = useState<string[]>(excludedTags);
 
     const [mangaList, setMangaList] = useState<any[]>([]);
     const [limit] = useState<number>(20); // Number of items per page
@@ -30,9 +21,7 @@ const MangaSearchPage: React.FC = () => {
     const getMangaData = async (
         this_title: string,
         limit: number,
-        offset: number,
-        includedTags: string[],
-        excludedTags: string[]
+        offset: number
     ) => {
         if (mangaList && mangaList.length > 0) return;
         const mangas = await searchManga(
@@ -47,11 +36,7 @@ const MangaSearchPage: React.FC = () => {
             [],
             [],
             [],
-            ["safe", "suggestive", "erotica", "pornographic"],
-            excludedTags,
-            "OR",
-            includedTags,
-            "AND"
+            ["safe", "suggestive", "erotica", "pornographic"]
         );
         setMangaList(mangas.data);
 
@@ -63,45 +48,15 @@ const MangaSearchPage: React.FC = () => {
             setTotalCount(0); // Update total count
             setTotalPages(0);
         }
-
-        const baseUrl = 'https://api.mangadex.org';
-        const tags = await axios.get(`${baseUrl}/manga/tag`);
-
-        setMangaTags(tags.data.data);
-        // console.log('Tags:', tags.data.data);
-    };
-
-    const handleSearchPress = () => {
-        const params = new URLSearchParams();
-        params.append("title", title);
-        thisIncludedTags.forEach(tag => params.append("includedTags", tag));
-        thisExcludedTags.forEach(tag => params.append("excludedTags", tag));
-        setMangaList([]);
-        navigate(`/search?${params.toString()}`);
-    };
-
-    const handleTagChange = (id: string, state: 'yes' | 'no' | 'unchecked') => {
-        if (state === 'yes') {
-            setThisIncludedTags(prev => [...prev, id]);
-            setThisExcludedTags(prev => prev.filter(tagId => tagId !== id));
-        } else if (state === 'no') {
-            setThisExcludedTags(prev => [...prev, id]);
-            setThisIncludedTags(prev => prev.filter(tagId => tagId !== id));
-        } else {
-            setThisIncludedTags(prev => prev.filter(tagId => tagId !== id));
-            setThisExcludedTags(prev => prev.filter(tagId => tagId !== id));
-        }
     };
 
     useEffect(() => {
-        setThisIncludedTags(includedTags);
-        setThisExcludedTags(excludedTags);
         setMangaList([]);
     }, [location]);
 
     useEffect(() => {
-        getMangaData(title, limit, offset, includedTags, excludedTags);
-    }, [title, limit, offset, includedTags, excludedTags, mangaList]);
+        getMangaData(title, limit, offset);
+    }, [title, limit, offset, mangaList]);
 
     const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -143,25 +98,6 @@ const MangaSearchPage: React.FC = () => {
 
     return (
         <div className="search-page">
-            {mangaList && mangaList.length > 0 &&
-                <>
-                    <div className="tag-checkboxes">
-                        {mangaTags.map(tag => (
-                            <TriStateCheckbox
-                                key={tag.id}
-                                tag={tag}
-                                includedTags={thisIncludedTags}
-                                excludedTags={thisExcludedTags}
-                                onChange={handleTagChange}
-                            />
-                        ))}
-                    </div>
-                    <button className="search-button" onClick={handleSearchPress}>
-                        Search
-                    </button>
-                </>
-            }
-
             {!(mangaList && mangaList.length > 0) ? (
                 <div className="loading-wave">
                     <div className="loading-bar"></div>
@@ -215,4 +151,4 @@ const MangaSearchPage: React.FC = () => {
     );
 };
 
-export default MangaSearchPage;
+export default LatestManga;

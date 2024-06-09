@@ -26,6 +26,7 @@ import Discorver from "./pages/SocialPage/discorver/Discorver";
 import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 import MangaHistory from "./pages/mangahistory/History";
+import LatestManga from "./pages/searchmangapage/LatestManga";
 
 function App() {
 
@@ -85,7 +86,7 @@ function App() {
         },
         {
           path: "/latest",
-          element: <SearchMangaPage />,
+          element: <LatestManga />,
           children: []
         },
         {
