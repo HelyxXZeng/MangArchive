@@ -59,7 +59,7 @@ const Chapter: React.FC<Props> = ({ data, chapterNumber, mangaID, userID }) => {
         chapID: any
     ) => {
         await addBookmark(chapterNumber, translatedLanguage);
-        navigate(`/chapter/${chapID}`);
+        navigate(`/chapter/${chapterNumber}/${chapID}`);
     };
 
     const onShow = () => {

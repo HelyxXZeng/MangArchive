@@ -27,6 +27,7 @@ import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 import MangaHistory from "./pages/mangahistory/History";
 import ProtectedRoute from "./hooks/protectRouter";
+import LatestManga from "./pages/searchmangapage/LatestManga";
 
 function App() {
 
@@ -87,12 +88,17 @@ function App() {
           children: []
         },
         {
+          path: "/latest",
+          element: <LatestManga />,
+          children: []
+        },
+        {
           path: "/library/:page",
           element: <MangaLibrary />,
           children: []
         },
         {
-          path: "/chapter/:chapter_id",
+          path: "/chapter/:chap/:chapter_id",
           element: <ReadChapter />,
           children: []
         },
