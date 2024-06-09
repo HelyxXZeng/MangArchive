@@ -10,18 +10,66 @@
     justify-content: center;
     position: relative; // Added to position the button
 
-    .toggle-style-button {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
+    .toggle-style-button,
+    .download-chapter-button,
+    .chapter-info {
         padding: 10px 20px;
-        background-color: $blue-main;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         z-index: 40;
         transition: background-color 0.3s;
+    }
+
+    .toggle-style-button {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+
+        @media screen and (min-width: 850px) {
+            background-color: $blue-main;
+        }
+
+        @media screen and (max-width: 849px) {
+            background-color: transparent;
+        }
+
+        &:hover {
+            background-color: $blue-soft-hover;
+        }
+    }
+
+    .download-chapter-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+
+        @media screen and (min-width: 850px) {
+            background-color: $blue-main;
+        }
+
+        @media screen and (max-width: 849px) {
+            background-color: transparent;
+        }
+
+        &:hover {
+            background-color: $blue-soft-hover;
+        }
+    }
+
+    .chapter-info {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+
+        @media screen and (min-width: 850px) {
+            background-color: $blue-main;
+        }
+
+        @media screen and (max-width: 849px) {
+            background-color: transparent;
+        }
 
         &:hover {
             background-color: $blue-soft-hover;
