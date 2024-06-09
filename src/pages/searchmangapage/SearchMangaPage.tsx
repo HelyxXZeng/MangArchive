@@ -22,6 +22,7 @@ const MangaSearchPage: React.FC = () => {
     const [limit] = useState<number>(20); // Number of items per page
     const [offset, setOffset] = useState<number>(0); // Current offset
     const [totalCount, setTotalCount] = useState<number>(0); // Total number of items
+    const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
     const [searchInput, setSearchInput] = useState<string>(title);
     const [show, setShow] = useState(true);
@@ -70,6 +71,7 @@ const MangaSearchPage: React.FC = () => {
                     "AND"
                 );
                 setMangaList(mangas.data);
+                setIsCompleted(true);
 
                 if (mangas.data.length > 0) {
                     const total = parseInt(mangas.total, 10);
@@ -126,7 +128,7 @@ const MangaSearchPage: React.FC = () => {
         const value = e.target.value;
         if (value === "" || (/^\d+$/.test(value) && parseInt(value) <= totalPages)) {
             setPageInput(value);
-            setOffset((parseInt(value) - 1) * limit || 0);
+            // setOffset((parseInt(value) - 1) * limit || 0);
         }
     };
 
@@ -198,13 +200,15 @@ const MangaSearchPage: React.FC = () => {
                 </>
             )}
 
-            {mangaList && mangaList.length === 0 && !error ? (
+            {mangaList && mangaList.length === 0 && !error && !isCompleted ? (
                 <div className="loading-wave">
                     <div className="loading-bar"></div>
                     <div className="loading-bar"></div>
                     <div className="loading-bar"></div>
                     <div className="loading-bar"></div>
                 </div>
+            ) : totalCount === 0 ? (
+                <div className="error-message">No results found</div>
             ) : (
                 <div>
                     <div className="manga-grid-container">
