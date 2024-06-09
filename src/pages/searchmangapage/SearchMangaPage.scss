@@ -38,7 +38,7 @@
     }
 
     .search-button {
-        margin-left: 10px;
+        margin-top: 10px;
         padding: 10px 20px;
         background-color: $blue-main;
         color: white;
@@ -121,7 +121,7 @@
         .verticaldotline {
             height: 100%;
             width: 1px;
-            border-left: 1px dashed black;
+            border-left: 1px dashed #ccc;
         }
 
         button {
