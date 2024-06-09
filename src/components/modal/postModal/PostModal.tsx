@@ -11,7 +11,7 @@ import './postModal.scss'; // Import your component-specific styles
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
-import ComicCard from '../socialComponents/comicCardSmall/ComicCard';
+import ComicCard from '../../socialComponents/comicCardSmall/ComicCard';
 import axios from 'axios';
 
 interface PostModalProps {
@@ -30,6 +30,8 @@ const PostModal = (props: PostModalProps) => {
     const [idError, setIdError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
+    const [imagesName,setImagesName] = useState<string[]>([]);
+    const [imagesFile,setImagesFile] = useState<File[]>([]);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -39,6 +41,8 @@ const PostModal = (props: PostModalProps) => {
                 reader.onload = (e) => {
                     if (e.target?.result) {
                         setImages(prevImages => [...prevImages, e.target.result as string]);
+                        setImagesFile(prevImages => [...prevImages, file]);
+                        setImagesName(prevNames => [...prevNames, file.name]);
                     }
                 };
                 reader.readAsDataURL(file);
@@ -58,12 +62,20 @@ const PostModal = (props: PostModalProps) => {
     const handleSend = () => {
         console.log("Content 1:", postContent);
         console.log("Content 2:", mangaSuggestContent);
-        images.forEach((image, index) => {
+        // images.forEach((image, index) => {
+        //     console.log(`Image ${index + 1} file name:`, image);
+        // });
+        imagesName.forEach((image, index) => {
             console.log(`Image ${index + 1} file name:`, image);
+        });
+        imagesFile.forEach((image, index) => {
+            console.log(`Image ${index + 1} file path:`, image);
         });
         setPostContent('');
         setMangaSuggestContent('');
         setImages([]);
+        setImagesFile([]);
+        setImagesName([]);
         props.handleClose();
     };
 
@@ -86,7 +98,7 @@ const PostModal = (props: PostModalProps) => {
 
     useEffect(() => {
         if (mangaSuggestContent.trim() !== '') {
-            axios.get(`https://api.mangadex.org/manga/${mangaSuggestContent}?includes[]=cover_art&includes[]=artist&includes[]=author`)
+            axios.get(`https://api.mangadex.org/manga/${mangaSuggestContent.trim()}?includes[]=cover_art&includes[]=artist&includes[]=author`)
                 .then(response => {
                     setComic(response.data.data);
                     setIdValid(true);
@@ -114,7 +126,7 @@ const PostModal = (props: PostModalProps) => {
             aria-labelledby="post-modal-title"
             aria-describedby="post-modal-description"
         >
-            <div className="post-modal">
+            <div className="post-modal customScrollbar">
                 <div className="header">
                     <div className="none"></div>
                     <Typography className="post-modal-title" variant="h6" component="h2">

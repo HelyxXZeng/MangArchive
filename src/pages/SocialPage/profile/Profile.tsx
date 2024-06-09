@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link, Outlet, matchPath, useLocation, useNavigate, useParams } from "react-router-dom";
 import "./profile.scss"
 import { Avatar, Button, Tab, Tabs } from "@mui/material";
+import UpdateProfileModal from "../../../components/modal/updateProfileModal/UpdateProfileModal";
 
 
 
@@ -11,9 +12,11 @@ const Profile = () => {
   const { username } = useParams<{ username: string }>();
   
   const handleBack = () => navigate(-1);
-  const handleOpenProfile = () => { console.log("open fire!") }
   const handleFollowUser = () => { console.log("Follow him!") }
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenProfile = () => setIsModalOpen(true);
+    const handleCloseProfile = () => setIsModalOpen(false);
   const routes = [`/profile/${username}`,`/profile/${username}/media`,`/profile/${username}/friends`,`/profile/${username}/groups`]
   function useRouteMatch(patterns: readonly string[]) {
     const { pathname } = useLocation();
@@ -55,12 +58,16 @@ const Profile = () => {
               src="https://cdn.donmai.us/original/5f/ea/__firefly_honkai_and_1_more_drawn_by_baba_ba_ba_mb__5feaaa99527187a3db0e437380ec3932.jpg"
               alt="avatar"
               sx={{ width: "128px", height: "128px", border: "4px solid #1F1F1F" }} />
-            {true ? <Button
-              className="textwhite"
-              onClick={handleOpenProfile}
-              variant="contained"
-              sx={{ borderRadius: "24px" }}
-            >Edit Profile</Button>
+            {true ? 
+            <div className="profile">
+              <Button
+                className="textwhite"
+                onClick={handleOpenProfile}
+                variant="contained"
+                sx={{ borderRadius: "24px" }}
+              >Edit Profile</Button>
+              <UpdateProfileModal open={isModalOpen} handleClose={handleCloseProfile} uid/>
+            </div>
               :
               <Button
                 className={true ? "textblack" : "textwhite"}
