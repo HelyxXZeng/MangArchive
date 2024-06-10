@@ -24,7 +24,7 @@ const RightBar = () => {
     <div className="rightBarContainer">
       <div className="sugesstCard">
         <h1>Who to follow</h1>
-        {["testt", "TestName", "testname hoi bi dai"].map((name, index) => (
+        {["HuyềnTrang92", "QuangNam1987", "AnhThu2203"].map((name, index) => (
           <div key={index}>
             <UserCardSmall name={name.toString()} />
           </div>
@@ -35,7 +35,7 @@ const RightBar = () => {
       </div>
       <div className="sugesstCard">
         <h1>Translation groups</h1>
-        {["testt", "TestName", "testname hoi bi dai"].map((name, index) => (
+        {["Thiên Hạ truyện", "Nhà của Meow", "Mộng Tiên Giới"].map((name, index) => (
           <div key={index}>
             <UserCardSmall name={name} />
           </div>

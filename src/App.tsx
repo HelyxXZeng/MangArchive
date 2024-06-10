@@ -111,8 +111,8 @@ function App() {
           element: <AboutUs />,
         },
         {
-          path:"/nofitication",
-          element:<AboutUs/>
+          path: "/nofitication",
+          element: <AboutUs />
         },
         {
           path: "/",
@@ -145,14 +145,14 @@ function App() {
               element: <Feed />
             },
             {
-              path: "discover/",
-              element: <Discorver />
-            },
-            {
-              path:"profile",
-              element: <ProtectedRoute/>
+              path: "profile",
+              element: <ProtectedRoute />
             }
           ]
+        },
+        {
+          path: "discover/",
+          element: <Discorver />
         },
         {
           path: "/profile/:username/post/:id",
@@ -172,7 +172,7 @@ function App() {
         },
         {
           path: "/setting",
-          element: <ProtectedRoute><Setting/></ProtectedRoute>
+          element: <ProtectedRoute><Setting /></ProtectedRoute>
         }
       ]
     },
