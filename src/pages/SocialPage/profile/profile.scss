@@ -67,6 +67,11 @@
                 //     object-fit: cover;
                 // }
             }
+            .backgroundPlaceholder{
+                height: 240px;
+                width: 100%;
+                background-color: $gray-bg;
+            }
             .info,.userNameInfo,.profileDescrition{
                 padding: 12px 16px 0px;
                 margin-bottom: 0px 0px 16px;
