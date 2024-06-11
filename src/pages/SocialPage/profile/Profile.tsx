@@ -222,7 +222,10 @@ const Profile = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
-
+  const [postCount, setPostCount] = useState(0);
+  const [groupCount, setGroupCount] = useState(0);
+  const [friendCount, setFriendCount] = useState(0);
+  
   useEffect(() => {
     const fetchUserId = async () => {
       if (session !== null) {
@@ -309,7 +312,7 @@ const Profile = () => {
         .eq("user", userID)
         .eq("follow", userInfo.id)
         .single();
-  
+
       if (error && error.code !== 'PGRST116') {
         throw error;
         // console.error("Error checking follow status:", error);
@@ -328,6 +331,29 @@ const Profile = () => {
       checkIfFollowed();
     }
   }, [userID, userInfo, isCurrentUser]);
+
+  //đếm bài đăng và following
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (userInfo?.id) {
+        try {
+          const [posts, groups, friends] = await Promise.all([
+            supabase.rpc("get_user_posts", { this_limit: 1000, this_offset: 0, this_user_id: userInfo.id }),
+            supabase.rpc("get_follow_group", { this_user_id: userInfo.id }),
+            supabase.rpc("get_follow_user", { this_user_id: userInfo.id }),
+          ]);
+          console.log(posts.data.length,groups.data.length,friends.data.length)
+          setPostCount(posts.data.length);
+          setGroupCount(groups.data.length);
+          setFriendCount(friends.data.length);
+        } catch (error) {
+          console.error("Error fetching profile data:", error);
+        }
+      }
+    };
+  
+    fetchProfileData();
+  }, [userInfo]);
 
   useEffect(() => {
     const fetchProfileImages = async () => {
@@ -393,7 +419,7 @@ const Profile = () => {
           </button>
           <div className="headerInfo">
             <div className="name">{userInfo?.name || username}</div>
-            <div className="postCount">{userInfo?.postcount || 0} bài đăng</div>
+            <div className="postCount">{postCount || 0} bài đăng</div>
           </div>
         </section>
         <div className="profileInfoFrame">
@@ -450,12 +476,12 @@ const Profile = () => {
             </div>
             <div className="friendCount">
               <div className="friends">
-                <span className="textHighlight">69</span>
+                <span className="textHighlight">{friendCount}</span>
                 <span> Friends</span>
               </div>
               <div className="mutual">
-                <span className="textHighlight">69</span>
-                <span> Mutual</span>
+                <span className="textHighlight">{groupCount}</span>
+                <span> Groups</span>
               </div>
             </div>
           </div>
