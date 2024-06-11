@@ -8,10 +8,7 @@ interface UPModalProps {
     open: boolean;
     handleClose: () => void;
     user: User;
-    background: string | any; // link, có thể rỗng vì user không có sẵn hình
-    avatar: string | any; // link, có thể rỗng vì user không có sẵn hình
 }
-
 export interface User {
     this_id: bigint;
     join_date: Date;
@@ -29,13 +26,12 @@ export interface User {
     background: bigint;
     link: string;
 }
-
 const UpdateProfileModal = (props: UPModalProps) => {
     const [name, setName] = useState<string>(props.user.name || '');
     const [bio, setBio] = useState<string>(props.user.bio || '');
     const [link, setLink] = useState<string>(props.user.link || '');
-    const [background, setBackground] = useState<string>(props.background);
-    const [avatar, setAvatar] = useState<string>(props.avatar);
+    const [background, setBackground] = useState<string>('');
+    const [avatar, setAvatar] = useState<string>('');
     const [backgroundFile, setBackgroundFile] = useState<File | null>(null);
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const [isSendButtonDisabled, setIsSendButtonDisabled] = useState<boolean>(true);
@@ -44,7 +40,14 @@ const UpdateProfileModal = (props: UPModalProps) => {
     const backgroundInputRef = useRef<HTMLInputElement>(null);
     const avatarInputRef = useRef<HTMLInputElement>(null);
     const [userId, setUserId] = useState('');
+    const [realUserID, setRealUserID] = useState<any>(null);
+    const [userInfo, setUserInfo] = useState<any>(null);
+
+    const session = useCheckSession();
+
     // console.log(background,avatar);
+    const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
+
     const getUser = async () => {
         try {
             const { data: { user } } = await supabase.auth.getUser()
@@ -56,12 +59,88 @@ const UpdateProfileModal = (props: UPModalProps) => {
         } catch (e) {
         }
     }
-    
     useEffect(() => {
+        getUser();
+    }, [userId])
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (session !== null) {
+                try {
+                    const { user } = session;
+                    if (user) {
+                        let { data, error } = await supabase.rpc("get_user_id_by_email", {
+                            p_email: session.user.email,
+                        });
+                        if (error) console.error(error);
+                        else {
+                            setRealUserID(data);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error fetching username:", error);
+                }
+            }
+        };
+
+        fetchUserId();
+    }, [session]);
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                if (realUserID) {
+                    const { data, error } = await supabase.rpc("get_user_info", { this_user_id: realUserID });
+                    if (error) console.error(error);
+                    else {
+                        setUserInfo(data[0]); // Adjust based on the returned data structure
+                        // console.log(data[0]);
+                        // setBio(userInfo?.bio)
+                        // setName(userInfo?.name)
+                        // setLink(userInfo?.link)
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching user info:", error);
+            }
+        };
+
+        fetchUserInfo();
+    }, [realUserID]);
+
+
+    useEffect(() => {
+        const fetchProfileImages = async () => {
+            try {
+                if (realUserID) {
+                    const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: realUserID });
+                    if (error) console.error(error);
+                    else {
+                        if (data[0]) {
+                            const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : null;
+                            const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : null;
+
+                            if (avatarLink || backgroundLink) {
+                                setProfileImages({ avatar: avatarLink, background: backgroundLink });
+                                console.log({ avatar: avatarLink, background: backgroundLink });
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching profile images:", error);
+            }
+        };
+
+        fetchProfileImages();
+        console.log(profileImages, realUserID)
+    }, [realUserID]);
+    useEffect(() => {
+        console.log(userInfo?.name,userInfo?.bio,userInfo?.link)
         if (
-            name !== props.user.name ||
-            bio !== props.user.bio ||
-            link !== props.user.link ||
+            name.trim() !== userInfo?.name ||
+            bio.trim() !== userInfo?.bio ||
+            link.trim() !== userInfo?.link ||
             backgroundFile !== null ||
             avatarFile !== null
         ) {
@@ -70,9 +149,6 @@ const UpdateProfileModal = (props: UPModalProps) => {
             setIsSendButtonDisabled(true);
         }
     }, [name, bio, link, backgroundFile, avatarFile]);
-    useEffect(() => {
-        getUser();
-    }, [userId])
     const handleBackgroundChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             setBackgroundFile(event.target.files[0]);
@@ -95,8 +171,8 @@ const UpdateProfileModal = (props: UPModalProps) => {
 
         try {
             getUser();
-            let avatarImageId = props.user.avatar;
-            let backgroundImageId = props.user.background;
+            let avatarImageId = userInfo.avatar;
+            let backgroundImageId = userInfo.background;
             if (avatarFile) {
                 console.log(userId + '/' + avatarFile.name)
                 const { data: avatarData, error: avatarError } = await supabase.storage
@@ -141,15 +217,15 @@ const UpdateProfileModal = (props: UPModalProps) => {
 
                 backgroundImageId = backgroundImage;
             }
-            console.log(backgroundImageId,avatarImageId)
+            console.log(backgroundImageId, avatarImageId)
             const { error } = await supabase.rpc('update_profile', {
                 avatar_image_id: avatarImageId,
                 background_image_id: backgroundImageId,
                 this_bio: bio,
-                this_email: props.user.email,
+                this_email: userInfo?.email,
                 this_link: link,
                 this_name: name,
-                this_user_id: props.user.this_id,
+                this_user_id: userInfo?.this_id,
             });
 
             if (error) {
@@ -158,9 +234,9 @@ const UpdateProfileModal = (props: UPModalProps) => {
             }
 
             // Clear all inputs
-            setName(props.user.name);
-            setBio(props.user.bio);
-            setLink(props.user.link);
+            setName(userInfo?.name);
+            setBio(userInfo?.bio);
+            setLink(userInfo?.link);
             setBackground('');
             setAvatar('');
             setBackgroundFile(null);
@@ -208,8 +284,8 @@ const UpdateProfileModal = (props: UPModalProps) => {
                         className="background"
                         onClick={() => backgroundInputRef.current?.click()}
                     >
-                        {background && (
-                            <img src={background} alt="Background" />
+                        {profileImages?.background && (
+                            <img src={profileImages?.background} alt="Background" />
                         )}
                         <input
                             type="file"
@@ -225,7 +301,7 @@ const UpdateProfileModal = (props: UPModalProps) => {
                     >
                         <Avatar
                             className="Avatar"
-                            src={avatar}
+                            src={profileImages?.avatar}
                             alt="avatar"
                             sx={{ width: "128px", height: "128px", border: "4px solid #1F1F1F" }}
                         />

@@ -8,7 +8,7 @@ import { supabase } from "../../../utils/supabase";
 import useCheckSession from "../../../hooks/session";
 const RightBar = () => {
   const [comics, setComics] = useState([]);
-  const [suggestUser, setSuggestuser] = useState([]);
+  const [suggestUser, setSuggestuser] = useState<any>([]);
   const session = useCheckSession();
   const [userID, setUserID] = useState<any>(null);
 
@@ -49,59 +49,62 @@ const RightBar = () => {
 
     fetchComics();
   }, []);
-  useEffect(()=>{
+  useEffect(() => {
     const fetchSUser = async () => {
       try {
         const { data, error } = await supabase
-        .rpc('get_most_similar_users', {
-          this_limit: 5, 
-          user_id: userID
-        })
-      if (error) console.error(error)
-      else setSuggestuser(data)
+          .rpc('get_most_similar_users', {
+            this_limit: 3,
+            user_id: userID
+          })
+        if (error) console.log(error)
+        else {
+          setSuggestuser(data)
+          // console.log(data) 
+        }
       } catch (error) {
         console.error("Error fetching suggest User:", error)
       }
     };
     fetchSUser();
-  })
+  }, [userID])
   return (
     <div className="rightBarContainer">
       <div className="sugesstCard">
         <h1>Who to follow</h1>
-        {["HuyềnTrang92", "QuangNam1987", "AnhThu2203"].map((name, index) => (
+        {suggestUser.map((user: any, index: any) => (
           <div key={index}>
-            <UserCardSmall name={name.toString()} />
+            <UserCardSmall userID={user.similar_user} />
           </div>
         ))}
-        <NavLink to="/discover/connect_people" className="seeMoreLink">
+        <NavLink to="/discover" className="seeMoreLink">
           See more
         </NavLink>
       </div>
       <div className="sugesstCard">
         <h1>Translation groups</h1>
-        {["Thiên Hạ truyện", "Nhà của Meow", "Mộng Tiên Giới"].map((name, index) => (
+        {suggestUser.map((user: any, index: any) => (
           <div key={index}>
-            <UserCardSmall name={name} />
+            <UserCardSmall userID={user.similar_user} />
           </div>
         ))}
-        <NavLink to="/discover/connect_group" className="seeMoreLink">
+        <NavLink to="/discover?is_group=true" className="seeMoreLink">
           See more
         </NavLink>
       </div>
       <div className="trend sugesstCard">
         <h1>Trends</h1>
         {comics.map((comic: any, index: any) => (
-            <ComicCard
-              key={index}
-              cover={comic.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName}
-              title={comic.attributes.title.en}
-              comictype={comic.type}
-              maintag={comic.attributes.tags[0].attributes.name.en}
-              id={comic.id}
-            />
+          <ComicCard
+            key={index}
+            cover={comic.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName}
+            title={comic.attributes.title.en}
+            comictype={comic.type}
+            maintag={comic.attributes.tags[0].attributes.name.en}
+            id={comic.id}
+          />
         ))}
-        <NavLink to="/i/latest/discover" className="seeMoreLink">
+        <NavLink to="latest" className="seeMoreLink">
           See more
         </NavLink>
       </div>

@@ -209,11 +209,20 @@ const Profile = () => {
   const { username } = useParams<{ username: string }>();
   const session = useCheckSession();
   const handleBack = () => navigate(-1);
-  const handleFollowUser = () => { console.log("Follow him!") };
+  const [isFollowed, setIsFollowed] = useState(false);
+  const handleFollowUser = () => {
+    if (isFollowed) {
+      unfollowUser();
+    } else {
+      followUser();
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userID, setUserID] = useState<any>(null);
   const [userInfo, setUserInfo] = useState<any>(null);
   const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
+
   useEffect(() => {
     const fetchUserId = async () => {
       if (session !== null) {
@@ -226,7 +235,6 @@ const Profile = () => {
             if (error) console.error(error);
             else {
               setUserID(data);
-              // console.log("User ID: ", data);
             }
           }
         } catch (error) {
@@ -241,12 +249,16 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        if (userID) {
-          const { data, error } = await supabase.rpc("get_user_info", { this_user_id: userID });
+        if (username) {
+          const { data, error } = await supabase
+            .from("User")
+            .select("*")
+            .eq("username", username)
+            .single();
           if (error) console.error(error);
           else {
-            setUserInfo(data[0]); // Adjusted based on the returned data structure
-            console.log(data[0]);
+            setUserInfo(data);
+            setIsCurrentUser(data.email === session?.user?.email);
           }
         }
       } catch (error) {
@@ -255,25 +267,86 @@ const Profile = () => {
     };
 
     fetchUserInfo();
-  }, [userID]);
+  }, [username, session]);
 
-  const level = Math.floor(userInfo?.level / 100);
-  // console.log(level);
+  const followUser = async () => {
+    try {
+      const { data, error } = await supabase.rpc("follow_user", {
+        this_user_id: userID,
+        follow_user_id: userInfo.id,
+      });
+      if (error) {
+        console.error("Error following user:", error);
+      } else {
+        setIsFollowed(true);
+      }
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const unfollowUser = async () => {
+    try {
+      const { data, error } = await supabase.rpc("unfollow_user", {
+        this_user_id: userID,
+        follow_user_id: userInfo.id,
+      });
+      if (error) {
+        console.error("Error unfollowing user:", error);
+      } else {
+        setIsFollowed(false);
+      }
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
+    }
+  };
+
+  const checkIfFollowed = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("UserFollowing")
+        .select("*")
+        .eq("user", userID)
+        .eq("follow", userInfo.id)
+        .single();
+  
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+        // console.error("Error checking follow status:", error);
+      } else {
+        setIsFollowed(!!data);
+      }
+    } catch (error) {
+      throw error;
+
+      // console.error("Error checking follow status:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userID && userInfo && !isCurrentUser) {
+      checkIfFollowed();
+    }
+  }, [userID, userInfo, isCurrentUser]);
 
   useEffect(() => {
     const fetchProfileImages = async () => {
       try {
-        if (userID) {
-          const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: userID });
+        if (userInfo?.id) {
+          const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: userInfo.id });
           if (error) console.error(error);
           else {
             if (data[0]) {
-              const avatarLink = JSON.parse(data[0].avatar_link).publicUrl;
-              const backgroundLink = JSON.parse(data[0].background_link).publicUrl;
-              setProfileImages({ avatar: avatarLink, background: backgroundLink });
-              console.log({ avatar: avatarLink, background: backgroundLink });
+              const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : "";
+              const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : "";
+
+              setProfileImages({ avatar: avatarLink || "", background: backgroundLink || "" });
+            } else {
+              setProfileImages({ avatar: "", background: "" });
             }
           }
+        } else {
+          setProfileImages({ avatar: "", background: "" });
         }
       } catch (error) {
         console.error("Error fetching profile images:", error);
@@ -281,7 +354,14 @@ const Profile = () => {
     };
 
     fetchProfileImages();
-  }, [userID]);
+  }, [userInfo]);
+
+  useEffect(() => {
+    // Reset profile-related states when the username changes
+    setUserInfo(null);
+    setProfileImages(null);
+    setIsCurrentUser(false);
+  }, [username]);
 
   const handleOpenProfile = () => setIsModalOpen(true);
   const handleCloseProfile = () => setIsModalOpen(false);
@@ -302,6 +382,8 @@ const Profile = () => {
 
   const routeMatch = useRouteMatch(routes);
   const currentTab = routeMatch?.pattern?.path;
+  const level = Math.floor(userInfo?.level / 100);
+
   return (
     <div className="profileFrame">
       <div className="main">
@@ -326,7 +408,7 @@ const Profile = () => {
               src={profileImages?.avatar || ""}
               alt="avatar"
               sx={{ width: "128px", height: "128px", border: "4px solid #1F1F1F" }} />
-            {userInfo?.this_id === userID ? (
+            {isCurrentUser ? (
               <div className="profile">
                 <Button
                   className="textwhite"
@@ -334,21 +416,23 @@ const Profile = () => {
                   variant="contained"
                   sx={{ borderRadius: "24px" }}
                 >Edit Profile</Button>
-                <UpdateProfileModal open={isModalOpen} handleClose={handleCloseProfile} user={userInfo} background={profileImages?.background} avatar={profileImages?.avatar} />
+                <UpdateProfileModal open={isModalOpen} handleClose={handleCloseProfile} user={userInfo} />
               </div>
             ) : (
               <Button
-                className="textblack"
+                className={!isFollowed ? "textblack" : "textwhite"}
                 onClick={handleFollowUser}
                 variant="contained"
                 sx={{ borderRadius: "24px" }}
-              >Follow</Button>
+              >
+                {isFollowed ? "Unfollow" : "Follow"}
+              </Button>
             )}
           </div>
           <div className="userNameInfo">
             <div className="userNameChild">
               <span className="Name">{userInfo?.username}</span>
-              <span className="level">LV<span className="textHighlightBlue">{level ? level : ""}</span></span>
+              <span className="level">LV<span className="textHighlightBlue">{level >= 0 ? level : ""}</span></span>
             </div>
             <span className="userName">@{userInfo?.username}</span>
           </div>
@@ -411,9 +495,7 @@ const Profile = () => {
               <Tab label="Groups" to={`/profile/${username}/groups`} value={`/profile/${username}/groups`} component={Link} />
             </Tabs>
           </div>
-          <div className="postlist">
-            <Outlet />
-          </div>
+          <Outlet />
         </div>
       </div>
     </div>
