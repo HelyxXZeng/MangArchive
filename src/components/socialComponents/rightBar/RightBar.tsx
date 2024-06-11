@@ -4,8 +4,37 @@ import "./rightBar.scss";
 import ComicCard from "../comicCardSmall/ComicCard";
 import { suggestManga } from "../../../utils/SuggestManga"
 import { useEffect, useState } from "react";
+import { supabase } from "../../../utils/supabase";
+import useCheckSession from "../../../hooks/session";
 const RightBar = () => {
   const [comics, setComics] = useState([]);
+  const [suggestUser, setSuggestuser] = useState([]);
+  const session = useCheckSession();
+  const [userID, setUserID] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      if (session !== null) {
+        try {
+          const { user } = session;
+          if (user) {
+            let { data, error } = await supabase.rpc("get_user_id_by_email", {
+              p_email: session.user.email,
+            });
+            if (error) console.error(error);
+            else {
+              setUserID(data);
+              // console.log("User ID: ", data);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching username:", error);
+        }
+      }
+    };
+
+    fetchUserId();
+  }, [session]);
 
   useEffect(() => {
     // Fetch comic data from the API
@@ -20,11 +49,27 @@ const RightBar = () => {
 
     fetchComics();
   }, []);
+  useEffect(()=>{
+    const fetchSUser = async () => {
+      try {
+        const { data, error } = await supabase
+        .rpc('get_most_similar_users', {
+          this_limit: 5, 
+          user_id: userID
+        })
+      if (error) console.error(error)
+      else setSuggestuser(data)
+      } catch (error) {
+        console.error("Error fetching suggest User:", error)
+      }
+    };
+    fetchSUser();
+  })
   return (
     <div className="rightBarContainer">
       <div className="sugesstCard">
         <h1>Who to follow</h1>
-        {["testt", "TestName", "testname hoi bi dai"].map((name, index) => (
+        {["HuyềnTrang92", "QuangNam1987", "AnhThu2203"].map((name, index) => (
           <div key={index}>
             <UserCardSmall name={name.toString()} />
           </div>
@@ -35,7 +80,7 @@ const RightBar = () => {
       </div>
       <div className="sugesstCard">
         <h1>Translation groups</h1>
-        {["testt", "TestName", "testname hoi bi dai"].map((name, index) => (
+        {["Thiên Hạ truyện", "Nhà của Meow", "Mộng Tiên Giới"].map((name, index) => (
           <div key={index}>
             <UserCardSmall name={name} />
           </div>

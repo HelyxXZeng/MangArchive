@@ -1,4 +1,4 @@
-@import './../../global-styles/Color.scss';
+@import './../../../global-styles/Color.scss';
 
 
 .post-modal {
@@ -7,7 +7,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     min-width: 360px;
-    width: 420px;
+    width: 100%;
     max-width: 640px;
     background-color: $soft-bg;
     color: $text-white-new;
@@ -16,6 +16,8 @@
     box-shadow: 24;
     padding: 16px;
     border-radius: 18px;
+    max-height: 768px;
+    // overflow-y: auto;
 
     .header {
         display: flex;
@@ -162,7 +164,8 @@
             position: relative;
             
             img {
-                max-width: 320px;
+                max-width: 480px;
+                width: 100%;
                 max-height: 320px;
                 // object-fit: cover;
                 border-radius: 18px;
@@ -191,8 +194,8 @@
     }
     .emoji-picker {
         position: absolute;
-        bottom: calc(60% + 20px);
-        right: -30%;
+        bottom: calc(30% + 20px);
+        right: 0%;
         // z-index: 10;
         margin-left: auto;
         margin-right: auto;

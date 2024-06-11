@@ -12,8 +12,8 @@ const Feed = () => {
                     <PostSection />
                 </div>
                 <div className="feedList">
-                    {[0, 1, 2, 3, 4].map((imageCount, index) => ( // Thêm tham số index vào hàm map nếu cần thiết
-                        <PostCard key={index} count={imageCount} /> // Sử dụng key để tránh cảnh báo mảng unique key trong React
+                    {[0, 1, 2, 3, 4,1,1,1,1].map((imageCount, index) => ( // Thêm tham số index vào hàm map nếu cần thiết
+                        <PostCard key={index} count={imageCount} isInDetailPage={false}/> // Sử dụng key để tránh cảnh báo mảng unique key trong React
                     ))}
                 </div>
             </div>

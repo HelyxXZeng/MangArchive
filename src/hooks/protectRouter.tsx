@@ -1,41 +1,24 @@
-// chưa có xong, để tính sau, cái này chưa thiệt sự cần thiết
-import React, { useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useAuth } from '../app/context/AuthContext';
-import { SIZES } from '../constants';
+import React from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import useCheckSession from './session'; // Ensure the correct path to the session hook
+import { Button } from '@mui/material';
+import './protectRouter.scss';
 
 const ProtectedRoute = ({ children }) => {
-    const router = useRouter();
-    const { session } = useAuth();
+  const session = useCheckSession();
+  const navigate = useNavigate();
+  // console.log(session)
+  if (session === null) {
+    return (
+      <div className='protectContainer'>
+        <span>You must login or sign up to use this feature</span>
+        <Button className="logIn" onClick={() => navigate('/auth/login')}>Login</Button>
+        <Button className='signUp' onClick={() => navigate('/auth/signup')}>Sign Up</Button>
+      </div>
+    );
+  }
 
-    useEffect(() => {
-        if (session === null) {
-            router.push('/auth');
-        }
-    }, [session, router]);
-
-    if (session === null) {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.text}>Redirecting to Sign In...</Text>
-            </View>
-        );
-    }
-
-    return children;
+  return children ? children : <Outlet />;
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    text: {
-        fontSize: SIZES.xLarge,
-        textAlign: 'center',
-    },
-});
 
 export default ProtectedRoute;

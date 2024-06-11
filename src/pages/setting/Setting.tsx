@@ -1,6 +1,7 @@
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import './setting.scss'
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../utils/supabase';
 
 const Setting = () => {
     const navigate = useNavigate();
@@ -8,6 +9,15 @@ const Setting = () => {
     const handleAskAdmin = () => {
         window.open('https://forms.gle/AL1U8eWXCMFTtbkEA', '_blank');
     };
+    const handleLogout = async ()=>{
+        try {
+            var { error } = await supabase.auth.signOut()
+        } catch (error) {
+            console.error(error)
+            throw error
+        }
+        
+    }
     return (
         <div className="settingFrame">
             <div className="headernav">
@@ -27,6 +37,12 @@ const Setting = () => {
                 <div className="changeRoles">
                     <span>Ask Admin to upgrade your Role to a Translation Group?<br/><span className='smalldescription'>This process <span className='red'>can not be undone</span> after you send form to us. The form will take care in 24-72h.</span></span>
                     <Button className="clickhere" onClick={handleAskAdmin}>Click here</Button>
+                </div>
+                <div className="logout">
+                    <span>Logout?</span>
+                    <IconButton className="logoutBtn" onClick={handleLogout}>
+                        <img src="/icons/logout.svg" alt="" />
+                    </IconButton>
                 </div>
             </div>
             <h3 className="danger">Danger Zone</h3>
