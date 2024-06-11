@@ -1,22 +1,39 @@
 import { Avatar, Button, IconButton, Modal, TextField, Typography } from '@mui/material';
 import './updateProfileModal.scss';
 import { useRef, useState, useEffect } from 'react';
+import { supabase } from "../../../utils/supabase"; // Adjust the path to your supabase client setup
+import useCheckSession from '../../../hooks/session';
 
 interface UPModalProps {
     open: boolean;
     handleClose: () => void;
-    uid: string;
-    background: string; // link, có thể rỗng vì user không có sẵn hình
-    avatar: string; // link, có thể rỗng vì user không có sẵn hình
+    user: User;
+    background: string | any; // link, có thể rỗng vì user không có sẵn hình
+    avatar: string | any; // link, có thể rỗng vì user không có sẵn hình
+}
+
+export interface User {
+    this_id: bigint;
+    join_date: Date;
+    birth_date: Date;
+    username: string;
+    password: string;
+    usertype: string;
+    email: string;
+    avatar: bigint;
+    level: bigint;
+    status: string;
+    phone: string;
     name: string;
     bio: string;
+    background: bigint;
     link: string;
 }
 
 const UpdateProfileModal = (props: UPModalProps) => {
-    const [name, setName] = useState<string>(props.name || '');
-    const [bio, setBio] = useState<string>(props.bio);
-    const [link, setLink] = useState<string>(props.link);
+    const [name, setName] = useState<string>(props.user.name || '');
+    const [bio, setBio] = useState<string>(props.user.bio || '');
+    const [link, setLink] = useState<string>(props.user.link || '');
     const [background, setBackground] = useState<string>(props.background);
     const [avatar, setAvatar] = useState<string>(props.avatar);
     const [backgroundFile, setBackgroundFile] = useState<File | null>(null);
@@ -26,12 +43,25 @@ const UpdateProfileModal = (props: UPModalProps) => {
     const [nameError, setNameError] = useState<string | null>(null);
     const backgroundInputRef = useRef<HTMLInputElement>(null);
     const avatarInputRef = useRef<HTMLInputElement>(null);
-
+    const [userId, setUserId] = useState('');
+    // console.log(background,avatar);
+    const getUser = async () => {
+        try {
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user !== null) {
+                setUserId(user.id);
+            } else {
+                setUserId('');
+            }
+        } catch (e) {
+        }
+    }
+    
     useEffect(() => {
         if (
-            name !== props.name ||
-            bio !== props.bio ||
-            link !== props.link ||
+            name !== props.user.name ||
+            bio !== props.user.bio ||
+            link !== props.user.link ||
             backgroundFile !== null ||
             avatarFile !== null
         ) {
@@ -40,7 +70,9 @@ const UpdateProfileModal = (props: UPModalProps) => {
             setIsSendButtonDisabled(true);
         }
     }, [name, bio, link, backgroundFile, avatarFile]);
-
+    useEffect(() => {
+        getUser();
+    }, [userId])
     const handleBackgroundChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             setBackgroundFile(event.target.files[0]);
@@ -62,29 +94,84 @@ const UpdateProfileModal = (props: UPModalProps) => {
         }
 
         try {
-            // Simulate an API call
-           
-            console.log("Name:", name);
-            console.log("Bio:", bio);
-            console.log("Link:", link);
-            console.log("Background Image File:", backgroundFile);
-            console.log("Avatar Image File:", avatarFile);
+            getUser();
+            let avatarImageId = props.user.avatar;
+            let backgroundImageId = props.user.background;
+            if (avatarFile) {
+                console.log(userId + '/' + avatarFile.name)
+                const { data: avatarData, error: avatarError } = await supabase.storage
+                    .from('userImage')
+                    .upload(userId + '/' + avatarFile.name, avatarFile, { upsert: true });
+
+                if (avatarError) {
+                    console.error('Avatar upload error:', avatarError);
+                    throw avatarError;
+                }
+                var { data: urlData } = await supabase.storage.from('userImage').getPublicUrl(userId + '/' + avatarFile.name);
+                const { data: avatarImage, error: avatarImageError } = await supabase
+                    .rpc("upload_image", { this_link: urlData, this_name: avatarFile.name });
+
+                if (avatarImageError) {
+                    console.error('RPC upload_user_avatar error:', avatarImageError);
+                    throw avatarImageError;
+                }
+
+                avatarImageId = avatarImage;
+            }
+
+            if (backgroundFile) {
+                console.log(userId + '/' + backgroundFile.name)
+                const { data: backgroundData, error: backgroundError } = await supabase.storage
+                    .from('userImage')
+                    .upload(userId + '/' + backgroundFile.name, backgroundFile, { upsert: true });
+
+                if (backgroundError) {
+                    console.error('Background upload error:', backgroundError);
+                    throw backgroundError;
+                }
+                var { data: urlData } = await supabase.storage.from('userImage').getPublicUrl(userId + '/' + backgroundFile.name);
+
+                const { data: backgroundImage, error: backgroundImageError } = await supabase
+                    .rpc("upload_image", { this_link: urlData, this_name: backgroundFile.name });
+
+                if (backgroundImageError) {
+                    console.error('RPC upload_user_avatar error:', backgroundImageError);
+                    throw backgroundImageError;
+                }
+
+                backgroundImageId = backgroundImage;
+            }
+            console.log(backgroundImageId,avatarImageId)
+            const { error } = await supabase.rpc('update_profile', {
+                avatar_image_id: avatarImageId,
+                background_image_id: backgroundImageId,
+                this_bio: bio,
+                this_email: props.user.email,
+                this_link: link,
+                this_name: name,
+                this_user_id: props.user.this_id,
+            });
+
+            if (error) {
+                console.error('RPC update_profile error:', error);
+                throw error;
+            }
 
             // Clear all inputs
-            setName(props.name);
-            setBio(props.bio);
-            setLink(props.link);
-            setBackground(props.background);
-            setAvatar(props.avatar);
+            setName(props.user.name);
+            setBio(props.user.bio);
+            setLink(props.user.link);
+            setBackground('');
+            setAvatar('');
             setBackgroundFile(null);
             setAvatarFile(null);
 
             props.handleClose();
             setTimeout(() => {
-            window.location.reload();
-            },5000);
+                window.location.reload();
+            }, 3000);
         } catch (error) {
-            // Handle error
+            console.error('Update failed:', error);
             setErrorMessage('Update failed, please try again in 10 seconds');
             setIsSendButtonDisabled(true);
             setTimeout(() => {

@@ -7,7 +7,7 @@ import './protectRouter.scss';
 const ProtectedRoute = ({ children }) => {
   const session = useCheckSession();
   const navigate = useNavigate();
-
+  // console.log(session)
   if (session === null) {
     return (
       <div className='protectContainer'>
