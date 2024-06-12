@@ -12,6 +12,8 @@ const Post = () => {
   const { username } = useParams<{ username: string }>();
   const [postList, setPostList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [offset, setOffset] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -35,34 +37,43 @@ const Post = () => {
     fetchUserInfo();
   }, [username, session]);
 
-  useEffect(() => {
-    const fetchPostList = async () => {
-      if (userInfo && userInfo.id) {
-        try {
-          const { data, error } = await supabase.rpc('get_user_posts', {
-            this_limit: 10, // adjust the limit as needed
-            this_offset: 0, // adjust the offset as needed
-            this_user_id: userInfo.id,
-          });
-          if (error) console.error(error);
-          else {
-            setPostList(data);
-            // console.log(data);
+  const fetchPostList = async (reset: boolean = false) => {
+    if (userInfo && userInfo.id) {
+      try {
+        const { data, error } = await supabase.rpc('get_user_posts', {
+          this_limit: 10,
+          this_offset: reset ? 0 : offset,
+          this_user_id: userInfo.id,
+        });
+        if (error) console.error(error);
+        else {
+          if (data.length < 10) {
+            setHasMore(false);
+          } else {
+            setHasMore(true);
           }
-        } catch (error) {
-          console.error("Error fetching post list:", error);
-        } finally {
-          setIsLoading(false);
+          setPostList(prevPostList => reset ? data : [...prevPostList, ...data]);
         }
+      } catch (error) {
+        console.error("Error fetching post list:", error);
+      } finally {
+        setIsLoading(false);
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     if (userInfo?.id) {
-      fetchPostList();
+      fetchPostList(true); // Initial fetch with reset
     }
   }, [userInfo]);
 
-  if (isLoading) {
+  const loadMorePosts = () => {
+    setOffset(prevOffset => prevOffset + 10);
+    fetchPostList();
+  };
+
+  if (isLoading && offset === 0) {
     return <div>Loading...</div>;
   }
 
@@ -82,15 +93,25 @@ const Post = () => {
   return (
     <div className="postContainer">
       <div className="postsection">
-        <PostSection />
+        <PostSection refreshList={() => fetchPostList(true)} />
       </div>
       <div className="postlist">
         {postList.map((post, index) => (
           <PostCard key={index} postId={post} />
         ))}
       </div>
+      {hasMore && !isLoading && (
+        <div className="loadMore">
+          <button onClick={loadMorePosts}>Load More Posts</button>
+        </div>
+      )}
+      {!hasMore && (
+        <div className="noMorePosts">
+          There are no more posts
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default Post;

@@ -34,7 +34,7 @@ const RightBar = () => {
     };
 
     fetchUserId();
-  }, [session]);
+  }, [session,userID,]);
 
   useEffect(() => {
     // Fetch comic data from the API
@@ -67,7 +67,7 @@ const RightBar = () => {
   };
   useEffect(() => {
     fetchSUser();
-  }, [userID])
+  }, [session,userID])
   return (
     <div className="rightBarContainer">
       <div className="sugesstCard">

@@ -8,21 +8,21 @@ const Feed = () => {
     const [postIds, setPostIds] = useState<bigint[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        const fetchFeedPosts = async () => {
-            try {
-                const { data, error } = await supabase.rpc('get_posts_for_feed', { this_limit: 10, this_offset: 0 });
-                if (error) {
-                    console.error("Error fetching feed posts:", error);
-                } else {
-                    setPostIds(data);
-                }
-            } catch (error) {
+    const fetchFeedPosts = async () => {
+        try {
+            const { data, error } = await supabase.rpc('get_posts_for_feed', { this_limit: 10, this_offset: 0 });
+            if (error) {
                 console.error("Error fetching feed posts:", error);
-            } finally {
-                setLoading(false);
+            } else {
+                setPostIds(data);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching feed posts:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
 
         fetchFeedPosts();
     }, []);
@@ -38,11 +38,11 @@ const Feed = () => {
                     <h2>Feed</h2>
                 </div>
                 <div className="newFeedSection">
-                    <PostSection />
+                    <PostSection refreshList={fetchFeedPosts} />
                 </div>
                 <div className="feedList">
                     {postIds.map((postId, index) => (
-                        <PostCard key={index} postId={postId} isInDetailPage={false} />
+                        <PostCard key={index} postId={postId}  />
                     ))}
                 </div>
             </div>

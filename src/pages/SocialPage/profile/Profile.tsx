@@ -419,7 +419,7 @@ const Profile = () => {
           </button>
           <div className="headerInfo">
             <div className="name">{userInfo?.name || username}</div>
-            <div className="postCount">{postCount || 0} bài đăng</div>
+            <div className="postCount">{postCount || 0} Posts</div>
           </div>
         </section>
         <div className="profileInfoFrame">

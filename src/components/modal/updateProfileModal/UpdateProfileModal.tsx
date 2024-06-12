@@ -39,8 +39,8 @@ const UpdateProfileModal = (props: UPModalProps) => {
     const [nameError, setNameError] = useState<string | null>(null);
     const backgroundInputRef = useRef<HTMLInputElement>(null);
     const avatarInputRef = useRef<HTMLInputElement>(null);
-    const [userId, setUserId] = useState('');
-    const [realUserID, setRealUserID] = useState<any>(null);
+    const [userId, setUserId] = useState('');//dùng cho upload, id kiểu  ký tự đặc biệt
+    const [realUserID, setRealUserID] = useState<any>(null);//dùng cho các loại khác
     const [userInfo, setUserInfo] = useState<any>(null);
 
     const session = useCheckSession();

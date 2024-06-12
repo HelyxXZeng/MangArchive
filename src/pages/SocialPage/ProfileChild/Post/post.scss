@@ -1,3 +1,5 @@
+@import './../../../../global-styles/Color.scss';
+
 .postContainer{
     width: 100%;
     height: 100%;
@@ -14,5 +16,27 @@
         font-size: 18px;
         font-weight: 700;
         margin-top: 50px;
+    }
+    .loadMore,.noMorePosts{
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        width: 100%;
+        font-family: 'Lato',sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        pointer-events: auto;
+        background-color: $gray-bg;
+        height: 30px;
+    }
+    .loadMore{
+        color: $blue-soft;
+        
+    }
+    .noMorePosts{
+        color:$text-white-new;
+        cursor: default;
     }
 }

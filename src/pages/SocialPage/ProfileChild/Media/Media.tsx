@@ -49,8 +49,9 @@ const Media = () => {
           if (data.length === 0) {
             setImages([]);
           } else {
-            const imageLinks = data.map((image: any) => image.link);
-            setImages(imageLinks);
+            console.log(data)
+            const images = data.map((image: any) => JSON.parse(image).publicUrl);
+            setImages(images);
           }
         } catch (error) {
           console.error("Error fetching media images:", error);
