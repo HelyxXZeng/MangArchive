@@ -93,7 +93,7 @@ const PostDetail = () => {
       <div className="postContent">
         <div className="postNComment customScrollbar">
           <div className="post">
-            <PostCard count={0} isInDetailPage={true} onCommentSectionClick={handleCommentSectionClick} />
+            <PostCard displayImage={false} isInDetailPage={true} onCommentSectionClick={handleCommentSectionClick} />
           </div>
           <div className="comments customScrollbar">
             {comments.map((comment, index) => (
