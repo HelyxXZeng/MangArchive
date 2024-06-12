@@ -122,7 +122,7 @@ const UpdateProfileModal = (props: UPModalProps) => {
 
                             if (avatarLink || backgroundLink) {
                                 setProfileImages({ avatar: avatarLink, background: backgroundLink });
-                                console.log({ avatar: avatarLink, background: backgroundLink });
+                                // console.log({ avatar: avatarLink, background: backgroundLink });
                             }
                         }
                     }
@@ -133,10 +133,10 @@ const UpdateProfileModal = (props: UPModalProps) => {
         };
 
         fetchProfileImages();
-        console.log(profileImages, realUserID)
+        // console.log(profileImages, realUserID)
     }, [realUserID]);
     useEffect(() => {
-        console.log(userInfo?.name,userInfo?.bio,userInfo?.link)
+        // console.log(userInfo?.name,userInfo?.bio,userInfo?.link)
         if (
             name.trim() !== userInfo?.name ||
             bio.trim() !== userInfo?.bio ||

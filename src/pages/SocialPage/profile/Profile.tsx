@@ -342,7 +342,7 @@ const Profile = () => {
             supabase.rpc("get_follow_group", { this_user_id: userInfo.id }),
             supabase.rpc("get_follow_user", { this_user_id: userInfo.id }),
           ]);
-          console.log(posts.data.length,groups.data.length,friends.data.length)
+          // console.log(posts.data.length,groups.data.length,friends.data.length)
           setPostCount(posts.data.length);
           setGroupCount(groups.data.length);
           setFriendCount(friends.data.length);
@@ -408,7 +408,7 @@ const Profile = () => {
 
   const routeMatch = useRouteMatch(routes);
   const currentTab = routeMatch?.pattern?.path;
-  const level = Math.floor(userInfo?.level / 100);
+  const level =!isNaN(Math.floor(userInfo?.level / 100))? Math.floor(userInfo?.level / 100) : 0;
 
   return (
     <div className="profileFrame">

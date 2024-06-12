@@ -49,23 +49,23 @@ const RightBar = () => {
 
     fetchComics();
   }, []);
-  useEffect(() => {
-    const fetchSUser = async () => {
-      try {
-        const { data, error } = await supabase
-          .rpc('get_most_similar_users', {
-            this_limit: 3,
-            user_id: userID
-          })
-        if (error) console.log(error)
-        else {
-          setSuggestuser(data)
-          // console.log(data) 
-        }
-      } catch (error) {
-        console.error("Error fetching suggest User:", error)
+  const fetchSUser = async () => {
+    try {
+      const { data, error } = await supabase
+        .rpc('get_most_similar_users', {
+          this_limit: 3,
+          user_id: userID
+        })
+      if (error) console.log(error)
+      else {
+        setSuggestuser(data)
+        // console.log(data) 
       }
-    };
+    } catch (error) {
+      console.error("Error fetching suggest User:", error)
+    }
+  };
+  useEffect(() => {
     fetchSUser();
   }, [userID])
   return (
@@ -74,7 +74,7 @@ const RightBar = () => {
         <h1>Who to follow</h1>
         {suggestUser.map((user: any, index: any) => (
           <div key={index}>
-            <UserCardSmall userID={user.similar_user} />
+            <UserCardSmall userID={user.similar_user} fetchSuggestUser={fetchSUser} />
           </div>
         ))}
         <NavLink to="/discover" className="seeMoreLink">
@@ -85,7 +85,7 @@ const RightBar = () => {
         <h1>Translation groups</h1>
         {suggestUser.map((user: any, index: any) => (
           <div key={index}>
-            <UserCardSmall userID={user.similar_user} />
+            <UserCardSmall userID={user.similar_user} fetchSuggestUser={fetchSUser} />
           </div>
         ))}
         <NavLink to="/discover?is_group=true" className="seeMoreLink">
