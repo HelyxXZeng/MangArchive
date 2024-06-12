@@ -1,6 +1,6 @@
 import { Avatar } from "@mui/material";
 import "./PostCard.scss";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../../../../utils/supabase";
 import ComicCard from "../../comicCardSmall/ComicCard";
@@ -29,10 +29,12 @@ const PostCard = ({
     const [totalComments, setTotalComments] = useState<number>(0);
 
     const [name, setName] = useState<string>('test');
-    const [level, setLevel] = useState<number>(3);
     const [idName, setIdName] = useState<string>('@test');
     const [liked, setLiked] = useState<boolean>(false);
     const [likes, setLikes] = useState<number>(1000);
+    const [userInfo, setUserInfo] = useState<any>(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPostInfo = async () => {
@@ -82,11 +84,11 @@ const PostCard = ({
     useEffect(() => {
         if (mangaSuggestContent) {
             axios.get(`https://api.mangadex.org/manga/${mangaSuggestContent.trim()}?includes[]=cover_art&includes[]=artist&includes[]=author`)
-                .then(response => {
+               .then(response => {
                     setComic(response.data.data);
                     setIdValid(true);
                 })
-                .catch(error => {
+               .catch(error => {
                     console.error("Invalid manga ID:", error);
                     setIdValid(false);
                     setComic(null);
@@ -113,7 +115,7 @@ const PostCard = ({
                             if (repliesError) {
                                 console.error("Error fetching replies:", repliesError);
                             }
-                            return replies ? replies.length : 0;
+                            return replies? replies.length : 0;
                         });
                         const repliesCounts = await Promise.all(repliesPromises);
                         totalRepliesCount = repliesCounts.reduce((acc, count) => acc + count, 0);
@@ -131,14 +133,39 @@ const PostCard = ({
 
     const handleLikeClick = () => {
         setLiked(!liked);
-        setLikes(liked ? likes - 1 : likes + 1);
+        setLikes(liked? likes - 1 : likes + 1);
     };
 
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                if (postInfo) {
+                    const { data, error } = await supabase.rpc("get_user_info", { this_user_id: postInfo.this_user });
+                    if (error) console.error(error);
+                    else {
+                        setUserInfo(data[0]); // Adjust based on the returned data structure
+                        // console.log(data[0]);
+                        // setBio(userInfo?.bio)
+                        // setName(userInfo?.name)
+                        // setLink(userInfo?.link)
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching user info:", error);
+            }
+        };
+
+        fetchUserInfo();
+    }, [postInfo]);
+
+    const handleImageClick = (index: any) => {
+        navigate(`/profile/${userInfo?.username}/post/${postId}`, { state: { displayImageIndex: index } });
+    };
     const handleCommentClick = () => {
         if (onCommentSectionClick) {
             onCommentSectionClick();
         } else {
-            console.log("Open post details!");
+            navigate(`/profile/${userInfo?.username}/post/${postId}`);
         }
     };
 
@@ -152,6 +179,7 @@ const PostCard = ({
                     className="gallery_item fullWidth"
                     src={postImages[0]}
                     alt={`Image 1`}
+                    onClick={() => handleImageClick(0)}
                 />
             );
             break;
@@ -163,6 +191,7 @@ const PostCard = ({
                         className={`gallery_item halfWidth image${index}`}
                         src={image}
                         alt={`Image ${index + 1}`}
+                        onClick={() => handleImageClick(index)}
                     />
                 );
             });
@@ -174,6 +203,7 @@ const PostCard = ({
                     className={`gallery_item halfWidth image0`}
                     src={postImages[0]}
                     alt={`Image 1`}
+                    onClick={() => handleImageClick(0)}
                 />
             );
             galleryItems.push(
@@ -182,11 +212,13 @@ const PostCard = ({
                         className={`image1`}
                         src={postImages[1]}
                         alt={`Image 2`}
+                        onClick={() => handleImageClick(1)}
                     />
                     <img
                         className={`image2`}
                         src={postImages[2]}
                         alt={`Image 3`}
+                        onClick={() => handleImageClick(2)}
                     />
                 </div>
             );
@@ -199,6 +231,7 @@ const PostCard = ({
                         className={`gallery_item quarterWidth image${index}`}
                         src={image}
                         alt={`Image ${index + 1}`}
+                        onClick={() => handleImageClick(index)}
                     />
                 );
             });
@@ -208,6 +241,7 @@ const PostCard = ({
     }
 
     if (!postInfo) return <div>Loading Current Post...</div>;
+    const level =!isNaN(Math.floor(userInfo?.level / 100))? Math.floor(userInfo?.level / 100) : 0;
 
     return (
         <div className="postCardContainer">
@@ -224,11 +258,11 @@ const PostCard = ({
                 <div className="leftContainer">
                     <div className="nameNId">
                         <div className="userNameChild">
-                            <span className="name">{name}</span>
-                            <span className="level">LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span></span>
+                            <span className="name">{userInfo?.name}</span>
+                            <span className="level">LV<span className={`textHighlight ${level < 4? "bluetext" : level < 7? "yellowtext" : "redtext"}`}>{level}</span></span>
                         </div>
                         <div className="idNameAndDate">
-                            <span className="idName">{idName} · </span>
+                            <span className="idName">{userInfo?.username} · </span>
                             <span className="datetime">{new Date(postInfo.post_time).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
                         </div>
                     </div>
@@ -251,17 +285,19 @@ const PostCard = ({
                     </div>
                 }
                 {displayImage && postImages.length > 0 &&
-                    <div className="gallery">{galleryItems}</div>
+                    <div className="gallery">
+                        {galleryItems}
+                    </div>
                 }
             </div>
             <div className="optionBar">
                 <div className="likeSection">
                     <div className="iconNnumber" onClick={handleLikeClick}>
-                        <div className={`heart-icon ${liked ? 'liked' : ''}`}>
-                            {/* <img className={`heart-icon ${liked ? 'liked' : ''}`} src="/heart.svg" alt="heart" /> */}
+                        <div className={`heart-icon ${liked? 'liked' : ''}`}>
+                            {/* <img className={`heart-icon ${liked? 'liked' : ''}`} src="/heart.svg" alt="heart" /> */}
                         </div>
                     </div>
-                    <span className={`likes-amount ${liked ? 'liked' : ''}`}>{postInfo.likecount}</span>
+                    <span className={`likes-amount ${liked? 'liked' : ''}`}>{likes}</span>
                 </div>
                 <div className="line"></div>
                 <div className="commentSection" onClick={handleCommentClick}>

@@ -212,6 +212,8 @@
                 max-height: 512px;
                 /* Height for each row */
                 display: block;
+                cursor: pointer;
+                pointer-events: auto;
                 transition: transform 0.2s ease-in-out;
 
                 &.fullWidth {
