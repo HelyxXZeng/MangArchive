@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, matchPath } from "react-router-dom";
 import "./sideBar.scss";
 import { useEffect, useState } from "react";
 import useCheckSession from "../../../hooks/session";
@@ -54,7 +54,7 @@ const menu = [
       {
         id: 4,
         title: "Notification",
-        url: "/nofitication",
+        url: "/notification",
         icon: "/icons/notification.svg",
       },
     ],
@@ -116,10 +116,9 @@ const menu = [
 ];
 
 const SideBar = () => {
-
   const [username, setUsername] = useState(null);
   const session = useCheckSession();
-  const location = useLocation(); // Get the current path
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -150,22 +149,27 @@ const SideBar = () => {
     fetchUsername();
   }, [session]);
 
+  const isProfilePath = matchPath("/profile/:username", location.pathname);
+
   return (
     <div className="menu">
       {menu.map((item) => (
         <div className="item" key={item.id}>
           <span className="title">{item.title}</span>
-          {item.listItems.map((listItem) => (
-            <NavLink
-              to={listItem.title === "Profile" && username ? `/profile/${username}` : listItem.url}
-              className={`listItem ${location.pathname === listItem.url ? 'active' : ''}`}
-              key={listItem.id}
-              preventScrollReset={true}
-            >
-              <img src={listItem.icon} alt="" />
-              <span className={`listItemTitles ${listItem.title === "Announcements" ? 'announ' : ''}`}>{listItem.title}</span>
-            </NavLink>
-          ))}
+          {item.listItems.map((listItem) => {
+            const isActive = location.pathname === listItem.url || (listItem.title === "Profile" && isProfilePath);
+            return (
+              <NavLink
+                to={listItem.title === "Profile" && username ? `/profile/${username}` : listItem.url}
+                className={`listItem ${isActive ? 'active' : ''}`}
+                key={listItem.id}
+                preventScrollReset={true}
+              >
+                <img src={listItem.icon} alt="" />
+                <span className={`listItemTitles ${listItem.title === "Announcements" ? 'announ' : ''}`}>{listItem.title}</span>
+              </NavLink>
+            );
+          })}
         </div>
       ))}
       <div className="footer">

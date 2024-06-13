@@ -177,11 +177,90 @@
 }
 
 .manga-details-comments-container {
-    // width: 80%;
+    width: 100%;
     margin: 0px;
     // padding: 20px;
     height: fit-content;
     min-height: 500px;
     text-align: center;
     color: $text-white-new;
+    
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    .headingNComment{
+        max-height: 480px;
+        overflow-y: auto;
+    overscroll-behavior: contain;
+    }
+    .heading{
+        font-size: 18px;
+        font-weight: 600;
+        position: relative;
+        // top: 100px;
+        // right:50%;
+    }
+    .comments {
+        padding: 4px 16px;
+
+        .commentCard {
+            margin-top: 4px; // Adjust the bottom margin as needed
+            transition: 0.5s ease-out;
+
+            .replyCommentCard {
+                margin-left: 48px;
+            }
+        }
+
+        .seemore {
+            display: flex;
+            align-items: center;
+            margin-left: 48px;
+            gap: 4px;
+            cursor: pointer;
+            pointer-events: auto;
+
+            img {
+                width: 16px;
+                height: 16px;
+                // fill: $text-gray-soft-new;
+            }
+
+            .seeMoreText {
+                font-size: 14px;
+                font-weight: 600;
+                color: $text-gray-soft-new;
+            }
+        }
+
+        .commentCard:last-child {
+            margin-bottom: 0; // Remove margin from the last item
+        }
+    }
+
+    .commentEditable {
+        display: flex;
+        align-items: flex-end; // Đặt textarea ở dưới cùng của container
+        width: 100%;
+        position: relative;
+        // z-index: 0;
+
+        @media (max-width: 959px) {
+            flex-shrink: 0;
+        }
+    }
+    .feedContainer{
+        width: 100%;
+    }
+}
+
+.noInfo {
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    // margin-top: 50px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid $gray-bg;
 }

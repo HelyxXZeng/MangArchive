@@ -21,8 +21,16 @@
         max-height: 256px; /* Tối đa là 256px */
         display: block; /* Hiển thị dạng block */
     }
+    
 }
-
+.NoMedia{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    border-bottom: 1px solid $gray-bg;
+}
 @media (max-width: 1280px) {
     .mediaContainer {
         grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
