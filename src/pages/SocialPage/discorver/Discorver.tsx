@@ -1,9 +1,10 @@
-
-import './discover.scss'
-import userList, { User } from '../../../../public/User';
+import './discover.scss';
 import UserCardLarge from '../../../components/socialComponents/userCardLarge/UserCardLarge';
-import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Tab, Tabs } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { supabase } from '../../../utils/supabase';
+import useCheckSession from '../../../hooks/session';
 
 const NotFound: React.FC = () => (
     <div className="notFound">
@@ -12,17 +13,46 @@ const NotFound: React.FC = () => (
         <Link to="/discover">Go to Discover</Link>
     </div>
 );
-const Discorver = () => {
+
+const Discover: React.FC = () => {
     const navigate = useNavigate();
-    // const [userList, setUserList] = useState<any>([]);
+    const [userList, setUserList] = useState<any[]>([]);
+    const [groupList, setGroupList] = useState<any[]>([]);
     const handleBack = () => navigate(-1);
-    const routes = ["/discover", "/discover?is_group=true"]
+    const routes = ["/discover", "/discover?is_group=true"];
+    const [hasMore, setHasMore] = useState(true);
+    const [page, setPage] = useState(1);
+    const session = useCheckSession();
+    const [userID, setUserID] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            if (session !== null) {
+                try {
+                    const { user } = session;
+                    if (user) {
+                        let { data, error } = await supabase.rpc("get_user_id_by_email", {
+                            p_email: session.user.email,
+                        });
+                        if (error) console.error(error);
+                        else {
+                            setUserID(data);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error fetching username:", error);
+                }
+            }
+        };
+
+        fetchUserId();
+    }, [session]);
+
     function useRouteMatch(patterns: readonly string[]) {
         const { pathname, search } = useLocation();
         const fullPath = `${pathname}${search}`;
         for (let i = 0; i < patterns.length; i += 1) {
             const pattern = patterns[i];
-            // Check for an exact match
             if (pattern === fullPath) {
                 return { pattern: { path: pattern } };
             }
@@ -31,79 +61,70 @@ const Discorver = () => {
     }
     const routeMatch = useRouteMatch(routes);
     const currentTab = routeMatch?.pattern?.path;
-    // console.log(currentTab)
 
     if (!currentTab) {
-        // If the current path does not match any of the routes, render NotFound component
         return <NotFound />;
     }
-    /* //viết trước
-    useEffect(() => {
-        if (currentTab === "/discover") {
-            setPage(1);
-            getUserSuggestList(1);
-        } else if (currentTab === "/discover?is_group=true") {
-            setPage(1);
-            getGroupSuggestList(1);
-        }
-    }, [currentTab]);
 
-    // Function to fetch user suggestions
+    const getSuggestList = (page: number) => {
+        if (currentTab === "/discover") {
+            getUserSuggestList(page);
+        } else if (currentTab === "/discover?is_group=true") {
+            getGroupSuggestList(page);
+        }
+    };
+
+    useEffect(() => {
+        if (userID) {
+            setUserList([]);
+            setGroupList([]);
+            setPage(1);
+            // setHasMore(true);
+            getSuggestList(1);
+        }
+    }, [userID, currentTab]);
+
     const getUserSuggestList = async (page: number) => {
         try {
-            const { data, error } = await supabase
-                .from('users')
-                .select('*') // Modify based on your table and columns
-                .range((page - 1) * 20, page * 20 - 1); // Limit to 20 users per page
-
-            if (error) {
-                console.error('Error fetching user suggestions:', error);
-            } else {
-                setUsers(prevUsers => (page === 1 ? data : [...prevUsers, ...data]));
-                setHasMore(data.length === 20);
+            const { data, error } = await supabase.rpc('get_most_similar_users', {
+                user_id: userID,
+                this_limit: 10,
+                // this_offset: (page - 1) * 10,
+            });
+            if (error) console.error('Error fetching user suggestions:', error);
+            else {
+                setUserList(prevList => page === 1 ? data : [...prevList, ...data]);
+                setHasMore(data.length === 10);
+                // console.log(data)
             }
         } catch (error) {
             console.error('Error fetching user suggestions:', error);
         }
     };
 
-    // Function to fetch group suggestions
     const getGroupSuggestList = async (page: number) => {
         try {
-            const { data, error } = await supabase
-                .from('groups')
-                .select('*') // Modify based on your table and columns
-                .range((page - 1) * 20, page * 20 - 1); // Limit to 20 users per page
-
-            if (error) {
-                console.error('Error fetching group suggestions:', error);
-            } else {
-                setUsers(prevUsers => (page === 1 ? data : [...prevUsers, ...data]));
-                setHasMore(data.length === 20);
+            const { data, error } = await supabase.rpc('get_most_similar_users', {
+                user_id: userID,
+                this_limit: 10,
+                // this_offset: (page - 1) * 10,
+            });
+            if (error) console.error('Error fetching group suggestions:', error);
+            else {
+                setGroupList(prevList => page === 1 ? data : [...prevList, ...data]);
+                setHasMore(data.length === 10);
             }
         } catch (error) {
             console.error('Error fetching group suggestions:', error);
         }
     };
 
-    const lastUserElementRef = useCallback(
-        (node) => {
-            if (observer.current) observer.current.disconnect();
-            observer.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasMore) {
-                    setPage((prevPage) => prevPage + 1);
-                    if (currentTab === "/discover") {
-                        getUserSuggestList(page + 1);
-                    } else if (currentTab === "/discover?is_group=true") {
-                        getGroupSuggestList(page + 1);
-                    }
-                }
-            });
-            if (node) observer.current.observe(node);
-        },
-        [hasMore, currentTab, page]
-    );
-    */
+    const handleLoadMore = () => {
+        const nextPage = page + 1;
+        setPage(nextPage);
+        getSuggestList(nextPage);
+    };
+
     return (
         <div className="discoverFrame">
             <section className="headernav">
@@ -122,7 +143,6 @@ const Discorver = () => {
                         aria-label="nav tabs example"
                         role="navigation"
                         scrollButtons="auto"
-                        // onChange={handleChange}
                         sx={{
                             '& .MuiTab-root': {
                                 color: "#E7E9EA",
@@ -146,23 +166,37 @@ const Discorver = () => {
                             }
                         }}
                     >
-                        <Tab label="Suggest following" to={"/discover"} value={"/discover"} component={Link} />
-                        <Tab label="Translation group for you" to={"/discover?is_group=true"} value={"/discover?is_group=true"} component={Link} />
+                        <Tab label="Suggest following" to="/discover" value="/discover" component={Link} />
+                        <Tab label="Translation group for you" to="/discover?is_group=true" value="/discover?is_group=true" component={Link} />
                     </Tabs>
                 </nav>
-                {userList.map((user: User, index: number) => (
-                    <UserCardLarge
-                        key={index}
-                        name={user.Name}
-                        idName={user.ID}
-                        followedState={true} // You can set the followed state as per your requirement
-                        description={user.description}
-                        level={user.level}
-                    />
-                ))}
+                {currentTab === "/discover" ? (
+                    userList.map((user: any, index: number) => (
+                        <UserCardLarge
+                            key={user.similar_user}
+                            userID={user.similar_user}
+                            fetchSuggestUser={() => getSuggestList(1)}
+                        />
+                    ))
+                ) : (
+                    groupList.map((group: any, index: number) => (
+                        <UserCardLarge
+                            key={group.similar_user}
+                            userID={group.similar_user}
+                            fetchSuggestUser={() => getSuggestList(1)}
+                        />
+                    ))
+                )}
+                {hasMore ? (
+                    <div className="loadMore" onClick={handleLoadMore}>
+                        Load more
+                    </div>
+                ) : (
+                    <div className="noMoreUsers">No more users to load</div>
+                )}
             </section>
         </div>
-    )
-}
+    );
+};
 
-export default Discorver
+export default Discover;

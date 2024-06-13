@@ -1,52 +1,183 @@
 import { Avatar, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './userCardLarge.scss';
+import useCheckSession from "../../../hooks/session";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../utils/supabase";
 
 interface UserCardLargeProps {
-  name: string;
-  idName: string;
-  followedState: boolean;
-  description: string;
-  level: number; // Add level prop
+  userID: number;
+  fetchSuggestUser: () => void; // Add level prop
 }
 
-const UserCardLarge: React.FC<UserCardLargeProps> = ({ name, idName, followedState, description, level }) => {
-  const [avatar, setAvatar] = useState<any>();
-  const [userName, setUserName] = useState<string>('');
-  const [followedstate, setFollowedState] = useState<boolean>(followedState);
+const UserCardLarge: React.FC<UserCardLargeProps> = ({ userID, fetchSuggestUser }) => {
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [realUserID, setRealUserID] = useState<any>(null);
+  const session = useCheckSession();
+  const navigate = useNavigate();
+  const level =!isNaN(Math.floor(userInfo?.level / 100))? Math.floor(userInfo?.level / 100) : 0;
 
-  const onFollowedButtonClick = () => {
-    console.log(followedstate);
-    setFollowedState(!followedstate);
+  useEffect(() => {
+    const fetchUserId = async () => {
+      if (session !== null) {
+        try {
+          const { user } = session;
+          if (user) {
+            let { data, error } = await supabase.rpc("get_user_id_by_email", {
+              p_email: session.user.email,
+            });
+            if (error) console.error(error);
+            else {
+              setRealUserID(data);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching username:", error);
+        }
+      }
+    };
+
+    fetchUserId();
+  }, [session]);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        if (userID) {
+          const { data, error } = await supabase.rpc("get_user_info", { this_user_id: userID });
+          if (error) console.error(error);
+          else {
+            setUserInfo(data[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, [userID]);
+
+  useEffect(() => {
+    const fetchProfileImages = async () => {
+      try {
+        if (userID) {
+          const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: userID });
+          if (error) console.error(error);
+          else {
+            if (data[0]) {
+              const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : null;
+              const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : null;
+
+              if (avatarLink || backgroundLink) {
+                setProfileImages({ avatar: avatarLink, background: backgroundLink });
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching profile images:", error);
+      }
+    };
+
+    fetchProfileImages();
+  }, [userID]);
+
+  useEffect(() => {
+    const checkIfFollowed = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("UserFollowing")
+          .select("*")
+          .eq("user", realUserID)
+          .eq("follow", userID)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        } else {
+          setIsFollowed(!!data);
+        }
+      } catch (error) {
+        console.error("Error checking follow status:", error);
+      }
+    };
+
+    if (userID && realUserID) {
+      checkIfFollowed();
+    }
+  }, [userID, realUserID]);
+
+  const followUser = async () => {
+    try {
+      const { data, error } = await supabase.rpc("follow_user", {
+        this_user_id: realUserID,
+        follow_user_id: userID,
+      });
+      if (error) {
+        console.error("Error following user:", error);
+      } else {
+        setIsFollowed(true);
+        fetchSuggestUser(); // Gọi hàm fetchSuggestUser sau khi follow
+      }
+    } catch (error) {
+      console.error("Error following user:", error);
+    }
+  };
+
+  const unfollowUser = async () => {
+    try {
+      const { data, error } = await supabase.rpc("unfollow_user", {
+        this_user_id: realUserID,
+        follow_user_id: userID,
+      });
+      if (error) {
+        console.error("Error unfollowing user:", error);
+      } else {
+        setIsFollowed(false);
+        fetchSuggestUser(); // Gọi hàm fetchSuggestUser sau khi unfollow
+      }
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
+    }
+  };
+
+  const handleNavigate = () => {
+    navigate(`/profile/${userInfo.username}`);
   };
 
   return (
-    <div className="cardFrame">
+    <div className="cardFrame" onClick={handleNavigate}>
       <div className="avatar">
-        <Avatar src="/wallpaper/test-avatar.png" alt="avatar of user"
+        <Avatar src={profileImages?.avatar} alt="avatar of user"
           sx={{ width: "40px", height: "40px" }} />
       </div>
       <div className="nameIdNDes">
         <div className="nameNFollButt">
           <div className="nameAndId">
             <div className="userNameChild">
-              <span className="name">{name}</span>
+              <span className="name">{userInfo?.name}</span>
               <span className="level">LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span></span>
             </div>
-            <span className="idName">{idName}</span>
+            <span className="idName">@{userInfo?.username}</span>
           </div>
           <div className="followedbutton">
             <Button
-              className={`followedButton ${followedstate ? "textwhite" : "textblack"}`}
+              className={`followedButton ${isFollowed ? "textwhite" : "textblack"}`}
               variant="contained"
-              onClick={onFollowedButtonClick}
+              onClick={(event) => {
+                event.stopPropagation();
+                isFollowed? unfollowUser() : followUser();
+              }} // Thay đổi hàm gọi khi click
             >
-              {followedstate ? "Following" : "Follow"}
+              {isFollowed ? "Unfollow" : "Follow"}
             </Button>
           </div>
         </div>
         <div className="des">
-          {description}
+          {userInfo?.bio}
         </div>
       </div>
 

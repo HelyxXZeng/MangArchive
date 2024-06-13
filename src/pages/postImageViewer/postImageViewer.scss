@@ -1,30 +1,51 @@
-@import "../../global-styles/Color.scss";
+@import '../../global-styles/Color.scss';
 
-.read-chapter-page {
-    height: calc(100vh - 56px); // Use 100vh to take the full height of the viewport
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.8); // Corrected syntax for rgba
+.postImageContainer {
+    height: calc(100vh - 56px);
+    max-width: 100%;
+    width: auto;
+    background-color: $main-bg;
     display: flex;
-    align-self: center;
     align-items: center;
     justify-content: center;
-    position: relative; // Added to position the button
 
-    .toggle-style-button {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        padding: 10px 20px;
-        background-color: $blue-main;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        z-index: 40;
-        transition: background-color 0.3s;
+    .previewImageContainer {
+        display: flex;
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+        justify-content: center;
 
-        &:hover {
-            background-color: $blue-soft-hover;
+        .previewImage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+
+            .previewIMG {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            img {
+                max-width: 100%;
+                max-height: 100vh;
+                object-fit: contain;
+                border-radius: 18px;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .postImageContainer {
+        .previewImageContainer {
+            .previewImage {
+                img {
+                    max-width: 90%;
+                }
+            }
         }
     }
 }
@@ -44,18 +65,18 @@
     background-color: $blue-main;
     border-radius: 5px;
     animation: loading-wave-animation 1s ease-in-out infinite;
-}
 
-.loading-bar:nth-child(2) {
-    animation-delay: 0.1s;
-}
+    &:nth-child(2) {
+        animation-delay: 0.1s;
+    }
 
-.loading-bar:nth-child(3) {
-    animation-delay: 0.2s;
-}
+    &:nth-child(3) {
+        animation-delay: 0.2s;
+    }
 
-.loading-bar:nth-child(4) {
-    animation-delay: 0.3s;
+    &:nth-child(4) {
+        animation-delay: 0.3s;
+    }
 }
 
 @keyframes loading-wave-animation {
@@ -69,51 +90,5 @@
 
     100% {
         height: 10px;
-    }
-}
-
-.chapter-swiper-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-
-    .swiper-slide-content {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        overflow-x: auto;
-
-        &.style1 img {
-            height: 100%;
-            width: fit-content;
-            max-width: 100%;
-        }
-
-        &.style2 img {
-            height: fit-content;
-            width: 100%;
-            max-width: 100%;
-        }
-    }
-
-    .chapter-swiper-pagination {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 10px;
-        background-color: rgba(0, 0, 0, 0.1);
-        z-index: 30;
-        cursor: pointer;
-
-        .swiper-pagination-progressbar {
-            background-color: $blue-soft;
-        }
-
-        .swiper-pagination-progressbar-fill {
-            background-color: $blue-soft-hover;
-        }
     }
 }

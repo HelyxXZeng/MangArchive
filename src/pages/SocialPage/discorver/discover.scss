@@ -40,11 +40,33 @@
         }
     }
     .mainContent{
+        transition: 0.5s ease;
         .navigationBar{
             border-bottom: 1px solid $gray-bg;
 
         }
-        
+        .loadMore,.noMoreUsers{
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            width: 100%;
+            font-family: 'Lato',sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            pointer-events: auto;
+            background-color: $gray-bg;
+            height: 30px;
+        }
+        .loadMore{
+            color: $blue-soft;
+            
+        }
+        .noMoreUsers{
+            color:$text-white-new;
+            cursor: default;
+        }
     }
 }
 
