@@ -3,41 +3,41 @@ import Image from '../../../image/Image';
 import './media.scss';
 import useCheckSession from '../../../../hooks/session';
 import { supabase } from '../../../../utils/supabase';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Media = () => {
   const session = useCheckSession();
   const [userInfo, setUserInfo] = useState<any>(null);
   const { username } = useParams<{ username: string }>();
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<{ publicUrl: string, postId: number }[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-        try {
-            if (username) {
-                const { data, error } = await supabase
-                    .from("User")
-                    .select("*")
-                    .eq("username", username)
-                    .single();
-                if (error) console.error(error);
-                else {
-                    setUserInfo(data);
-                    // setIsCurrentUser(data.email === session?.user?.email);
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching user info:", error);
+      try {
+        if (username) {
+          const { data, error } = await supabase
+            .from("User")
+            .select("*")
+            .eq("username", username)
+            .single();
+          if (error) console.error(error);
+          else {
+            setUserInfo(data);
+          }
         }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
     };
 
     fetchUserInfo();
-}, [username, session]);
+  }, [username, session]);
 
   useEffect(() => {
     const fetchMediaImages = async () => {
-      if(userInfo && userInfo.id) {
+      if (userInfo && userInfo.id) {
         try {
           const { data, error } = await supabase.rpc("get_media_image", {
             this_user_id: userInfo?.id,
@@ -49,8 +49,11 @@ const Media = () => {
           if (data.length === 0) {
             setImages([]);
           } else {
-            console.log(data)
-            const images = data.map((image: any) => JSON.parse(image).publicUrl);
+            console.log(data);
+            const images = data.map((image: any) => {
+              const linkObj = JSON.parse(image.link);
+              return { publicUrl: linkObj.publicUrl, postId: image.post_id };
+            });
             setImages(images);
           }
         } catch (error) {
@@ -77,7 +80,14 @@ const Media = () => {
       ) : (
         <div className="mediaContainer">
           {images.map((image, index) => (
-            <Image className="smallimg" key={index} src={image} alt={`Image ${index + 1}`} ratio='1/1' />
+            <Image
+              className="smallimg"
+              key={index}
+              src={image.publicUrl}
+              alt={`Image ${index + 1}`}
+              ratio='1/1'
+              onClick={() => navigate(`/profile/${username}/post/${image.postId}`)}
+            />
           ))}
         </div>
       )}

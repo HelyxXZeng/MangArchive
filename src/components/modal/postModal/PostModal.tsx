@@ -236,6 +236,17 @@ const PostModal = (props: PostModalProps) => {
                     </IconButton>
                 </div>
                 <div className="mangaSuggest">
+                {mangaSuggestContent ? (
+                    <TextField
+                    placeholder="Enter comicId here (copy series code from link)"
+                    variant="outlined"
+                    fullWidth
+                    rows={1}
+                    value={mangaSuggestContent}
+                    className="mangaSuggestField"
+                    disabled
+                />
+                ) : (
                     <TextField
                         placeholder="Enter comicId here (copy series code from link)"
                         variant="outlined"
@@ -247,6 +258,7 @@ const PostModal = (props: PostModalProps) => {
                         error={Boolean(idError)}
                         helperText={idError}
                     />
+                )}
                     {idValid && comic && (
                         <ComicCard
                             cover={comic.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName}

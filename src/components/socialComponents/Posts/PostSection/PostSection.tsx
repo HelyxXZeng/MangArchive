@@ -6,15 +6,13 @@ import { useEffect, useState } from 'react';
 import useCheckSession from '../../../../hooks/session';
 import { supabase } from '../../../../utils/supabase';
 
-interface Props{
+interface Props {
     refreshList?: () => void;
+    manga_id?: string;  // Thêm manga_id vào Props
 }
-const PostSection = (prop:Props) => {
-    const onButtonClick =()=>{
-        console.log("Open Post Model")
-    }
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
+const PostSection = (prop: Props) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const handleOpen = () => setIsModalOpen(true);
     const handleClose = () => setIsModalOpen(false);
     const [userId, setUserId] = useState('');
@@ -44,6 +42,7 @@ const PostSection = (prop:Props) => {
 
         fetchUserId();
     }, [session]);
+
     useEffect(() => {
         const fetchProfileImages = async () => {
             try {
@@ -57,7 +56,6 @@ const PostSection = (prop:Props) => {
 
                             if (avatarLink || backgroundLink) {
                                 setProfileImages({ avatar: avatarLink, background: backgroundLink });
-                                // console.log({ avatar: avatarLink, background: backgroundLink });
                             }
                         }
                     }
@@ -68,41 +66,40 @@ const PostSection = (prop:Props) => {
         };
 
         fetchProfileImages();
-        // console.log(profileImages, realUserID)
     }, [realUserID]);
-  return (
-    <div className="postSectionComponent">
-        <div className="postpress">
-            <div className="avatarContainer">
-              <NavLink to="/profile/test"> 
-                <Avatar
-                  className="Avatar"
-                  src={profileImages?.avatar}
-                  alt="avatar"
-                  sx={{ width: "40px", height: "40px" }} />
-              </NavLink>
+    // console.log(prop.manga_id)
+    return (
+        <div className="postSectionComponent">
+            <div className="postpress">
+                <div className="avatarContainer">
+                    <NavLink to="/profile/test">
+                        <Avatar
+                            className="Avatar"
+                            src={profileImages?.avatar}
+                            alt="avatar"
+                            sx={{ width: "40px", height: "40px" }} />
+                    </NavLink>
+                </div>
+                <div className="press">
+                    <Button className="click"
+                        variant='contained'
+                        onClick={handleOpen}>
+                        <span className="text">What's your take? Share to enlighten others!</span>
+                    </Button>
+                    <PostModal open={isModalOpen} handleClose={handleClose} refreshList={prop.refreshList} mangaid={prop.manga_id} />
+                </div>
             </div>
-            <div className="press">
-                <Button className="click"
-                    variant='contained'
-                    onClick={handleOpen}>
-
-                <span className="text">What's your take? Share to enlighten others!</span>
-                </Button>
-                <PostModal open={isModalOpen} handleClose={handleClose} refreshList={prop.refreshList}/>
+            <h4> Or you can </h4>
+            <div className="navHistory">
+                <NavLink to="/history">
+                    <Button className="click"
+                        variant='contained'>
+                        <span className="text">Suggest your favorite Manga, Manhua, Manhwa to others!</span>
+                    </Button>
+                </NavLink>
             </div>
         </div>
-        <h4> Or you can </h4>
-        <div className="navHistory">
-            <NavLink to="/history">
-                <Button className="click"
-                    variant='contained'>
-                <span className="text">Suggest your favorite Manga, Manhua, Manhwa to others!</span>
-                </Button>
-            </NavLink>
-        </div>
-    </div>
-  );
+    );
 }
 
 export default PostSection;

@@ -50,25 +50,26 @@ const PostCard = ({
     }, [postId]);
 
     useEffect(() => {
-        const fetchPostImages = async () => {
-            try {
-                if (postId) {
-                    const { data, error } = await supabase.rpc('get_post_image', { post_id: postId });
-                    if (error) {
-                        console.error("Error fetching post images:", error);
-                    } else {
-                        const images = data.map((image: any) => JSON.parse(image).publicUrl);
-                        setPostImages(images);
-                        // console.log(postImages.length)
+        if (displayImage) {
+            const fetchPostImages = async () => {
+                try {
+                    if (postId) {
+                        const { data, error } = await supabase.rpc('get_post_image', { post_id: postId });
+                        if (error) {
+                            console.error("Error fetching post images:", error);
+                        } else {
+                            const images = data.map((image: any) => JSON.parse(image).publicUrl);
+                            setPostImages(images);
+                        }
                     }
+                } catch (error) {
+                    console.error("Error fetching post images:", error);
                 }
-            } catch (error) {
-                console.error("Error fetching post images:", error);
-            }
-        };
+            };
 
-        fetchPostImages();
-    }, [postId]);
+            fetchPostImages();
+        }
+    }, [postId, displayImage]);
 
     useEffect(() => {
         if (postInfo && postInfo.truyen) {
@@ -95,15 +96,14 @@ const PostCard = ({
         const fetchCommentsAndReplies = async () => {
             try {
                 if (postId) {
-                    const { data: comments, error: commentsError } = await supabase.rpc('get_comments_for_post', { this_limit: 0, this_offset: 0, this_post_id: postId });
+                    const { data: comments, error: commentsError } = await supabase.rpc('get_comments_for_post', { this_limit: 99999, this_offset: 0, this_post_id: postId });
                     if (commentsError) {
                         console.error("Error fetching comments:", commentsError);
                     }
-
                     let totalRepliesCount = 0;
                     if (comments && comments.length > 0) {
-                        const repliesPromises = comments.map(async (commentId: bigint) => {
-                            const { data: replies, error: repliesError } = await supabase.rpc('get_replies_for_comment', { this_limit: 0, this_offset: 0, this_comment_id: commentId });
+                        const repliesPromises = comments.map(async (comment: any) => {
+                            const { data: replies, error: repliesError } = await supabase.rpc('get_replies_for_comment', { this_limit: 99999, this_offset: 0, this_comment_id: comment });
                             if (repliesError) {
                                 console.error("Error fetching replies:", repliesError);
                             }
@@ -112,8 +112,8 @@ const PostCard = ({
                         const repliesCounts = await Promise.all(repliesPromises);
                         totalRepliesCount = repliesCounts.reduce((acc, count) => acc + count, 0);
                     }
-
                     setTotalComments(comments.length + totalRepliesCount);
+                    // console.log("postID: ",postId,comments,comments.length,totalRepliesCount)
                 }
             } catch (error) {
                 console.error("Error fetching comments and replies:", error);
@@ -144,7 +144,6 @@ const PostCard = ({
         }
     };
 
-    // Load user info/ lưu ý là user info của người khác, không phải của bản thân
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -163,7 +162,6 @@ const PostCard = ({
         fetchUserInfo();
     }, [postInfo]);
 
-    // Load avatar
     useEffect(() => {
         const fetchProfileImages = async () => {
             try {
@@ -190,6 +188,28 @@ const PostCard = ({
 
         fetchProfileImages();
     }, [userInfo, postInfo]);
+
+    const fetchLikeStatus = async () => {
+        try {
+            if (postId && userInfo?.this_id) {
+                const { data, error } = await supabase.rpc('check_like_for_post', {
+                    this_post_id: postId,
+                    this_user_id: userInfo.this_id
+                });
+                if (error) {
+                    console.error("Error checking like status:", error);
+                } else {
+                    setLiked(data);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching like status:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchLikeStatus();
+    }, [postId, userInfo]);
 
     const handleImageClick = (index: any) => {
         navigate(`/profile/${userInfo?.username}/post/${postId}`, { state: { displayImageIndex: index } });

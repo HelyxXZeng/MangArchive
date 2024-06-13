@@ -14,6 +14,7 @@ const Post = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [offset, setOffset] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [showPostSection, setShowPostSection] = useState<boolean>(false); // State to control visibility of PostSection
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -27,6 +28,8 @@ const Post = () => {
           if (error) console.error(error);
           else {
             setUserInfo(data);
+            // Set showPostSection to true only if email matches session user's email
+            setShowPostSection(data?.email === session.user.email);
           }
         }
       } catch (error) {
@@ -81,7 +84,7 @@ const Post = () => {
     return (
       <div className="postContainer">
         <div className="postsection">
-          <PostSection />
+          {showPostSection && <PostSection refreshList={() => fetchPostList(true)} />}
         </div>
         <div className="postlist">
           <div className='noPost'>No posts found</div>
@@ -93,7 +96,7 @@ const Post = () => {
   return (
     <div className="postContainer">
       <div className="postsection">
-        <PostSection refreshList={() => fetchPostList(true)} />
+        {showPostSection && <PostSection refreshList={() => fetchPostList(true)} />}
       </div>
       <div className="postlist">
         {postList.map((post, index) => (
