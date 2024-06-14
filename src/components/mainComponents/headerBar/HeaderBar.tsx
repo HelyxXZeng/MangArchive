@@ -3,9 +3,11 @@ import "./headerBar.scss";
 import { Avatar, Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useCheckSession from "../../../hooks/session";
+import { supabase } from "../../../utils/supabase";
 
 const HeaderBar = () => {
   const navigate = useNavigate();
+  const [realUserID, setRealUserID] = useState<any>(null);
   const onLoginButtonClick = useCallback(() => {
     navigate("/auth/login");
   }, [navigate]);
@@ -13,7 +15,7 @@ const HeaderBar = () => {
   const onSignUpContainerClick = useCallback(() => {
     navigate("/auth/signup");
   }, [navigate]);
-  const session  = useCheckSession();
+  const session = useCheckSession();
 
   const [status, setStatus] = useState<boolean>(false);
   useEffect(() => {
@@ -27,6 +29,57 @@ const HeaderBar = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
+  useEffect(() => {
+    const fetchUserId = async () => {
+      if (session !== null) {
+        try {
+          const { user } = session;
+          if (user) {
+            let { data, error } = await supabase.rpc("get_user_id_by_email", {
+              p_email: session.user.email,
+            });
+            if (error) console.error(error);
+            else {
+              setRealUserID(data);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching user ID:", error);
+        }
+      }
+    };
+    fetchUserId();
+  }, [session]);
+
+  const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
+
+  useEffect(() => {
+    const fetchProfileImages = async () => {
+      try {
+        if (realUserID) {
+          const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: realUserID });
+          if (error) console.error(error);
+          else {
+            if (data[0]) {
+              const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : "";
+              const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : "";
+              setProfileImages({ avatar: avatarLink || "", background: backgroundLink || "" });
+              // console.log(profileImages)
+
+            } else {
+              setProfileImages({ avatar: "", background: "" });
+            }
+          }
+        } else {
+          setProfileImages({ avatar: "", background: "" });
+        }
+      } catch (error) {
+        console.error("Error fetching profile images:", error);
+      }
+    };
+
+    fetchProfileImages();
+  }, [realUserID]);
 
   const handleSearch = () => {
     if (searchInput.trim() !== "") {
@@ -74,7 +127,7 @@ const HeaderBar = () => {
               </div>
               <Avatar
                 className="avatar"
-                src="https://cdn.donmai.us/original/5f/ea/__firefly_honkai_and_1_more_drawn_by_baba_ba_ba_mb__5feaaa99527187a3db0e437380ec3932.jpg"
+                src={profileImages?.avatar}
                 alt="avatar"
                 sx={{ width: "48px", height: "48px", border: "2px solid #1F1F1F" }}
               />
