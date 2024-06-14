@@ -64,7 +64,7 @@ const MangaSearchPage: React.FC = () => {
                     [],
                     [],
                     [],
-                    ["safe", "suggestive", "erotica", "pornographic"],
+                    ["safe", "suggestive", "erotica"], //, "pornographic"
                     excludedTags,
                     "OR",
                     includedTags,

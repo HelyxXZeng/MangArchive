@@ -36,7 +36,7 @@ const LatestManga: React.FC = () => {
             [],
             [],
             [],
-            ["safe", "suggestive", "erotica", "pornographic"]
+            ["safe", "suggestive", "erotica"] //, "pornographic"
         );
         setMangaList(mangas.data);
 
