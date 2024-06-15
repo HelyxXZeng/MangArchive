@@ -4,10 +4,11 @@ import './CustomSelect.scss';
 interface Props {
     options: any,
     value: any,
-    onChange: any
+    onChange: any,
+    color: any
 }
 
-const CustomSelect: React.FC<Props> = ({ options, value, onChange }) => {
+const CustomSelect: React.FC<Props> = ({ options, value, onChange, color }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOptionClick = (option: any) => {
@@ -17,15 +18,15 @@ const CustomSelect: React.FC<Props> = ({ options, value, onChange }) => {
 
     return (
         <div className="custom-select-container">
-            <div className="custom-select-header" onClick={() => setIsOpen(!isOpen)}>
+            <div className={color === 'orange' ? "custom-select-header2" : "custom-select-header"} onClick={() => setIsOpen(!isOpen)}>
                 {value || 'Select an option'}
             </div>
             {isOpen && (
-                <div className="custom-select-options">
+                <div className={color === 'orange' ? "custom-select-options2" : "custom-select-options"}>
                     {options.map((option: any) => (
                         <div
                             key={option}
-                            className="custom-select-option"
+                            className={color === 'orange' ? "custom-select-option2" : "custom-select-option"}
                             onClick={() => handleOptionClick(option)}
                         >
                             {option}

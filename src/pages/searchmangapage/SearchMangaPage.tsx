@@ -15,8 +15,8 @@ const MangaSearchPage: React.FC = () => {
     const excludedTags = queryParams.getAll("excludedTags");
 
     const [mangaTags, setMangaTags] = useState<any[]>([]);
-    const [thisIncludedTags, setThisIncludedTags] = useState<string[]>(includedTags);
-    const [thisExcludedTags, setThisExcludedTags] = useState<string[]>(excludedTags);
+    const [thisIncludedTags, setThisIncludedTags] = useState<string[]>(includedTags || []);
+    const [thisExcludedTags, setThisExcludedTags] = useState<string[]>(excludedTags || []);
 
     const [mangaList, setMangaList] = useState<any[]>([]);
     const [limit] = useState<number>(20); // Number of items per page
@@ -64,7 +64,7 @@ const MangaSearchPage: React.FC = () => {
                     [],
                     [],
                     [],
-                    ["safe", "suggestive", "erotica"], //, "pornographic"
+                    ["safe", "suggestive", "erotica", "pornographic"],
                     excludedTags,
                     "OR",
                     includedTags,
@@ -165,6 +165,7 @@ const MangaSearchPage: React.FC = () => {
             {mangaTags && mangaTags.length > 0 && (
                 <>
                     <div className={`tag-checkboxes ${show ? "show" : ""}`}>
+                        <p>For searching with each of the tags, click the tag once to have that tag included in the results, click the second time to exclude it, and the third time to normal</p>
                         {mangaTags.map((tag) => (
                             <TriStateCheckbox
                                 key={tag.id}
@@ -214,7 +215,7 @@ const MangaSearchPage: React.FC = () => {
                     <div className="manga-grid-container">
                         <div className="manga-grid">
                             {mangaList && mangaList.map((manga) => (
-                                <MangaCard key={manga.id} manga={manga} />
+                                <MangaCard key={manga.id} manga={manga} includedTags={includedTags} />
                             ))}
                         </div>
                     </div>

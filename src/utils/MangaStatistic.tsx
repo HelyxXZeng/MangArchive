@@ -8,7 +8,7 @@ const getStatsApi = async (slug: any) => {
         url: `${baseUrl}/statistics/manga/${slug}`
     });
 
-    const { rating, follows } = resp.data.statistics[slug];
+    // const { rating, follows } = resp.data.statistics[slug];
 
     // console.log(
     //     'Mean Rating:', rating.average, '\n' +
