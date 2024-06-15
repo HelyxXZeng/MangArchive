@@ -166,7 +166,7 @@ const MangaSearchPage: React.FC = () => {
             {mangaTags && mangaTags.length > 0 && (
                 <>
                     <div className={`tag-checkboxes ${show ? "show" : ""}`}>
-                        <p style={{ color: 'whitesmoke' }}>For searching with each of the tags, click the tag once to have that tag included in the results, click the second time to exclude it, and the third time to normal</p>
+                        <p style={{ color: 'whitesmoke' }}>For searching with each of the tags, click the tag once to have that tag included in the results, click the second time to exclude it, and the third time to back to normal</p>
                         {thisIncludedTags && thisExcludedTags && mangaTags.map((tag) => (
                             <TriStateCheckbox
                                 key={tag.id}
