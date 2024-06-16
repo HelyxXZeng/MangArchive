@@ -164,7 +164,7 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
                     const { data: imageId, error: rpcImageError } = await supabase.rpc('upload_comment_image', {
                         this_name: imageName,
                         this_comment_id: commentId,
-                        this_link: urlData.publicUrl,
+                        this_link: urlData,
                     });
 
                     if (rpcImageError) {
