@@ -499,7 +499,7 @@ const MangaDetails: React.FC<Props> = () => {
 
                                         <div className="heading">Comments</div>
                                         {comments.length === 0 ? (
-                                            <div className="noInfo">There are no posts yet</div>
+                                            <div className="noInfo">There are no comment yet</div>
                                         ) : (
                                             <div className="comments customScrollbar">
                                                 {comments.map((comment) => (
