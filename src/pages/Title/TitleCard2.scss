@@ -47,6 +47,27 @@
   z-index: 30;
 }
 
+.rating-tag {
+  background-color: $blue-main;
+  color: $text-white-new;
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  svg {
+    fill: $orange-yellow;
+  }
+
+  span {
+    font-size: 14px;
+  }
+}
+
 .manga-card-image {
   position: relative;
   width: 100%;
