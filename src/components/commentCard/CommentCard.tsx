@@ -7,7 +7,7 @@ import './commentCard.scss';
 interface CommentCardProps {
   className?: string;
   commentBoxRef?: any;
-  onReplyClick?: (userId:any, username:any) => void;
+  onReplyClick?: (userId: any, username: any) => void;
   commentID: number;
   replyCount?: number;
 }
@@ -24,7 +24,6 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
   useEffect(() => {
     const fetchCommentData = async () => {
       try {
-        // console.log(commentID)
         if (commentID) {
           const { data, error } = await supabase.rpc('get_comment_info', { this_comment_id: commentID });
           if (error) console.error("Error fetching comment data:", error);
@@ -46,8 +45,19 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
           if (error) {
             console.error("Error fetching comment images:", error);
           } else {
-            const Link = data[0] ? JSON.parse(data[0]).publicUrl : null;
-            setCommentImages(Link);
+            let imageUrl = '';
+            if (Array.isArray(data) && data.length > 0) {
+              const firstImage = data[0];
+              if (typeof firstImage === 'string') {
+                try {
+                  const parsedData = JSON.parse(firstImage);
+                  imageUrl = parsedData.publicUrl;
+                } catch {
+                  imageUrl = firstImage;
+                }
+              }
+            }
+            setCommentImages(imageUrl);
           }
         }
       } catch (error) {
@@ -137,7 +147,6 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
       onReplyClick(commentData.this_user, userInfo.username);
     }
   };
-  
 
   const handleLike = async () => {
     if (commentData && commentData.this_user) {
@@ -194,7 +203,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
         </div>
         {commentImages !== '' &&
           <div className="commentImage">
-              <img src={commentImages} alt="Comment visual content" />
+            <img src={commentImages} alt="Comment visual content" />
           </div>
         }
         <div className="option">
