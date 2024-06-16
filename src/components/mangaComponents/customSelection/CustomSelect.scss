@@ -17,12 +17,34 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
+.custom-select-header2 {
+    background-color: $orange-yellow;
+    color: $text-gray-trans;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
 .custom-select-options {
     position: absolute;
     background-color: $main-white;
     color: $text-gray-trans;
     width: 100%;
     border: 1px solid $blue-main;
+    border-radius: 5px;
+    margin-top: 5px;
+    z-index: 10;
+}
+
+.custom-select-options2 {
+    position: absolute;
+    background-color: $main-white;
+    color: $text-gray-trans;
+    width: 100%;
+    border: 1px solid $orange-yellow;
     border-radius: 5px;
     margin-top: 5px;
     z-index: 10;
@@ -36,6 +58,21 @@
     &:hover {
         background-color: $blue-main;
         color: $text-white-new;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 5px; // Increase gap between options
+    }
+}
+
+.custom-select-option2 {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: $orange-yellow;
+        // color: $text-white-new;
     }
 
     &:not(:last-child) {

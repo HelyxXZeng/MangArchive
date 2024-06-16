@@ -4,19 +4,22 @@ import Image from '../image/Image';
 import './TitleCard2.scss';
 import Tag from '../tag/Tag';
 import { getDataApi } from '../../utils/MangaData';
+import { getStatsApi } from '../../utils/MangaStatistic';
 import { Link, NavLink } from 'react-router-dom';
 
 interface Props {
   manga: any;
+  includedTags?: string[]; // Add this line
 }
 
-const MangaCard: React.FC<Props> = ({ manga }) => {
+const MangaCard: React.FC<Props> = ({ manga, includedTags = [] }) => {
   const [cover, setCover] = useState('');
   const [author, setAuthor] = useState('');
   const [artist, setArtist] = useState('');
   const [title, setTitle] = useState('');
   const [lastUpdated, setLastUpdated] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const [rating, setRating] = useState<number | null>(null);
 
   const getCover = async () => {
     manga.relationships.forEach((relate: any) => {
@@ -86,12 +89,27 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
     setShowPopup(false);
   };
 
+  const getStats = () => {
+    getStatsApi(manga.id)
+      .then((returnData: any) => {
+        // console.log(returnData);
+        if (returnData && returnData.rating) {
+          setRating(returnData.rating.average || returnData.rating.bayesian);
+        }
+      })
+      .catch((error: any) => {
+        console.error('Error:', error);
+      });
+  }
+
   useEffect(() => {
+    // console.log(manga);
     setAuthor(manga.relationships.find((r: any) => r.type === "author")?.attributes.name);
     setArtist(manga.relationships.find((r: any) => r.type === "artist")?.attributes.name);
     getCover();
     getTime();
     getTitle();
+    getStats();
   }, []);
 
   return (
@@ -109,8 +127,14 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
             </div>
           )}
           <div className="top-tag">
-            {/* <Tag key={manga.attributes.tags[0].id} tag={manga.attributes.tags[0]} /> */}
-            {/* <Tag tag = {manga.attributes.tags[0]}/> */}
+            {rating !== null && (
+              <div className="rating-tag">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-star-fill" viewBox="0 0 16 16">
+                  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.32-.158-.888.283-.95l4.898-.696 2.197-4.415c.197-.394.73-.394.927 0l2.197 4.415 4.898.696c.441.063.612.63.283.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                </svg>
+                <span>{rating.toFixed(2)}</span>
+              </div>
+            )}
           </div>
           <Image src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} ratio="4/6" />
         </div>
@@ -123,7 +147,7 @@ const MangaCard: React.FC<Props> = ({ manga }) => {
         <div className="manga-card-content">
           <div className="tags">
             {manga.attributes.tags.map((tag: any) => (
-              <Tag key={tag.id} tag={tag} />
+              <Tag key={tag.id} tag={tag} includedTags={includedTags} />
             ))}
           </div>
           <p style={{ color: 'black' }}>{lastUpdated}</p>

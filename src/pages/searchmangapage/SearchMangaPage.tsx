@@ -11,8 +11,8 @@ const MangaSearchPage: React.FC = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const title = queryParams.get("title") || "";
-    const includedTags = queryParams.getAll("includedTags");
-    const excludedTags = queryParams.getAll("excludedTags");
+    let includedTags = queryParams.getAll("includedTags");
+    let excludedTags = queryParams.getAll("excludedTags");
 
     const [mangaTags, setMangaTags] = useState<any[]>([]);
     const [thisIncludedTags, setThisIncludedTags] = useState<string[]>(includedTags);
@@ -87,8 +87,9 @@ const MangaSearchPage: React.FC = () => {
                 setError("Error fetching data. Please refresh the page.");
             }
         };
-        setThisIncludedTags(excludedTags);
+
         setThisIncludedTags(includedTags);
+        setThisExcludedTags(excludedTags);
         setSearchInput(title);
 
         fetchMangaData();
@@ -165,7 +166,8 @@ const MangaSearchPage: React.FC = () => {
             {mangaTags && mangaTags.length > 0 && (
                 <>
                     <div className={`tag-checkboxes ${show ? "show" : ""}`}>
-                        {mangaTags.map((tag) => (
+                        <p style={{ color: 'whitesmoke' }}>For searching with each of the tags, click the tag once to have that tag included in the results, click the second time to exclude it, and the third time to back to normal</p>
+                        {thisIncludedTags && thisExcludedTags && mangaTags.map((tag) => (
                             <TriStateCheckbox
                                 key={tag.id}
                                 tag={tag}
@@ -214,7 +216,7 @@ const MangaSearchPage: React.FC = () => {
                     <div className="manga-grid-container">
                         <div className="manga-grid">
                             {mangaList && mangaList.map((manga) => (
-                                <MangaCard key={manga.id} manga={manga} />
+                                <MangaCard key={manga.id} manga={manga} includedTags={includedTags} />
                             ))}
                         </div>
                     </div>

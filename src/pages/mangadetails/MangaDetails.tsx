@@ -11,6 +11,8 @@ import PostCard from "../../components/socialComponents/Posts/PostCard/PostCard"
 import PostSection from "../../components/socialComponents/Posts/PostSection/PostSection";
 import CommentBox from "../../components/commentFunc/CommentFunc";
 import CommentCard from "../../components/commentCard/CommentCard";
+import { getStatsApi } from "../../utils/MangaStatistic";
+import RatingStars from "./RatingStars";
 
 interface Props { }
 
@@ -28,6 +30,8 @@ const MangaDetails: React.FC<Props> = () => {
 
     const [collection, setCollection] = useState("");
     const [rating, setRating] = useState(0);
+
+    const [averageRating, setAverageRating] = useState(0);
 
     const [userID, setUserID] = useState<number | null>(null);
     const [placeholder, setPlaceholder] = useState<string>('Nhập bình luận...');
@@ -75,6 +79,17 @@ const MangaDetails: React.FC<Props> = () => {
             })
             .catch((error) => {
                 console.error("Error:", error);
+            });
+
+        getStatsApi(manga_id)
+            .then((returnData: any) => {
+                // console.log(returnData);
+                if (returnData && returnData.rating) {
+                    setAverageRating(returnData.rating.average || returnData.rating.bayesian);
+                }
+            })
+            .catch((error: any) => {
+                console.error('Error:', error);
             });
     };
 
@@ -268,7 +283,7 @@ const MangaDetails: React.FC<Props> = () => {
             } else {
                 setReplies((prevReplies) => {
                     const existingReplies = prevReplies[commentId] || [];
-                    const newReplies = data.filter(reply => !existingReplies.some(existingReply => existingReply.id === reply.id));
+                    const newReplies = data.filter((reply: any) => !existingReplies.some(existingReply => existingReply.id === reply.id));
                     return {
                         ...prevReplies,
                         [commentId]: [...existingReplies, ...newReplies],
@@ -368,6 +383,7 @@ const MangaDetails: React.FC<Props> = () => {
                                         ? setCollection("")
                                         : setCollection(option)
                                 }
+                                color='blue'
                             />
                         </div>
                         <div className="choose-collection">
@@ -395,8 +411,10 @@ const MangaDetails: React.FC<Props> = () => {
                                     const newRating = match ? parseInt(match[1], 10) : 0;
                                     setRating(newRating);
                                 }}
+                                color='orange'
                             />
                         </div>
+                        <RatingStars averageRating={averageRating} />
                     </div>
 
                     {manga && <p>{manga.attributes.description.en}</p>}
@@ -408,6 +426,9 @@ const MangaDetails: React.FC<Props> = () => {
                             </span>
                             <span style={{ color: "white", marginLeft: "20px" }}>
                                 Status: {manga.attributes.status}
+                            </span>
+                            <span style={{ color: "white", marginLeft: "20px" }}>
+                                Rating: {averageRating.toFixed(2)}
                             </span>
                         </div>
                         <div className="chapter-container">
@@ -499,7 +520,7 @@ const MangaDetails: React.FC<Props> = () => {
 
                                         <div className="heading">Comments</div>
                                         {comments.length === 0 ? (
-                                            <div className="noInfo">There are no posts yet</div>
+                                            <div className="noInfo">There are no comments yet</div>
                                         ) : (
                                             <div className="comments customScrollbar">
                                                 {comments.map((comment) => (

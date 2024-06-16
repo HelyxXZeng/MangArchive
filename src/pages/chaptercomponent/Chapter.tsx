@@ -87,8 +87,13 @@ const Chapter: React.FC<Props> = ({ data, chapterNumber, mangaID, userID }) => {
                             display: "none",
                         }}
                     ></div>
+                    <img
+                        src={bookmarks[chap.id] ? "/icons/eye-slash.svg" : "/icons/eye.svg"}
+                        alt="icon"
+                        style={{ marginRight: "5px" }}
+                    />
                     <h3>{chap.translatedLanguage}</h3>
-                    <div style={{ width: "80%" }}>
+                    <div style={{ width: "85%" }}>
                         <div
                             onClick={() =>
                                 handleNavLinkClick(
@@ -109,11 +114,6 @@ const Chapter: React.FC<Props> = ({ data, chapterNumber, mangaID, userID }) => {
                             <h2>{chap.volume ? "Volume " + chap.volume : "No volume"}</h2>
                         </div>
                     </div>
-                    <img
-                        src={bookmarks[chap.id] ? "/icons/eye-slash.svg" : "/icons/eye.svg"}
-                        alt="icon"
-                        style={{ marginLeft: "10%", marginRight: "5px" }}
-                    />
                 </div>
             ))}
         </div>
