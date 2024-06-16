@@ -18,7 +18,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
   const [likeCount, setLikeCount] = useState<number>(0);
   const [profileImages, setProfileImages] = useState<{ avatar: string | null; background: string | null }>({ avatar: null, background: null });
   const [userInfo, setUserInfo] = useState<any>(null);
-  const [commentImages, setCommentImages] = useState<string[]>([]);
+  const [commentImages, setCommentImages] = useState<string>('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,7 +46,8 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
           if (error) {
             console.error("Error fetching comment images:", error);
           } else {
-            setCommentImages(data || []);
+            const Link = data[0] ? JSON.parse(data[0]).publicUrl : null;
+            setCommentImages(Link);
           }
         }
       } catch (error) {
@@ -191,11 +192,9 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
             <span>{commentData.content}</span>
           </div>
         </div>
-        {commentImages.length > 0 &&
+        {commentImages !== '' &&
           <div className="commentImage">
-            {commentImages.map((image, index) => (
-              <img key={index} src={image} alt="Comment visual content" />
-            ))}
+              <img src={commentImages} alt="Comment visual content" />
           </div>
         }
         <div className="option">
