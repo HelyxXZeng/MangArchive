@@ -15,15 +15,27 @@
     padding: 0px 16px;
     // margin: 0px 8px;
     .logo{
+        display: flex;
         justify-content: center;
         align-items: center;
+        .Icon{
+            height: 47px;
+        }
         @media (max-width: 959px) {
-            img{
+            .Icon-text{
                 max-width: 96px;
+            }
+            .Icon{
+                max-height: 32px;
             }
         }
         @media (max-width: 767px) {
-            display: none;
+            .Icon-text{
+                display: none;
+            }
+            .Icon{
+                max-height: 24px;
+            }
         }
     }
 
