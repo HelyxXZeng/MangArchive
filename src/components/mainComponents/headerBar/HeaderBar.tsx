@@ -51,21 +51,32 @@ const HeaderBar = () => {
     fetchUserId();
   }, [session]);
 
-  const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
+  const [profileImages, setProfileImages] = useState<{
+    avatar: string;
+    background: string;
+  } | null>(null);
 
   useEffect(() => {
     const fetchProfileImages = async () => {
       try {
         if (realUserID) {
-          const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: realUserID });
+          const { data, error } = await supabase.rpc("get_profile_image", {
+            this_user_id: realUserID,
+          });
           if (error) console.error(error);
           else {
             if (data[0]) {
-              const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : "";
-              const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : "";
-              setProfileImages({ avatar: avatarLink || "", background: backgroundLink || "" });
+              const avatarLink = data[0].avatar_link
+                ? JSON.parse(data[0].avatar_link).publicUrl
+                : "";
+              const backgroundLink = data[0].background_link
+                ? JSON.parse(data[0].background_link).publicUrl
+                : "";
+              setProfileImages({
+                avatar: avatarLink || "",
+                background: backgroundLink || "",
+              });
               // console.log(profileImages)
-
             } else {
               setProfileImages({ avatar: "", background: "" });
             }
@@ -90,7 +101,8 @@ const HeaderBar = () => {
   return (
     <div className="headerBar">
       <div className="logo">
-        <img src="/Logo.png" alt="Logo" />
+        <img src="/MangArchive-Icon.svg" alt="" className="Icon" />
+        <img src="/Logo.png" alt="Logo" className="Icon-text"/>
       </div>
       <div className="leftContainer">
         <div className="searchbar">
@@ -129,7 +141,11 @@ const HeaderBar = () => {
                 className="avatar"
                 src={profileImages?.avatar}
                 alt="avatar"
-                sx={{ width: "48px", height: "48px", border: "2px solid #1F1F1F" }}
+                sx={{
+                  width: "48px",
+                  height: "48px",
+                  border: "2px solid #1F1F1F",
+                }}
               />
             </div>
           ) : (
@@ -139,11 +155,11 @@ const HeaderBar = () => {
                 onClick={onLoginButtonClick}
                 className="button"
                 sx={{
-                  '&.MuiButton-contained': {
-                    backgroundColor: '#1b6fa8',
-                    color: '#fff',
-                    '&:hover': {
-                      backgroundColor: '#4296cf',
+                  "&.MuiButton-contained": {
+                    backgroundColor: "#1b6fa8",
+                    color: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#4296cf",
                     },
                   },
                 }}
@@ -155,12 +171,12 @@ const HeaderBar = () => {
                 onClick={onSignUpContainerClick}
                 className="button"
                 sx={{
-                  '&.MuiButton-contained': {
-                    backgroundColor: 'transparent',
-                    color: '#1F1F1F',
-                    border: '1px solid #1F1F1F',
-                    '&:hover': {
-                      backgroundColor: '#f0f0f0',
+                  "&.MuiButton-contained": {
+                    backgroundColor: "transparent",
+                    color: "#1F1F1F",
+                    border: "1px solid #1F1F1F",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
                     },
                   },
                 }}
