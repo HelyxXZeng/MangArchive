@@ -9,6 +9,7 @@ import {
 } from "../../api/commentAPI";
 import "./commentCard.scss";
 import { fetchUserInfo, fetchUserProfileImages } from "../../api/userAPI";
+import { getCommentImageUrl } from "../../utils/imageLinkPhraser";
 
 interface CommentCardProps {
   className?: string;
@@ -51,7 +52,8 @@ const CommentCard: React.FC<CommentCardProps> = ({
           );
           if (imagesError)
             return console.error("Error fetching comment images:", imagesError);
-          setCommentImages(images?.[0]?.publicUrl || "");
+          const imageUrl = getCommentImageUrl(images);
+          setCommentImages(imageUrl);
 
           const { data: user, error: userError } = await fetchUserInfo(
             comment[0].this_user

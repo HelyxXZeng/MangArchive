@@ -39,6 +39,7 @@ const Login: FunctionComponent = () => {
                 setErrors((prevErrors) => ({
                   ...prevErrors,
                   email: "Invalid email or password",
+                  password: "Invalid email or password",
                 }));
               }
             } catch (error) {
@@ -46,6 +47,7 @@ const Login: FunctionComponent = () => {
               setErrors((prevErrors) => ({
                 ...prevErrors,
                 email: "Invalid email or password",
+                password: "Invalid email or password",
               }));
             }
           } else {
@@ -83,6 +85,7 @@ const Login: FunctionComponent = () => {
               setErrors((prevErrors) => ({
                 ...prevErrors,
                 email: "Invalid username or password",
+                password: "Invalid username or password",
               }));
             }
           }
