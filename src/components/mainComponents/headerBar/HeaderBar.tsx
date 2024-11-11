@@ -102,7 +102,7 @@ const HeaderBar = () => {
     <div className="headerBar">
       <div className="logo">
         <img src="/MangArchive-Icon.svg" alt="" className="Icon" />
-        <img src="/Logo.png" alt="Logo" className="Icon-text"/>
+        <img src="/Logo.png" alt="Logo" className="Icon-text" />
       </div>
       <div className="leftContainer">
         <div className="searchbar">
