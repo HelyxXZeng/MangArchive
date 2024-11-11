@@ -17,7 +17,7 @@ import {
 } from "../../api/commentAPI";
 import { uploadImage } from "../../api/fileUploadAPI";
 import { fetchUserProfileImages } from "../../api/userAPI";
-import { getCommentImageUrl } from "../../utils/imageLinkPhraser";
+import { phraseImageUrl } from "../../utils/imageLinkPhraser";
 
 interface CommentBoxProps {
   postId?: string | any;
@@ -175,9 +175,9 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
           if (error) {
             console.error("Error fetching profile images:", error);
           } else {
-            // Dùng getCommentImageUrl để xử lý dữ liệu trả về
+            // Dùng phraseImageUrl để xử lý dữ liệu trả về
             if (data[0]) {
-              const avatarLink = getCommentImageUrl(data[0].avatar_link);
+              const avatarLink = phraseImageUrl(data[0].avatar_link);
               setProfileImages({
                 avatar: avatarLink || "",
               });

@@ -9,7 +9,7 @@ import {
 } from "../../api/commentAPI";
 import "./commentCard.scss";
 import { fetchUserInfo, fetchUserProfileImages } from "../../api/userAPI";
-import { getCommentImageUrl } from "../../utils/imageLinkPhraser";
+import { phraseImageUrl } from "../../utils/imageLinkPhraser";
 
 interface CommentCardProps {
   className?: string;
@@ -30,8 +30,8 @@ const CommentCard: React.FC<CommentCardProps> = ({
   const [likeCount, setLikeCount] = useState<number>(0);
   const [profileImages, setProfileImages] = useState<{
     avatar: string | null;
-    background: string | null;
-  }>({ avatar: null, background: null });
+  }>({ avatar: null });
+
   const [userInfo, setUserInfo] = useState<any>(null);
   const [commentImages, setCommentImages] = useState<string>("");
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
           );
           if (imagesError)
             return console.error("Error fetching comment images:", imagesError);
-          const imageUrl = getCommentImageUrl(images);
+          const imageUrl = phraseImageUrl(images);
           setCommentImages(imageUrl);
 
           const { data: user, error: userError } = await fetchUserInfo(
@@ -69,13 +69,9 @@ const CommentCard: React.FC<CommentCardProps> = ({
               "Error fetching profile images:",
               profileError
             );
+          // console.log("final", phraseImageUrl(profile[0]?.avatar_link));
           setProfileImages({
-            avatar: profile[0]?.avatar_link
-              ? JSON.parse(profile[0].avatar_link).publicUrl
-              : null,
-            background: profile[0]?.background_link
-              ? JSON.parse(profile[0].background_link).publicUrl
-              : null,
+            avatar: phraseImageUrl(profile[0]?.avatar_link),
           });
 
           const { data: liked, error: likeError } = await checkLikeStatus(
