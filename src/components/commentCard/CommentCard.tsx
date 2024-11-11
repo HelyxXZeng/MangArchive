@@ -1,8 +1,14 @@
-import { useEffect, useState } from 'react';
-import { Avatar } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { supabase } from '../../utils/supabase';
-import './commentCard.scss';
+import { useEffect, useState } from "react";
+import { Avatar } from "@mui/material";
+import { NavLink, useNavigate } from "react-router-dom";
+import {
+  fetchCommentData,
+  fetchCommentImages,
+  checkLikeStatus,
+  addLikeForComment,
+} from "../../api/commentAPI";
+import "./commentCard.scss";
+import { fetchUserInfo, fetchUserProfileImages } from "../../api/userAPI";
 
 interface CommentCardProps {
   className?: string;
@@ -12,131 +18,80 @@ interface CommentCardProps {
   replyCount?: number;
 }
 
-const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onReplyClick, commentID, replyCount }) => {
+const CommentCard: React.FC<CommentCardProps> = ({
+  className,
+  onReplyClick,
+  commentID,
+  replyCount,
+}) => {
   const [commentData, setCommentData] = useState<any>(null);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(0);
-  const [profileImages, setProfileImages] = useState<{ avatar: string | null; background: string | null }>({ avatar: null, background: null });
+  const [profileImages, setProfileImages] = useState<{
+    avatar: string | null;
+    background: string | null;
+  }>({ avatar: null, background: null });
   const [userInfo, setUserInfo] = useState<any>(null);
-  const [commentImages, setCommentImages] = useState<string>('');
+  const [commentImages, setCommentImages] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCommentData = async () => {
+    const loadData = async () => {
       try {
         if (commentID) {
-          const { data, error } = await supabase.rpc('get_comment_info', { this_comment_id: commentID });
-          if (error) console.error("Error fetching comment data:", error);
-          else setCommentData(data[0]);
-        }
-      } catch (error) {
-        console.error("Error fetching comment data:", error);
-      }
-    };
+          const { data: comment, error: commentError } = await fetchCommentData(
+            commentID
+          );
+          if (commentError)
+            return console.error("Error fetching comment data:", commentError);
+          setCommentData(comment[0]);
 
-    fetchCommentData();
-  }, [commentID]);
+          const { data: images, error: imagesError } = await fetchCommentImages(
+            commentID
+          );
+          if (imagesError)
+            return console.error("Error fetching comment images:", imagesError);
+          setCommentImages(images?.[0]?.publicUrl || "");
 
-  useEffect(() => {
-    const fetchCommentImages = async () => {
-      try {
-        if (commentID) {
-          const { data, error } = await supabase.rpc('get_comment_image', { comment_id: commentID });
-          if (error) {
-            console.error("Error fetching comment images:", error);
-          } else {
-            let imageUrl = '';
-            if (Array.isArray(data) && data.length > 0) {
-              const firstImage = data[0];
-              if (typeof firstImage === 'string') {
-                try {
-                  const parsedData = JSON.parse(firstImage);
-                  imageUrl = parsedData.publicUrl;
-                } catch {
-                  imageUrl = firstImage;
-                }
-              }
-            }
-            setCommentImages(imageUrl);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching comment images:", error);
-      }
-    };
+          const { data: user, error: userError } = await fetchUserInfo(
+            comment[0].this_user
+          );
+          if (userError)
+            return console.error("Error fetching user info:", userError);
+          setUserInfo(user[0]);
 
-    fetchCommentImages();
-  }, [commentID]);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      if (commentData) {
-        try {
-          const { data, error } = await supabase.rpc("get_user_info", { this_user_id: commentData.this_user });
-          if (error) console.error(error);
-          else {
-            setUserInfo(data[0]);
-          }
-        } catch (error) {
-          console.error("Error fetching user info:", error);
-        }
-      }
-    };
-
-    fetchUserInfo();
-  }, [commentData]);
-
-  useEffect(() => {
-    const fetchProfileImages = async () => {
-      if (commentData) {
-        try {
-          const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: commentData.this_user });
-          if (error) console.error(error);
-          else {
-            if (data[0]) {
-              const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : null;
-              const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : null;
-
-              if (avatarLink || backgroundLink) {
-                setProfileImages({ avatar: avatarLink, background: backgroundLink });
-              }
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching profile images:", error);
-        }
-      }
-    };
-
-    fetchProfileImages();
-  }, [commentData]);
-
-  useEffect(() => {
-    if (commentData) {
-      setLikeCount(commentData.likecount);
-    }
-  }, [commentData]);
-
-  useEffect(() => {
-    const checkLikeStatus = async () => {
-      if (commentData && commentData.this_user) {
-        try {
-          const { data, error } = await supabase.rpc('check_like_for_comment', {
-            this_comment_id: commentID,
-            this_user_id: commentData.this_user
+          const { data: profile, error: profileError } =
+            await fetchUserProfileImages(comment[0].this_user);
+          if (profileError)
+            return console.error(
+              "Error fetching profile images:",
+              profileError
+            );
+          setProfileImages({
+            avatar: profile[0]?.avatar_link
+              ? JSON.parse(profile[0].avatar_link).publicUrl
+              : null,
+            background: profile[0]?.background_link
+              ? JSON.parse(profile[0].background_link).publicUrl
+              : null,
           });
-          if (error) console.error("Error checking like status:", error);
-          else setIsLiked(data);
-        } catch (error) {
-          console.error("Error checking like status:", error);
+
+          const { data: liked, error: likeError } = await checkLikeStatus(
+            commentID,
+            comment[0].this_user
+          );
+          if (likeError)
+            return console.error("Error checking like status:", likeError);
+          setIsLiked(liked);
+          setLikeCount(comment[0].likecount);
         }
+      } catch (error) {
+        console.error("Error loading data:", error);
       }
     };
 
-    if (commentData && commentData.this_user) {
-      checkLikeStatus();
-    }
-  }, [commentData, commentID]);
+    loadData();
+  }, [commentID]);
 
   const handleProfileNavigate = () => {
     navigate(`/profile/${userInfo.username}`);
@@ -149,18 +104,11 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
   };
 
   const handleLike = async () => {
-    if (commentData && commentData.this_user) {
+    if (commentData?.this_user) {
       try {
-        const { data, error } = await supabase.rpc('add_interact_for_comment', {
-          this_comment_id: commentID,
-          this_user_id: commentData.this_user,
-          this_type: 'like'
-        });
-        if (error) console.error("Error liking comment:", error);
-        else {
-          setLikeCount(prevCount => prevCount + 1);
-          setIsLiked(true);
-        }
+        await addLikeForComment(commentID, commentData.this_user);
+        setLikeCount((prev) => prev + 1);
+        setIsLiked(true);
       } catch (error) {
         console.error("Error liking comment:", error);
       }
@@ -170,7 +118,8 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
   if (!commentData || !userInfo) {
     return <div>Loading...</div>;
   }
-  const level = !isNaN(Math.floor(userInfo?.level / 100)) ? Math.floor(userInfo?.level / 100) : 0;
+
+  const level = Math.floor((userInfo?.level || 0) / 100);
 
   return (
     <div className={`commentCardContainer ${className}`}>
@@ -178,7 +127,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
         <NavLink to={`/profile/${commentData.this_user}`}>
           <Avatar
             className="Avatar"
-            src={profileImages.avatar || "https://cdn.donmai.us/original/5f/ea/__firefly_honkai_and_1_more_drawn_by_baba_ba_ba_mb__5feaaa99527187a3db0e437380ec3932.jpg"}
+            src={profileImages.avatar || "default_avatar_url"}
             alt="avatar"
             sx={{ width: "40px", height: "40px" }}
           />
@@ -188,30 +137,42 @@ const CommentCard: React.FC<CommentCardProps> = ({ className, commentBoxRef, onR
         <div className="mainCommentContainer">
           <div className="header" onClick={handleProfileNavigate}>
             <div className="nameNId">
-              <div className="userNameChild">
-                <span className="name">{userInfo.name}</span>
-                <span className="idName">@{userInfo.username}</span>
-                <span className="level">
-                  LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span>
+              <span className="name">{userInfo.name}</span>
+              <span className="idName">@{userInfo.username}</span>
+              <span className="level">
+                LV
+                <span
+                  className={`textHighlight ${
+                    level < 4
+                      ? "bluetext"
+                      : level < 7
+                      ? "yellowtext"
+                      : "redtext"
+                  }`}
+                >
+                  {level}
                 </span>
-              </div>
+              </span>
             </div>
           </div>
           <div className="CommentContent">
             <span>{commentData.content}</span>
           </div>
         </div>
-        {commentImages !== '' &&
+        {commentImages && (
           <div className="commentImage">
             <img src={commentImages} alt="Comment visual content" />
           </div>
-        }
+        )}
         <div className="option">
           <div className="datetime">
-            {new Date(commentData.this_time).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+            {new Date(commentData.this_time).toLocaleDateString("en-US")}
           </div>
           <div className="like" onClick={handleLike}>
-            <img src={isLiked ? "/icons/heart-pink.svg" : "/icons/heart.svg"} alt="like" />
+            <img
+              src={isLiked ? "/icons/heart-pink.svg" : "/icons/heart.svg"}
+              alt="like"
+            />
             <span className="number">{likeCount}</span>
           </div>
           <div className="reply" onClick={handleReply}>

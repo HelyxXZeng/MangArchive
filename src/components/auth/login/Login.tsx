@@ -16,51 +16,21 @@ const Login: FunctionComponent = () => {
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
-  const onLoginButtonClick = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({ email: "", password: "" }); // Clear previous errors
+  const onLoginButtonClick = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      setErrors({ email: "", password: "" }); // Clear previous errors
 
-    try {
-      if (email && password) {
-        const isEmail = email.includes("@");
+      try {
+        if (email && password) {
+          const isEmail = email.includes("@");
 
-        if (isEmail) {
-          try {
-            const response = await supabase.auth.signInWithPassword({
-              email: email,
-              password: password,
-            });
-            if (response.error) throw response.error;
-
-            if (response.data.user) {
-              navigate(`/`, { replace: true });
-            } else {
-              setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: "Invalid email or password",
-              }));
-            }
-          } catch (error) {
-            console.error("Error:", error);
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              email: "Invalid email or password",
-            }));
-          }
-        } else {
-          try {
-            const { data, error } = await supabase
-              .from("User")
-              .select("email")
-              .eq("username", email);
-
-            if (error) throw error;
-            if (data && data.length > 0) {
+          if (isEmail) {
+            try {
               const response = await supabase.auth.signInWithPassword({
-                email: data[0].email,
+                email: email,
                 password: password,
               });
-
               if (response.error) throw response.error;
 
               if (response.data.user) {
@@ -68,44 +38,77 @@ const Login: FunctionComponent = () => {
               } else {
                 setErrors((prevErrors) => ({
                   ...prevErrors,
-                  email: "Invalid username or password",
+                  email: "Invalid email or password",
                 }));
               }
-            } else {
+            } catch (error) {
+              console.error("Error:", error);
               setErrors((prevErrors) => ({
                 ...prevErrors,
-                email: "Username does not exist",
+                email: "Invalid email or password",
               }));
             }
-          } catch (error) {
-            console.error("Error:", error);
+          } else {
+            try {
+              const { data, error } = await supabase
+                .from("User")
+                .select("email")
+                .eq("username", email);
+
+              if (error) throw error;
+              if (data && data.length > 0) {
+                const response = await supabase.auth.signInWithPassword({
+                  email: data[0].email,
+                  password: password,
+                });
+
+                if (response.error) throw response.error;
+
+                if (response.data.user) {
+                  navigate(`/`, { replace: true });
+                } else {
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    email: "Invalid username or password",
+                  }));
+                }
+              } else {
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  email: "Username does not exist",
+                }));
+              }
+            } catch (error) {
+              console.error("Error:", error);
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                email: "Invalid username or password",
+              }));
+            }
+          }
+        } else {
+          if (!email) {
             setErrors((prevErrors) => ({
               ...prevErrors,
-              email: "Invalid username or password",
+              email: "Email or Username is required",
+            }));
+          }
+          if (!password) {
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              password: "Password is required",
             }));
           }
         }
-      } else {
-        if (!email) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            email: "Email or Username is required",
-          }));
-        }
-        if (!password) {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            password: "Password is required",
-          }));
-        }
+      } catch (error: any) {
+        console.error("Error signing in:", error.message);
       }
-    } catch (error: any) {
-      console.error("Error signing in:", error.message);
-    }
-  }, [email, password, navigate]);
+    },
+    [email, password, navigate]
+  );
 
   const onGoogleLoginContainerClick = useCallback(() => {
-    // Xử lý đăng nhập bằng Google
+    alert("Tính năng hiện chưa được hỗ trợ");
   }, []);
 
   const onSignUpClick = useCallback(() => {
@@ -191,11 +194,11 @@ const Login: FunctionComponent = () => {
               variant="contained"
               onClick={onLoginButtonClick}
               sx={{
-                '&.MuiButton-contained': {
-                  backgroundColor: '#1b6fa8',
-                  color: '#fff',
-                  '&:hover': {
-                    backgroundColor: '#4296cf',
+                "&.MuiButton-contained": {
+                  backgroundColor: "#1b6fa8",
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#4296cf",
                   },
                 },
               }}
@@ -206,17 +209,21 @@ const Login: FunctionComponent = () => {
               variant="contained"
               onClick={onGoogleLoginContainerClick}
               sx={{
-                '&.MuiButton-contained': {
-                  backgroundColor: 'transparent',
-                  color: '#1F1F1F',
-                  border: '1px solid #1F1F1F',
-                  '&:hover': {
-                    backgroundColor: '#f0f0f0',
+                "&.MuiButton-contained": {
+                  backgroundColor: "transparent",
+                  color: "#1F1F1F",
+                  border: "1px solid #1F1F1F",
+                  "&:hover": {
+                    backgroundColor: "#f0f0f0",
                   },
                 },
               }}
             >
-              <img className="google-icon" alt="" src="/icons/logo_google_icon.png" />
+              <img
+                className="google-icon"
+                alt=""
+                src="/icons/logo_google_icon.png"
+              />
               <div className="log-in-with-google-wrapper">
                 <div className="log-in-with">Log in with Google</div>
               </div>
@@ -225,7 +232,9 @@ const Login: FunctionComponent = () => {
           <div className="otherOption">
             <div className="signup">
               Don't have an account?
-              <span onClick={onSignUpClick}><b> Sign up</b></span>
+              <span onClick={onSignUpClick}>
+                <b> Sign up</b>
+              </span>
             </div>
           </div>
         </div>
