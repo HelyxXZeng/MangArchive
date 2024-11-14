@@ -14,6 +14,7 @@ import CommentCard from "../../components/commentCard/CommentCard";
 import { getStatsApi } from "../../utils/MangaStatistic";
 import RatingStars from "./RatingStars";
 import ProtectedRoute from "../../hooks/protectRouter";
+import { fetchUserIdByEmail } from "../../api/userAPI";
 
 interface Props {}
 
@@ -135,12 +136,12 @@ const MangaDetails: React.FC<Props> = () => {
           console.error(sessionError);
           return;
         }
-        if (sessionData && sessionData.user) {
+        if (sessionData && sessionData.user?.email) {
           // console.log(sessionData.user.email);
 
-          let { data, error } = await supabase.rpc("get_user_id_by_email", {
-            p_email: sessionData.user.email,
-          });
+          const { error, data } = await fetchUserIdByEmail(
+            sessionData.user.email
+          );
           if (error) console.error(error);
           else {
             setUserID(data);

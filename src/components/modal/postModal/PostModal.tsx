@@ -17,6 +17,7 @@ import useCheckSession from "../../../hooks/session";
 import { supabase } from "../../../utils/supabase";
 import { fetchMangaById } from "../../../api/mangaAPI";
 import { uploadImage } from "../../../api/fileUploadAPI";
+import { fetchUserIdByEmail } from "../../../api/userAPI";
 
 interface PostModalProps {
   open: boolean;
@@ -66,25 +67,18 @@ const PostModal = (props: PostModalProps) => {
   }, []);
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      if (session !== null) {
+    const getUserID = async () => {
+      if (session && session.user) {
         try {
-          const { user } = session;
-          if (user) {
-            let { data, error } = await supabase.rpc("get_user_id_by_email", {
-              p_email: session.user.email,
-            });
-            if (error) console.error(error);
-            else {
-              setRealUserID(data);
-            }
-          }
+          const userId = await fetchUserIdByEmail(session.user.email);
+          setRealUserID(userId);
         } catch (error) {
           console.error("Error fetching user ID:", error);
         }
       }
     };
-    fetchUserId();
+
+    getUserID();
   }, [session]);
 
   useEffect(() => {

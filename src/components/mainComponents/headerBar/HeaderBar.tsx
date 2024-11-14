@@ -3,7 +3,11 @@ import "./headerBar.scss";
 import { Avatar, Badge, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useCheckSession from "../../../hooks/session";
-import { supabase } from "../../../utils/supabase";
+import {
+  fetchUserIdByEmail,
+  fetchUserProfileImages,
+} from "../../../api/userAPI";
+import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 
 const HeaderBar = () => {
   const navigate = useNavigate();
@@ -25,64 +29,47 @@ const HeaderBar = () => {
   }, [session]);
   const [notificationCount, setNotificationCount] = useState(1);
   const [searchInput, setSearchInput] = useState<string>("");
+  const [profileImages, setProfileImages] = useState<{
+    avatar: string;
+  } | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
   useEffect(() => {
-    const fetchUserId = async () => {
-      if (session !== null) {
+    const getUserID = async () => {
+      if (session && session.user) {
         try {
-          const { user } = session;
-          if (user) {
-            let { data, error } = await supabase.rpc("get_user_id_by_email", {
-              p_email: session.user.email,
-            });
-            if (error) console.error(error);
-            else {
-              setRealUserID(data);
-            }
-          }
+          const userId = await fetchUserIdByEmail(session.user.email);
+          setRealUserID(userId);
         } catch (error) {
           console.error("Error fetching user ID:", error);
         }
       }
     };
-    fetchUserId();
-  }, [session]);
 
-  const [profileImages, setProfileImages] = useState<{
-    avatar: string;
-    background: string;
-  } | null>(null);
+    getUserID();
+  }, [session]);
 
   useEffect(() => {
     const fetchProfileImages = async () => {
       try {
         if (realUserID) {
-          const { data, error } = await supabase.rpc("get_profile_image", {
-            this_user_id: realUserID,
-          });
+          const { data, error } = await fetchUserProfileImages(realUserID);
           if (error) console.error(error);
           else {
             if (data[0]) {
-              const avatarLink = data[0].avatar_link
-                ? JSON.parse(data[0].avatar_link).publicUrl
-                : "";
-              const backgroundLink = data[0].background_link
-                ? JSON.parse(data[0].background_link).publicUrl
-                : "";
+              const avatar = phraseImageUrl(data[0].avatar_link);
               setProfileImages({
-                avatar: avatarLink || "",
-                background: backgroundLink || "",
+                avatar,
               });
               // console.log(profileImages)
             } else {
-              setProfileImages({ avatar: "", background: "" });
+              setProfileImages({ avatar: "" });
             }
           }
         } else {
-          setProfileImages({ avatar: "", background: "" });
+          setProfileImages({ avatar: "" });
         }
       } catch (error) {
         console.error("Error fetching profile images:", error);
@@ -120,7 +107,12 @@ const HeaderBar = () => {
             }}
           />
           <div className="verticaldotline"></div>
-          <button className="filter">
+          <button
+            className="filter"
+            onClick={() => {
+              navigate("/search");
+            }}
+          >
             <img src="/icons/filter.svg" alt="Filter Icon" />
           </button>
         </div>

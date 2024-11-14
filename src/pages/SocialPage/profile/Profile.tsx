@@ -6,8 +6,6 @@
 // import { supabase } from "../../../utils/supabase";
 // import useCheckSession from "../../../hooks/session";
 
-
-
 // const Profile = () => {
 //   const navigate = useNavigate();
 
@@ -197,12 +195,20 @@
 
 // export default Profile
 import { useEffect, useState } from "react";
-import { Link, Outlet, matchPath, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  matchPath,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import "./profile.scss";
 import { Avatar, Button, Tab, Tabs } from "@mui/material";
 import UpdateProfileModal from "../../../components/modal/updateProfileModal/UpdateProfileModal";
 import { supabase } from "../../../utils/supabase";
 import useCheckSession from "../../../hooks/session";
+import { fetchUserIdByEmail } from "../../../api/userAPI";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -220,33 +226,28 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userID, setUserID] = useState<any>(null);
   const [userInfo, setUserInfo] = useState<any>(null);
-  const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
+  const [profileImages, setProfileImages] = useState<{
+    avatar: string;
+    background: string;
+  } | null>(null);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [postCount, setPostCount] = useState(0);
   const [groupCount, setGroupCount] = useState(0);
   const [friendCount, setFriendCount] = useState(0);
-  
+
   useEffect(() => {
-    const fetchUserId = async () => {
-      if (session !== null) {
+    const getUserID = async () => {
+      if (session && session.user) {
         try {
-          const { user } = session;
-          if (user) {
-            let { data, error } = await supabase.rpc("get_user_id_by_email", {
-              p_email: session.user.email,
-            });
-            if (error) console.error(error);
-            else {
-              setUserID(data);
-            }
-          }
+          const userId = await fetchUserIdByEmail(session.user.email);
+          setUserID(userId);
         } catch (error) {
-          console.error("Error fetching username:", error);
+          console.error("Error fetching user ID:", error);
         }
       }
     };
 
-    fetchUserId();
+    getUserID();
   }, [session]);
 
   useEffect(() => {
@@ -274,7 +275,7 @@ const Profile = () => {
 
   const followUser = async () => {
     try {
-      const { data, error } = await supabase.rpc("follow_user", {
+      const { error } = await supabase.rpc("follow_user", {
         this_user_id: userID,
         follow_user_id: userInfo.id,
       });
@@ -290,7 +291,7 @@ const Profile = () => {
 
   const unfollowUser = async () => {
     try {
-      const { data, error } = await supabase.rpc("unfollow_user", {
+      const { error } = await supabase.rpc("unfollow_user", {
         this_user_id: userID,
         follow_user_id: userInfo.id,
       });
@@ -313,7 +314,7 @@ const Profile = () => {
         .eq("follow", userInfo.id)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error && error.code !== "PGRST116") {
         throw error;
         // console.error("Error checking follow status:", error);
       } else {
@@ -338,7 +339,11 @@ const Profile = () => {
       if (userInfo?.id) {
         try {
           const [posts, groups, friends] = await Promise.all([
-            supabase.rpc("get_user_posts", { this_limit: 1000, this_offset: 0, this_user_id: userInfo.id }),
+            supabase.rpc("get_user_posts", {
+              this_limit: 1000,
+              this_offset: 0,
+              this_user_id: userInfo.id,
+            }),
             supabase.rpc("get_follow_group", { this_user_id: userInfo.id }),
             supabase.rpc("get_follow_user", { this_user_id: userInfo.id }),
           ]);
@@ -351,7 +356,7 @@ const Profile = () => {
         }
       }
     };
-  
+
     fetchProfileData();
   }, [userInfo]);
 
@@ -359,14 +364,23 @@ const Profile = () => {
     const fetchProfileImages = async () => {
       try {
         if (userInfo?.id) {
-          const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: userInfo.id });
+          const { data, error } = await supabase.rpc("get_profile_image", {
+            this_user_id: userInfo.id,
+          });
           if (error) console.error(error);
           else {
             if (data[0]) {
-              const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : "";
-              const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : "";
+              const avatarLink = data[0].avatar_link
+                ? JSON.parse(data[0].avatar_link).publicUrl
+                : "";
+              const backgroundLink = data[0].background_link
+                ? JSON.parse(data[0].background_link).publicUrl
+                : "";
 
-              setProfileImages({ avatar: avatarLink || "", background: backgroundLink || "" });
+              setProfileImages({
+                avatar: avatarLink || "",
+                background: backgroundLink || "",
+              });
             } else {
               setProfileImages({ avatar: "", background: "" });
             }
@@ -392,7 +406,12 @@ const Profile = () => {
   const handleOpenProfile = () => setIsModalOpen(true);
   const handleCloseProfile = () => setIsModalOpen(false);
 
-  const routes = [`/profile/${username}`, `/profile/${username}/media`, `/profile/${username}/friends`, `/profile/${username}/groups`];
+  const routes = [
+    `/profile/${username}`,
+    `/profile/${username}/media`,
+    `/profile/${username}/friends`,
+    `/profile/${username}/groups`,
+  ];
 
   function useRouteMatch(patterns: readonly string[]) {
     const { pathname } = useLocation();
@@ -408,7 +427,9 @@ const Profile = () => {
 
   const routeMatch = useRouteMatch(routes);
   const currentTab = routeMatch?.pattern?.path;
-  const level =!isNaN(Math.floor(userInfo?.level / 100))? Math.floor(userInfo?.level / 100) : 0;
+  const level = !isNaN(Math.floor(userInfo?.level / 100))
+    ? Math.floor(userInfo?.level / 100)
+    : 0;
 
   return (
     <div className="profileFrame">
@@ -424,7 +445,11 @@ const Profile = () => {
         </section>
         <div className="profileInfoFrame">
           {profileImages?.background ? (
-            <img className="background" src={profileImages?.background} alt="" />
+            <img
+              className="background"
+              src={profileImages?.background}
+              alt=""
+            />
           ) : (
             <div className="backgroundPlaceholder"></div>
           )}
@@ -433,7 +458,12 @@ const Profile = () => {
               className="Avatar"
               src={profileImages?.avatar || ""}
               alt="avatar"
-              sx={{ width: "128px", height: "128px", border: "4px solid #1F1F1F" }} />
+              sx={{
+                width: "128px",
+                height: "128px",
+                border: "4px solid #1F1F1F",
+              }}
+            />
             {isCurrentUser ? (
               <div className="profile">
                 <Button
@@ -441,8 +471,14 @@ const Profile = () => {
                   onClick={handleOpenProfile}
                   variant="contained"
                   sx={{ borderRadius: "24px" }}
-                >Edit Profile</Button>
-                <UpdateProfileModal open={isModalOpen} handleClose={handleCloseProfile} user={userInfo} />
+                >
+                  Edit Profile
+                </Button>
+                <UpdateProfileModal
+                  open={isModalOpen}
+                  handleClose={handleCloseProfile}
+                  user={userInfo}
+                />
               </div>
             ) : (
               <Button
@@ -458,7 +494,12 @@ const Profile = () => {
           <div className="userNameInfo">
             <div className="userNameChild">
               <span className="Name">{userInfo?.username}</span>
-              <span className="level">LV<span className="textHighlightBlue">{level >= 0 ? level : ""}</span></span>
+              <span className="level">
+                LV
+                <span className="textHighlightBlue">
+                  {level >= 0 ? level : ""}
+                </span>
+              </span>
             </div>
             <span className="userName">@{userInfo?.username}</span>
           </div>
@@ -471,7 +512,15 @@ const Profile = () => {
               </a>
               <div className="joinDate">
                 <img src="/icons/calendar.svg" alt="" />
-                <span>Joined in <span className="textHighlight">{new Date(userInfo?.join_date).toLocaleString('default', { month: 'long', year: 'numeric' })}</span></span>
+                <span>
+                  Joined in{" "}
+                  <span className="textHighlight">
+                    {new Date(userInfo?.join_date).toLocaleString("default", {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                </span>
               </div>
             </div>
             <div className="friendCount">
@@ -495,30 +544,50 @@ const Profile = () => {
               role="navigation"
               scrollButtons="auto"
               sx={{
-                '& .MuiTab-root': {
+                "& .MuiTab-root": {
                   color: "#E7E9EA",
                   fontWeight: 700,
                   fontFamily: '"Lato", sans-serif',
-                  padding: '0 16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  padding: "0 16px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
                   minWidth: 80,
                   maxWidth: 160,
                 },
-                '& .MuiTabs-indicator': {
+                "& .MuiTabs-indicator": {
                   backgroundColor: "#4296cf",
                 },
-                '& .Mui-selected': {
+                "& .Mui-selected": {
                   color: "#4296cf !important",
-                }
+                },
               }}
             >
-              <Tab label="Post" to={`/profile/${username}`} value={`/profile/${username}`} component={Link} />
-              <Tab label="Media" to={`/profile/${username}/media`} value={`/profile/${username}/media`} component={Link} />
-              <Tab label="Friends" to={`/profile/${username}/friends`} value={`/profile/${username}/friends`} component={Link} />
-              <Tab label="Groups" to={`/profile/${username}/groups`} value={`/profile/${username}/groups`} component={Link} />
+              <Tab
+                label="Post"
+                to={`/profile/${username}`}
+                value={`/profile/${username}`}
+                component={Link}
+              />
+              <Tab
+                label="Media"
+                to={`/profile/${username}/media`}
+                value={`/profile/${username}/media`}
+                component={Link}
+              />
+              <Tab
+                label="Friends"
+                to={`/profile/${username}/friends`}
+                value={`/profile/${username}/friends`}
+                component={Link}
+              />
+              <Tab
+                label="Groups"
+                to={`/profile/${username}/groups`}
+                value={`/profile/${username}/groups`}
+                component={Link}
+              />
             </Tabs>
           </div>
           <Outlet />

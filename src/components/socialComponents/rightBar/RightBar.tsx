@@ -2,39 +2,33 @@ import { NavLink } from "react-router-dom";
 import UserCardSmall from "../userCardSmall/UserCardSmall";
 import "./rightBar.scss";
 import ComicCard from "../comicCardSmall/ComicCard";
-import { suggestManga } from "../../../utils/SuggestManga"
+import { suggestManga } from "../../../utils/SuggestManga";
 import { useEffect, useState } from "react";
-import { supabase } from "../../../utils/supabase";
 import useCheckSession from "../../../hooks/session";
+import {
+  fetchMostSimilarUsers,
+  fetchUserIdByEmail,
+} from "../../../api/userAPI";
 const RightBar = () => {
   const [comics, setComics] = useState([]);
-  const [suggestUser, setSuggestuser] = useState<any>([]);
+  const [suggestUser, setSuggestUser] = useState<any>([]);
   const session = useCheckSession();
   const [userID, setUserID] = useState<any>(null);
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      if (session !== null) {
+    const getUserID = async () => {
+      if (session && session.user) {
         try {
-          const { user } = session;
-          if (user) {
-            let { data, error } = await supabase.rpc("get_user_id_by_email", {
-              p_email: session.user.email,
-            });
-            if (error) console.error(error);
-            else {
-              setUserID(data);
-              // console.log("User ID: ", data);
-            }
-          }
+          const userId = await fetchUserIdByEmail(session.user.email);
+          setUserID(userId);
         } catch (error) {
-          console.error("Error fetching username:", error);
+          console.error("Error fetching user ID:", error);
         }
       }
     };
 
-    fetchUserId();
-  }, [session,userID,]);
+    getUserID();
+  }, [session]);
 
   useEffect(() => {
     // Fetch comic data from the API
@@ -50,31 +44,28 @@ const RightBar = () => {
     fetchComics();
   }, []);
   const fetchSUser = async () => {
-    try {
-      const { data, error } = await supabase
-        .rpc('get_most_similar_users', {
-          this_limit: 3,
-          user_id: userID
-        })
-      if (error) console.log(error)
-      else {
-        setSuggestuser(data)
-        // console.log(data) 
+    if (userID) {
+      try {
+        const data = await fetchMostSimilarUsers(userID);
+        setSuggestUser(data);
+      } catch (error) {
+        console.error("Error fetching suggested users:", error);
       }
-    } catch (error) {
-      console.error("Error fetching suggest User:", error)
     }
   };
   useEffect(() => {
     fetchSUser();
-  }, [session,userID])
+  }, [userID]);
   return (
     <div className="rightBarContainer">
       <div className="sugesstCard">
         <h1>Who to follow</h1>
         {suggestUser.map((user: any, index: any) => (
           <div key={index}>
-            <UserCardSmall userID={user.similar_user} fetchSuggestUser={fetchSUser} />
+            <UserCardSmall
+              userID={user.similar_user}
+              fetchSuggestUser={fetchSUser}
+            />
           </div>
         ))}
         <NavLink to="/discover" className="seeMoreLink">
@@ -85,7 +76,10 @@ const RightBar = () => {
         <h1>Translation groups</h1>
         {suggestUser.map((user: any, index: any) => (
           <div key={index}>
-            <UserCardSmall userID={user.similar_user} fetchSuggestUser={fetchSUser} />
+            <UserCardSmall
+              userID={user.similar_user}
+              fetchSuggestUser={fetchSUser}
+            />
           </div>
         ))}
         <NavLink to="/discover?is_group=true" className="seeMoreLink">
@@ -97,7 +91,10 @@ const RightBar = () => {
         {comics.map((comic: any, index: any) => (
           <ComicCard
             key={index}
-            cover={comic.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName}
+            cover={
+              comic.relationships.find((r: any) => r.type === "cover_art")
+                ?.attributes.fileName
+            }
             title={comic.attributes.title.en}
             comictype={comic.type}
             maintag={comic.attributes.tags[0].attributes.name.en}

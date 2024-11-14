@@ -4,7 +4,11 @@ import { NavLink } from "react-router-dom"; // Ensure you've imported NavLink
 import PostModal from "../../../modal/postModal/PostModal";
 import { useEffect, useState } from "react";
 import useCheckSession from "../../../../hooks/session";
-import { supabase } from "../../../../utils/supabase";
+import {
+  fetchUserIdByEmail,
+  fetchUserProfileImages,
+} from "../../../../api/userAPI";
+import { phraseImageUrl } from "../../../../utils/imageLinkPhraser";
 
 interface Props {
   refreshList?: () => void;
@@ -19,64 +23,42 @@ const PostSection = (prop: Props) => {
   const [realUserID, setRealUserID] = useState<any>(null);
   const [profileImages, setProfileImages] = useState<{
     avatar: string;
-    background: string;
   } | null>(null);
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      if (session !== null) {
+    const getUserID = async () => {
+      if (session && session.user) {
         try {
-          const { user } = session;
-          if (user) {
-            let { data, error } = await supabase.rpc("get_user_id_by_email", {
-              p_email: session.user.email,
-            });
-            if (error) console.error(error);
-            else {
-              setRealUserID(data);
-            }
-          }
+          const userId = await fetchUserIdByEmail(session.user.email);
+          setRealUserID(userId);
         } catch (error) {
-          console.error("Error fetching username:", error);
+          console.error("Error fetching user ID:", error);
         }
       }
     };
 
-    fetchUserId();
+    getUserID();
   }, [session]);
 
   useEffect(() => {
-    const fetchProfileImages = async () => {
-      try {
-        if (realUserID) {
-          const { data, error } = await supabase.rpc("get_profile_image", {
-            this_user_id: realUserID,
-          });
+    const getProfileImages = async () => {
+      if (realUserID) {
+        try {
+          const { data, error } = await fetchUserProfileImages(realUserID);
           if (error) console.error(error);
-          else {
-            if (data[0]) {
-              const avatarLink = data[0].avatar_link
-                ? JSON.parse(data[0].avatar_link).publicUrl
-                : null;
-              const backgroundLink = data[0].background_link
-                ? JSON.parse(data[0].background_link).publicUrl
-                : null;
-
-              if (avatarLink || backgroundLink) {
-                setProfileImages({
-                  avatar: avatarLink,
-                  background: backgroundLink,
-                });
-              }
-            }
+          if (data) {
+            const avatar = phraseImageUrl(data[0].avatar_link);
+            setProfileImages({
+              avatar,
+            });
           }
+        } catch (error) {
+          console.error("Error fetching profile images:", error);
         }
-      } catch (error) {
-        console.error("Error fetching profile images:", error);
       }
     };
 
-    fetchProfileImages();
+    getProfileImages();
   }, [realUserID]);
   // console.log(prop.manga_id)
   return (

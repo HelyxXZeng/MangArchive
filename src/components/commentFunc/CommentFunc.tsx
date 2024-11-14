@@ -16,7 +16,7 @@ import {
   uploadReply,
 } from "../../api/commentAPI";
 import { uploadImage } from "../../api/fileUploadAPI";
-import { fetchUserProfileImages } from "../../api/userAPI";
+import { fetchUserIdByEmail, fetchUserProfileImages } from "../../api/userAPI";
 import { phraseImageUrl } from "../../utils/imageLinkPhraser";
 
 interface CommentBoxProps {
@@ -83,25 +83,18 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
   }, [session]);
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      if (session !== null) {
+    const getUserID = async () => {
+      if (session && session.user) {
         try {
-          const { user } = session;
-          if (user) {
-            let { data, error } = await supabase.rpc("get_user_id_by_email", {
-              p_email: session.user.email,
-            });
-            if (error) console.error(error);
-            else {
-              setRealUserID(data);
-            }
-          }
+          const userId = await fetchUserIdByEmail(session.user.email);
+          setRealUserID(userId);
         } catch (error) {
           console.error("Error fetching user ID:", error);
         }
       }
     };
-    fetchUserId();
+
+    getUserID();
   }, [session]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
