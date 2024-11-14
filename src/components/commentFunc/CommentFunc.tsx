@@ -28,7 +28,7 @@ interface CommentBoxProps {
   mangaID?: string | any;
 }
 
-interface CommentBoxRef {
+export interface CommentBoxRef {
   focusTextarea: () => void;
   setReplyInfo: (replyInfo: ReplyInfo) => void;
 }

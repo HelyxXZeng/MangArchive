@@ -1,15 +1,15 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import Homepage from './pages/homepage/Homepage';
+import Homepage from "./pages/homepage/Homepage";
 
 import "./global-styles/App.scss";
-import "./global-styles/Color.scss"
-import "./global-styles/Font.scss"
+import "./global-styles/Color.scss";
+import "./global-styles/Font.scss";
 import AuthPage from "./pages/authpage/Authpage";
 import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
 import Profile from "./pages/SocialPage/profile/Profile";
 import RightBar from "./components/socialComponents/rightBar/RightBar";
-import RulePage from "./pages/Policies/Policies";
+import RulePage from "./pages/policies/Policies";
 import AboutUs from "./pages/aboutus/AboutUs";
 import Announcement from "./pages/announcement/Announcement";
 import Post from "./pages/SocialPage/ProfileChild/Post/Post";
@@ -30,13 +30,11 @@ import ProtectedRoute from "./hooks/protectRouter";
 import LatestManga from "./pages/searchmangapage/LatestManga";
 
 function App() {
-
   const Layout = () => {
     return (
       <>
         <ScrollToTop />
         <div className="main">
-
           <div className="headerWarper">
             <HeaderBar />
           </div>
@@ -51,7 +49,7 @@ function App() {
         </div>
       </>
     );
-  }
+  };
 
   const SocialLayout = () => {
     return (
@@ -67,7 +65,7 @@ function App() {
         </div>
       </ProtectedRoute>
     );
-  }
+  };
   const router = createBrowserRouter([
     {
       path: "/",
@@ -75,32 +73,32 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Homepage />
+          element: <Homepage />,
         },
         {
           path: "/manga/:manga_id",
           element: <MangaDetails />,
-          children: []
+          children: [],
         },
         {
           path: "/search",
           element: <SearchMangaPage />,
-          children: []
+          children: [],
         },
         {
           path: "/latest",
           element: <LatestManga />,
-          children: []
+          children: [],
         },
         {
           path: "/library/:page",
           element: <MangaLibrary />,
-          children: []
+          children: [],
         },
         {
           path: "/chapter/:chap/:chapter_id",
           element: <ReadChapter />,
-          children: []
+          children: [],
         },
         {
           path: "/history",
@@ -112,7 +110,7 @@ function App() {
         },
         {
           path: "/nofitication",
-          element: <AboutUs />
+          element: <AboutUs />,
         },
         {
           path: "/",
@@ -124,62 +122,70 @@ function App() {
               children: [
                 {
                   path: "",
-                  element: <Post />
+                  element: <Post />,
                 },
                 {
                   path: "media",
-                  element: <Media />
+                  element: <Media />,
                 },
                 {
                   path: "friends",
-                  element: <Friends />
+                  element: <Friends />,
                 },
                 {
                   path: "groups",
-                  element: <Groups />
-                }
-              ]
+                  element: <Groups />,
+                },
+              ],
             },
             {
               path: "feed",
-              element: <Feed />
+              element: <Feed />,
             },
             {
               path: "profile",
-              element: <ProtectedRoute />
-            }
-          ]
+              element: <ProtectedRoute />,
+            },
+          ],
         },
         {
           path: "discover/",
-          element: <Discorver />
+          element: <Discorver />,
         },
         {
           path: "/profile/:username/post/:id",
-          element: <ProtectedRoute><PostDetail /></ProtectedRoute>
+          element: (
+            <ProtectedRoute>
+              <PostDetail />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/policies",
-          element: <RulePage />
+          element: <RulePage />,
         },
         {
           path: "/aboutus",
-          element: <AboutUs />
+          element: <AboutUs />,
         },
         {
           path: "/announcement",
-          element: <Announcement />
+          element: <Announcement />,
         },
         {
           path: "/setting",
-          element: <ProtectedRoute><Setting /></ProtectedRoute>
-        }
-      ]
+          element: (
+            <ProtectedRoute>
+              <Setting />
+            </ProtectedRoute>
+          ),
+        },
+      ],
     },
     {
       path: "/auth/:action",
       element: <AuthPage />,
-      children: []
+      children: [],
     },
   ]);
 

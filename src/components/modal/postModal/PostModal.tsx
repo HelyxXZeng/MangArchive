@@ -13,9 +13,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import ComicCard from "../../socialComponents/comicCardSmall/ComicCard";
-import axios from "axios";
-import { supabase } from "../../../utils/supabase"; // Adjust the path to your supabase client setup
 import useCheckSession from "../../../hooks/session";
+import { supabase } from "../../../utils/supabase";
+import { fetchMangaById } from "../../../api/mangaAPI";
+import { uploadImage } from "../../../api/fileUploadAPI";
 
 interface PostModalProps {
   open: boolean;
@@ -31,7 +32,6 @@ const PostModal = (props: PostModalProps) => {
   );
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [images, setImages] = useState<string[]>([]);
-  const [imagesName, setImagesName] = useState<string[]>([]);
   const [imagesFile, setImagesFile] = useState<File[]>([]);
   const [idValid, setIdValid] = useState<boolean>(true);
   const [comic, setComic] = useState<any>(null);
@@ -89,12 +89,9 @@ const PostModal = (props: PostModalProps) => {
 
   useEffect(() => {
     if (mangaSuggestContent.trim() !== "") {
-      axios
-        .get(
-          `https://api.mangadex.org/manga/${mangaSuggestContent.trim()}?includes[]=cover_art&includes[]=artist&includes[]=author`
-        )
+      fetchMangaById(mangaSuggestContent.trim())
         .then((response) => {
-          setComic(response.data.data);
+          setComic(response);
           setIdValid(true);
           setIdError(null);
         })
@@ -113,22 +110,6 @@ const PostModal = (props: PostModalProps) => {
     }
   }, [mangaSuggestContent]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        emojiPickerRef.current &&
-        !emojiPickerRef.current.contains(event.target as Node)
-      ) {
-        setShowEmojiPicker(false);
-      }
-    };
-
-    window.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const files = Array.from(event.target.files).slice(0, 4 - images.length);
@@ -141,7 +122,6 @@ const PostModal = (props: PostModalProps) => {
               e?.target?.result as string,
             ]);
             setImagesFile((prevImages) => [...prevImages, file]);
-            setImagesName((prevNames) => [...prevNames, file.name]);
           }
         };
         reader.readAsDataURL(file);
@@ -160,11 +140,6 @@ const PostModal = (props: PostModalProps) => {
       const newFiles = [...prevFiles];
       newFiles.splice(index, 1);
       return newFiles;
-    });
-    setImagesName((prevNames) => {
-      const newNames = [...prevNames];
-      newNames.splice(index, 1);
-      return newNames;
     });
   };
 
@@ -193,27 +168,18 @@ const PostModal = (props: PostModalProps) => {
 
       for (let i = 0; i < imagesFile.length; i++) {
         const imageFile = imagesFile[i];
-        const imageName = imagesName[i];
 
-        const { error: imageError } = await supabase.storage
-          .from("userImage")
-          .upload(`${userId}/${imageName}`, imageFile, { upsert: true });
-
-        if (imageError) {
-          console.error("Image upload error:", imageError);
-          throw imageError;
+        const result = await uploadImage(userId, imageFile);
+        if (!result) {
+          throw new Error("Image upload failed");
         }
-
-        const { data: urlData } = await supabase.storage
-          .from("userImage")
-          .getPublicUrl(`${userId}/${imageName}`);
 
         const { error: rpcImageError } = await supabase.rpc(
           "upload_post_image",
           {
-            this_name: imageName,
+            this_name: result.imageName,
             this_post_id: postId,
-            this_link: urlData,
+            this_link: result.publicUrl,
           }
         );
 
@@ -234,7 +200,6 @@ const PostModal = (props: PostModalProps) => {
       setMangaSuggestContent("");
       setImages([]);
       setImagesFile([]);
-      setImagesName([]);
       setUploading(false);
       props.handleClose();
       if (props.refreshList) props.refreshList();
