@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
-import Image from '../../../image/Image';
-import './media.scss';
-import useCheckSession from '../../../../hooks/session';
-import { supabase } from '../../../../utils/supabase';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import Image from "../../../../components/imageResponsive/Image";
+import "./media.scss";
+import useCheckSession from "../../../../hooks/session";
+import { supabase } from "../../../../utils/supabase";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Media = () => {
   const session = useCheckSession();
   const [userInfo, setUserInfo] = useState<any>(null);
   const { username } = useParams<{ username: string }>();
-  const [images, setImages] = useState<{ publicUrl: string, postId: number }[]>([]);
+  const [images, setImages] = useState<{ publicUrl: string; postId: number }[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
@@ -76,7 +78,7 @@ const Media = () => {
   return (
     <>
       {images.length === 0 ? (
-        <div className='NoMedia'>This user has no media yet</div>
+        <div className="NoMedia">This user has no media yet</div>
       ) : (
         <div className="mediaContainer">
           {images.map((image, index) => (
@@ -85,8 +87,10 @@ const Media = () => {
               key={index}
               src={image.publicUrl}
               alt={`Image ${index + 1}`}
-              ratio='1/1'
-              onClick={() => navigate(`/profile/${username}/post/${image.postId}`)}
+              ratio="1/1"
+              onClick={() =>
+                navigate(`/profile/${username}/post/${image.postId}`)
+              }
             />
           ))}
         </div>

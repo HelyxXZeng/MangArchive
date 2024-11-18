@@ -25,35 +25,6 @@ const Signup: FunctionComponent = () => {
     return emailRegex.test(email);
   };
 
-  // const checkDuplicate = async () => {
-  //   const { data: duplicateUsers, error } = await supabase
-  //     .from('User')
-  //     .select('email, username')
-  //     .or(`email.eq.${email}, username.eq.${username}`);
-
-  //   if (error) {
-  //     console.error(error);
-  //     return;
-  //   }
-
-  //   if (duplicateUsers && duplicateUsers.length > 0) {
-  //     duplicateUsers.forEach((user) => {
-  //       if (user.email === email) {
-  //         setErrors((prevErrors) => ({
-  //           ...prevErrors,
-  //           email: "Email already exists",
-  //         }));
-  //       }
-  //       if (user.username === username) {
-  //         setErrors((prevErrors) => ({
-  //           ...prevErrors,
-  //           username: "Username already exists",
-  //         }));
-  //       }
-  //     });
-  //   }
-  //   return
-  // };
   const onSignupButtonClick = useCallback(async () => {
     let validationErrors = {
       email: "",
@@ -83,13 +54,10 @@ const Signup: FunctionComponent = () => {
       validationErrors.checkPassword = "Mật khẩu không khớp";
     }
 
-    // if (Object.keys(validationErrors).length > 0) {
-    //   setErrors(validationErrors);
-    //   return;
-    // }
+    setErrors(validationErrors);
+    if (Object.values(validationErrors).some((error) => error !== "")) return;
 
     try {
-      // console.log("sent");
       let { data, error: rpcError } = await supabase.rpc("register_user", {
         p_birthdate: "2000-01-01",
         p_email: email,
@@ -98,7 +66,7 @@ const Signup: FunctionComponent = () => {
         p_phone: "0",
         p_username: username,
       });
-      // console.log(data)
+
       if (rpcError) {
         console.error(rpcError);
         throw rpcError;
@@ -173,141 +141,154 @@ const Signup: FunctionComponent = () => {
           </div>
         </div>
         <div className="loginFrame">
-          <div className="inputContainer">
-            <TextField
-              className="username-input-field"
-              color="primary"
-              placeholder="Email"
-              variant="outlined"
-              type="email"
-              onChange={(event) => {
-                setEmail(event.target.value);
-                setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
-              }}
-              error={!!errors.email}
-              helperText={errors.email}
-            />
-            <TextField
-              className="username-input-field"
-              color="primary"
-              placeholder="Username (không dấu, tối đa 32 ký tự)"
-              variant="outlined"
-              type="text"
-              onChange={(event) => {
-                setUsername(event.target.value);
-                setErrors((prevErrors) => ({ ...prevErrors, username: "" }));
-              }}
-              error={!!errors.username}
-              helperText={errors.username}
-            />
-            <TextField
-              className="password-input-field"
-              placeholder="Password"
-              variant="outlined"
-              onChange={(event) => {
-                setPassword(event.target.value);
-                setErrors((prevErrors) => ({ ...prevErrors, password: "" }));
-              }}
-              InputProps={{
-                type: showPassword ? "text" : "password",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                    >
-                      {showPassword ? (
-                        <img src="/icons/eye.svg" alt="show password" />
-                      ) : (
-                        <img src="/icons/eye-slash.svg" alt="hide password" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              error={!!errors.password}
-              helperText={errors.password}
-            />
-            <TextField
-              className="password-input-field"
-              placeholder="Nhập lại Password"
-              variant="outlined"
-              onChange={(event) => {
-                setCheckPassword(event.target.value);
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  checkPassword: "",
-                }));
-              }}
-              InputProps={{
-                type: showPassword ? "text" : "password",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                    >
-                      {showPassword ? (
-                        <img src="/icons/eye.svg" alt="show password" />
-                      ) : (
-                        <img src="/icons/eye-slash.svg" alt="hide password" />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              error={!!errors.checkPassword}
-              helperText={errors.checkPassword}
-            />
-          </div>
-          <div className="buttonOption">
-            <Button
-              variant="contained"
-              onClick={onSignupButtonClick}
-              sx={{
-                "&.MuiButton-contained": {
-                  backgroundColor: "#1b6fa8", // Màu nền của button
-                  color: "#fff", // Màu chữ của button
-                  "&:hover": {
-                    backgroundColor: "#4296cf", // Màu nền khi hover
-                  },
-                },
-              }}
-            >
-              Sign up
-            </Button>
-            <Button
-              variant="contained"
-              onClick={onGoogleLoginContainerClick}
-              sx={{
-                "&.MuiButton-contained": {
-                  backgroundColor: "transparent", // Nền trong suốt
-                  color: "#1F1F1F", // Màu chữ của button
-                  border: "1px solid #1F1F1F", // Viền của button
-                  "&:hover": {
-                    backgroundColor: "#f0f0f0", // Màu nền khi hover
-                  },
-                },
-              }}
-            >
-              <img
-                className="google-icon"
-                alt=""
-                src="/icons/logo_google_icon.png"
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              onSignupButtonClick();
+            }}
+          >
+            <div className="inputContainer">
+              <TextField
+                className="username-input-field"
+                color="primary"
+                placeholder="Email"
+                variant="outlined"
+                type="email"
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  setErrors((prevErrors) => ({ ...prevErrors, email: "" }));
+                }}
+                error={!!errors.email}
+                helperText={errors.email}
               />
-              <div className="log-in-with-google-wrapper">
-                <div className="log-in-with">Sign in with Google</div>
-              </div>
-            </Button>
-          </div>
-          <div className="otherOption">
-            <div className="signup">
-              Already have an account?
-              <span onClick={onLoginClick}>
-                <b> Login</b>
-              </span>
+              <TextField
+                className="username-input-field"
+                color="primary"
+                placeholder="Username (không dấu, tối đa 32 ký tự)"
+                variant="outlined"
+                type="text"
+                onChange={(event) => {
+                  setUsername(event.target.value);
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    username: "",
+                  }));
+                }}
+                error={!!errors.username}
+                helperText={errors.username}
+              />
+              <TextField
+                className="password-input-field"
+                placeholder="Password"
+                variant="outlined"
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    password: "",
+                  }));
+                }}
+                InputProps={{
+                  type: showPassword ? "text" : "password",
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {showPassword ? (
+                          <img src="/icons/eye.svg" alt="show password" />
+                        ) : (
+                          <img src="/icons/eye-slash.svg" alt="hide password" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                error={!!errors.password}
+                helperText={errors.password}
+              />
+              <TextField
+                className="password-input-field"
+                placeholder="Nhập lại Password"
+                variant="outlined"
+                onChange={(event) => {
+                  setCheckPassword(event.target.value);
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    checkPassword: "",
+                  }));
+                }}
+                InputProps={{
+                  type: showPassword ? "text" : "password",
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {showPassword ? (
+                          <img src="/icons/eye.svg" alt="show password" />
+                        ) : (
+                          <img src="/icons/eye-slash.svg" alt="hide password" />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                error={!!errors.checkPassword}
+                helperText={errors.checkPassword}
+              />
             </div>
-          </div>
+            <div className="buttonOption">
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{
+                  "&.MuiButton-contained": {
+                    backgroundColor: "#1b6fa8",
+                    color: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#4296cf",
+                    },
+                  },
+                }}
+              >
+                Sign up
+              </Button>
+              <Button
+                variant="contained"
+                onClick={onGoogleLoginContainerClick}
+                sx={{
+                  "&.MuiButton-contained": {
+                    backgroundColor: "transparent",
+                    color: "#1F1F1F",
+                    border: "1px solid #1F1F1F",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  },
+                }}
+              >
+                <img
+                  className="google-icon"
+                  alt=""
+                  src="/icons/logo_google_icon.png"
+                />
+                <div className="log-in-with-google-wrapper">
+                  <div className="log-in-with">Sign in with Google</div>
+                </div>
+              </Button>
+            </div>
+            <div className="otherOption">
+              <div className="signup">
+                Already have an account?
+                <span onClick={onLoginClick}>
+                  <b> Login</b>
+                </span>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

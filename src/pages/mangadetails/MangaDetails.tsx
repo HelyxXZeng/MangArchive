@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import MangaBanner from "../mangabanner/MangaBanner";
+import MangaBanner from "../../components/mangaComponents/bannerVariant/mangabanner/MangaBanner";
 import "./MangaDetails.scss";
 import { getDataApi } from "../../utils/MangaData";
-import Chapter from "../chaptercomponent/Chapter";
+import Chapter from "../../components/mangaComponents/chapterComponent/Chapter";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 import CustomSelect from "../../components/mangaComponents/customSelection/CustomSelect";

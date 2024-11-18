@@ -4,7 +4,13 @@ import "./userCardLarge.scss";
 import useCheckSession from "../../../hooks/session";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../utils/supabase";
-import { fetchUserIdByEmail } from "../../../api/userAPI";
+import {
+  fetchUserIdByEmail,
+  fetchUserInfo,
+  fetchUserProfileImages,
+} from "../../../api/userAPI";
+import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
+import { followUserById, unfollowUserById } from "../../../api/scocialAPI";
 
 interface UserCardLargeProps {
   userID: number;
@@ -18,7 +24,6 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
   const [userInfo, setUserInfo] = useState<any>(null);
   const [profileImages, setProfileImages] = useState<{
     avatar: string;
-    background: string;
   } | null>(null);
   const [isFollowed, setIsFollowed] = useState(false);
   const [realUserID, setRealUserID] = useState<any>(null);
@@ -44,12 +49,10 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
   }, [session]);
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const fetchUserInfos = async () => {
       try {
         if (userID) {
-          const { data, error } = await supabase.rpc("get_user_info", {
-            this_user_id: userID,
-          });
+          const { data, error } = await fetchUserInfo(userID.toString());
           if (error) console.error(error);
           else {
             setUserInfo(data[0]);
@@ -60,30 +63,24 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
       }
     };
 
-    fetchUserInfo();
+    fetchUserInfos();
   }, [userID]);
 
   useEffect(() => {
     const fetchProfileImages = async () => {
       try {
         if (userID) {
-          const { data, error } = await supabase.rpc("get_profile_image", {
-            this_user_id: userID,
-          });
+          const { data, error } = await fetchUserProfileImages(
+            userID.toString()
+          );
           if (error) console.error(error);
           else {
             if (data[0]) {
-              const avatarLink = data[0].avatar_link
-                ? JSON.parse(data[0].avatar_link).publicUrl
-                : null;
-              const backgroundLink = data[0].background_link
-                ? JSON.parse(data[0].background_link).publicUrl
-                : null;
+              const avatarLink = phraseImageUrl(data[0].avatar_link);
 
-              if (avatarLink || backgroundLink) {
+              if (avatarLink) {
                 setProfileImages({
                   avatar: avatarLink,
-                  background: backgroundLink,
                 });
               }
             }
@@ -124,16 +121,9 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
 
   const followUser = async () => {
     try {
-      const { error } = await supabase.rpc("follow_user", {
-        this_user_id: realUserID,
-        follow_user_id: userID,
-      });
-      if (error) {
-        console.error("Error following user:", error);
-      } else {
-        setIsFollowed(true);
-        fetchSuggestUser(); // Gọi hàm fetchSuggestUser sau khi follow
-      }
+      await followUserById(realUserID, userID);
+      setIsFollowed(true);
+      fetchSuggestUser();
     } catch (error) {
       console.error("Error following user:", error);
     }
@@ -141,16 +131,9 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
 
   const unfollowUser = async () => {
     try {
-      const { error } = await supabase.rpc("unfollow_user", {
-        this_user_id: realUserID,
-        follow_user_id: userID,
-      });
-      if (error) {
-        console.error("Error unfollowing user:", error);
-      } else {
-        setIsFollowed(false);
-        fetchSuggestUser(); // Gọi hàm fetchSuggestUser sau khi unfollow
-      }
+      await unfollowUserById(realUserID, userID);
+      setIsFollowed(false);
+      fetchSuggestUser();
     } catch (error) {
       console.error("Error unfollowing user:", error);
     }

@@ -1,4 +1,4 @@
-import { FunctionComponent, useCallback, useState } from "react";
+import React, { FunctionComponent, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, InputAdornment, IconButton, Button } from "@mui/material";
 import "./login.scss";
@@ -21,90 +21,78 @@ const Login: FunctionComponent = () => {
       e.preventDefault();
       setErrors({ email: "", password: "" }); // Clear previous errors
 
+      if (!email) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: "Email or Username is required",
+        }));
+      }
+      if (!password) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          password: "Password is required",
+        }));
+      }
+
+      if (!email || !password) return;
+
       try {
-        if (email && password) {
-          const isEmail = email.includes("@");
+        const isEmail = email.includes("@");
 
-          if (isEmail) {
-            try {
-              const response = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password,
-              });
-              if (response.error) throw response.error;
+        if (isEmail) {
+          const response = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+          });
+          if (response.error) throw response.error;
 
-              if (response.data.user) {
-                navigate(`/`, { replace: true });
-              } else {
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  email: "Invalid email or password",
-                  password: "Invalid email or password",
-                }));
-              }
-            } catch (error) {
-              console.error("Error:", error);
-              setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: "Invalid email or password",
-                password: "Invalid email or password",
-              }));
-            }
+          if (response.data.user) {
+            navigate(`/`, { replace: true });
           } else {
-            try {
-              const { data, error } = await supabase
-                .from("User")
-                .select("email")
-                .eq("username", email);
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email: "Invalid email or password",
+              password: "Invalid email or password",
+            }));
+          }
+        } else {
+          const { data, error } = await supabase
+            .from("User")
+            .select("email")
+            .eq("username", email);
 
-              if (error) throw error;
-              if (data && data.length > 0) {
-                const response = await supabase.auth.signInWithPassword({
-                  email: data[0].email,
-                  password: password,
-                });
+          if (error) throw error;
 
-                if (response.error) throw response.error;
+          if (data && data.length > 0) {
+            const response = await supabase.auth.signInWithPassword({
+              email: data[0].email,
+              password: password,
+            });
 
-                if (response.data.user) {
-                  navigate(`/`, { replace: true });
-                } else {
-                  setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    email: "Invalid username or password",
-                  }));
-                }
-              } else {
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  email: "Username does not exist",
-                }));
-              }
-            } catch (error) {
-              console.error("Error:", error);
+            if (response.error) throw response.error;
+
+            if (response.data.user) {
+              navigate(`/`, { replace: true });
+            } else {
               setErrors((prevErrors) => ({
                 ...prevErrors,
                 email: "Invalid username or password",
-                password: "Invalid username or password",
               }));
             }
-          }
-        } else {
-          if (!email) {
+          } else {
             setErrors((prevErrors) => ({
               ...prevErrors,
-              email: "Email or Username is required",
-            }));
-          }
-          if (!password) {
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              password: "Password is required",
+              email: "Username does not exist",
             }));
           }
         }
-      } catch (error: any) {
-        console.error("Error signing in:", error.message);
+      } catch (error) {
+        console.error("Error signing in:", error);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: "Invalid username or password",
+          password: "Invalid username or password",
+        }));
       }
     },
     [email, password, navigate]
@@ -122,8 +110,17 @@ const Login: FunctionComponent = () => {
     navigate("/");
   }, [navigate]);
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") {
+        onLoginButtonClick(e as unknown as React.FormEvent);
+      }
+    },
+    [onLoginButtonClick]
+  );
+
   return (
-    <div className="mainFrame">
+    <div className="mainFrame" onKeyDown={handleKeyDown} tabIndex={0}>
       <div className="heading">
         <div className="logoContent" onClick={onLogoContainerClick}>
           <h1>MangArchive</h1>
@@ -148,7 +145,6 @@ const Login: FunctionComponent = () => {
               color="primary"
               placeholder="Email or Username"
               variant="outlined"
-              type="email"
               onChange={(event) => {
                 setEmail(event.target.value);
                 setErrors((prevErrors) => ({ ...prevErrors, email: "" }));

@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 // import searchManga from './MangaSearch.js';
 
 import MangaCard from "../title/TitleCard2";
-import BannerSwiper from "../bannerswiper/BannerSwiper";
-import MangaCardSwiper from "../mangaswiper/MangaSwiper";
+import BannerSwiper from "../../components/mangaComponents/bannerVariant/bannerswiper/BannerSwiper";
+import MangaCardSwiper from "../../components/mangaComponents/mangaswiper/MangaSwiper";
 // import MangaBanner from "../mangabanner/MangaBanner";
 // import Banner from '../banner/Banner';
 import { suggestManga } from "../../utils/SuggestManga";
@@ -21,7 +21,7 @@ const Manga = () => {
     try {
       const resp = await axios({
         method: "GET",
-        url: `${baseUrl}/manga/random`
+        url: `${baseUrl}/manga/random`,
       });
       console.log("random: ", resp.data.data);
       navigate(`/manga/${resp.data.data.id}`);

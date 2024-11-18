@@ -95,7 +95,7 @@
   height: fit-content;
 }
 
-@media screen and (min-width: 512px) {
+@media screen and (width> 512px) {
   .manga-grid {
     grid-template-columns: repeat(2, 1fr);
     place-items: center;
@@ -103,7 +103,7 @@
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (width> 768px) {
   .manga-grid {
     grid-template-columns: repeat(3, 1fr);
     place-items: center;
@@ -111,7 +111,7 @@
   }
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (width> 1024px) {
   .manga-grid {
     grid-template-columns: repeat(4, 1fr);
     place-items: center;
@@ -119,7 +119,7 @@
   }
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (width> 1280px) {
   .manga-grid {
     grid-template-columns: repeat(5, 1fr);
     place-items: center;

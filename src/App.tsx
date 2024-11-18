@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Homepage from "./pages/homepage/Homepage";
-
 import "./global-styles/App.scss";
 import "./global-styles/Color.scss";
 import "./global-styles/Font.scss";
@@ -19,7 +18,7 @@ import MangaDetails from "./pages/mangadetails/MangaDetails";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 import Feed from "./pages/SocialPage/feed/Feed";
-import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
+import SearchMangaPage from "./pages/searchMangaPage/SearchMangaPage";
 import ReadChapter from "./pages/readchapter/ReadChapter";
 import ScrollToTop from "./hooks/useScrollToTop";
 import Discorver from "./pages/SocialPage/discorver/Discorver";
@@ -27,7 +26,7 @@ import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 import MangaHistory from "./pages/mangahistory/History";
 import ProtectedRoute from "./hooks/protectRouter";
-import LatestManga from "./pages/searchmangapage/LatestManga";
+import LatestManga from "./pages/searchMangaPage/LatestManga";
 
 function App() {
   const Layout = () => {
