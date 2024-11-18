@@ -4,7 +4,7 @@ import "./Manga.scss";
 import { useNavigate } from "react-router-dom";
 // import searchManga from './MangaSearch.js';
 
-import MangaCard from "../title/TitleCard2";
+import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import BannerSwiper from "../../components/mangaComponents/bannerVariant/bannerswiper/BannerSwiper";
 import MangaCardSwiper from "../../components/mangaComponents/mangaswiper/MangaSwiper";
 // import MangaBanner from "../mangabanner/MangaBanner";

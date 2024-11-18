@@ -3,7 +3,7 @@ import SwiperCore from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
-import MangaCard from "../../../pages/title/TitleCard2"; // Assuming your MangaCard component is in the same directory
+import MangaCard from "../title/TitleCard2"; // Assuming your MangaCard component is in the same directory
 import "./MangaSwiper.scss";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);

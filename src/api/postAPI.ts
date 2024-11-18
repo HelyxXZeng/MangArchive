@@ -1,6 +1,28 @@
 import { supabase } from "../utils/supabase";
 import { phraseImageUrl } from "../utils/imageLinkPhraser";
 
+export const fetchFeedPostsAPI = async (
+  limit: number = 10,
+  offset: number = 0
+): Promise<bigint[]> => {
+  try {
+    const { data, error } = await supabase.rpc("get_posts_for_feed", {
+      this_limit: limit,
+      this_offset: offset,
+    });
+
+    if (error) {
+      console.error("Error fetching feed posts:", error);
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in fetchFeedPostsAPI:", error);
+    throw new Error("Failed to fetch feed posts");
+  }
+};
+
 export const fetchPostInfo = async (postId: any) => {
   const { data: post, error } = await supabase.rpc("get_post_info", {
     this_post_id: postId,
@@ -21,6 +43,41 @@ export const fetchPostImages = async (postId: any) => {
     throw error;
   }
   return data.map((image: any) => phraseImageUrl(image));
+};
+
+export const fetchComments = async (
+  postId: any,
+  offset: number,
+  limit: number = 10
+) => {
+  const { data, error } = await supabase.rpc("get_comments_for_post", {
+    this_limit: limit,
+    this_offset: offset,
+    this_post_id: postId,
+  });
+  if (error) {
+    console.error("Error fetching comments:", error);
+    throw error;
+  }
+  return data;
+};
+
+// Fetch replies for a comment
+export const fetchRepliesForComment = async (
+  commentId: number,
+  offset: number,
+  limit: number = 5
+) => {
+  const { data, error } = await supabase.rpc("get_replies_for_comment", {
+    this_limit: limit,
+    this_offset: offset,
+    this_comment_id: commentId,
+  });
+  if (error) {
+    console.error("Error fetching replies:", error);
+    throw error;
+  }
+  return data;
 };
 
 export const fetchCommentsAndReplies = async (postId: any) => {

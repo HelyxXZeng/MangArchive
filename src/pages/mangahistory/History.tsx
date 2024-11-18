@@ -3,7 +3,7 @@ import axios from "axios";
 import "./History.scss";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
-import MangaCard from "../title/TitleCard2";
+import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import { fetchUserIdByEmail } from "../../api/userAPI";
 
 interface Props {}

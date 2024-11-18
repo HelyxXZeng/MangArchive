@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "@mui/material";
-import Image from "../../components/imageResponsive/Image";
+import Image from "../../imageResponsive/Image";
 import "./TitleCard2.scss";
 import Tag from "../tag/Tag";
-import { getDataApi } from "../../utils/MangaData";
-import { getStatsApi } from "../../utils/MangaStatistic";
+import { getDataApi } from "../../../utils/MangaData";
+import { getStatsApi } from "../../../utils/MangaStatistic";
 import { Link, NavLink } from "react-router-dom";
 
 interface Props {

@@ -87,7 +87,9 @@
             .clickhere {
                 background-color: $blue-main;
                 color: $text-white-new;
-
+                text-align: center;
+                align-items: center;
+                justify-content: center;
                 &:hover {
                     background-color: $blue-soft;
                 }
@@ -118,6 +120,7 @@
         .delete{
             color: $text-white-new;
             background-color: $like-pink;
+            font-weight: 700;
         }
     }
 }

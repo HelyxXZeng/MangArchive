@@ -113,7 +113,6 @@ const MangaDetails: React.FC<Props> = () => {
       setIsDownloading(false);
     }
   };
-
   return (
     <div className="read-chapter-page">
       {!data ? (
@@ -128,7 +127,6 @@ const MangaDetails: React.FC<Props> = () => {
           <Swiper
             onSwiper={(swiper) => {
               swiperRef.current = swiper;
-
               const progressBar = document.querySelector(
                 ".chapter-swiper-pagination"
               );
@@ -163,12 +161,12 @@ const MangaDetails: React.FC<Props> = () => {
             }}
             style={{ height: "100%" }}
           >
-            {data.chapter.data.map((chap: any) => (
-              <SwiperSlide key={chap.id} style={{ width: "100%" }}>
+            {data.chapter.data.map((chap: any, index: number) => (
+              <SwiperSlide key={index} style={{ width: "100%" }}>
                 <div className={`swiper-slide-content ${imgStyle}`}>
                   <img
                     src={`${data.baseUrl}/data/${data.chapter.hash}/${chap}`}
-                    alt={`${chap}`}
+                    alt={`Page ${index + 1}`}
                     loading="lazy"
                   />
                 </div>

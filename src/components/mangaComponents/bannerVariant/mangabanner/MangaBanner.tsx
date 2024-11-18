@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./MangaBanner.scss";
-import Tag from "../../../../pages/tag/Tag";
+import Tag from "../../tag/Tag";
 
 import Image from "../../../imageResponsive/Image";
 // import { getDataApi } from '../../utils/MangaData';

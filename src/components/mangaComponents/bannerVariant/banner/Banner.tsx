@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Banner.scss";
 
 import Image from "../../../imageResponsive/Image";
-import Tag from "../../../../pages/tag/Tag";
+import Tag from "../../tag/Tag";
 import { NavLink } from "react-router-dom";
 
 interface BannerProps {

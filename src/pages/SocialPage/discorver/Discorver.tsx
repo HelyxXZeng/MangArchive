@@ -3,9 +3,12 @@ import UserCardLarge from "../../../components/socialComponents/userCardLarge/Us
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Tab, Tabs } from "@mui/material";
 import { useEffect, useState } from "react";
-import { supabase } from "../../../utils/supabase";
 import useCheckSession from "../../../hooks/session";
 import { fetchUserIdByEmail } from "../../../api/userAPI";
+import {
+  fetchGroupSuggestList,
+  fetchUserSuggestList,
+} from "../../../api/scocialAPI";
 
 const NotFound: React.FC = () => (
   <div className="notFound">
@@ -79,17 +82,9 @@ const Discover: React.FC = () => {
 
   const getUserSuggestList = async (page: number) => {
     try {
-      const { data, error } = await supabase.rpc("get_most_similar_users", {
-        user_id: userID,
-        this_limit: 10,
-        // this_offset: (page - 1) * 10,
-      });
-      if (error) console.error("Error fetching user suggestions:", error);
-      else {
-        setUserList((prevList) => (page === 1 ? data : [...prevList, ...data]));
-        setHasMore(data.length === 10);
-        // console.log(data)
-      }
+      const data = await fetchUserSuggestList(userID, page);
+      setUserList((prevList) => (page === 1 ? data : [...prevList, ...data]));
+      setHasMore(data.length === 10);
     } catch (error) {
       console.error("Error fetching user suggestions:", error);
     }
@@ -97,18 +92,9 @@ const Discover: React.FC = () => {
 
   const getGroupSuggestList = async (page: number) => {
     try {
-      const { data, error } = await supabase.rpc("get_most_similar_users", {
-        user_id: userID,
-        this_limit: 10,
-        // this_offset: (page - 1) * 10,
-      });
-      if (error) console.error("Error fetching group suggestions:", error);
-      else {
-        setGroupList((prevList) =>
-          page === 1 ? data : [...prevList, ...data]
-        );
-        setHasMore(data.length === 10);
-      }
+      const data = await fetchGroupSuggestList(userID, page);
+      setGroupList((prevList) => (page === 1 ? data : [...prevList, ...data]));
+      setHasMore(data.length === 10);
     } catch (error) {
       console.error("Error fetching group suggestions:", error);
     }

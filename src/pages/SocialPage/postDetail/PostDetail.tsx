@@ -4,11 +4,14 @@ import PostCard from "../../../components/socialComponents/Posts/PostCard/PostCa
 import CommentBox, {
   CommentBoxRef,
 } from "../../../components/commentFunc/CommentFunc";
-import PostImageViewer from "../../postImageViewer/PostImageViewer";
+import PostImageViewer from "../../../components/socialComponents/Posts/postImageViewer/PostImageViewer";
 import CommentCard from "../../../components/commentCard/CommentCard";
 import { useParams } from "react-router-dom";
-import { supabase } from "../../../utils/supabase";
-import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
+import {
+  fetchComments,
+  fetchPostImages,
+  fetchRepliesForComment,
+} from "../../../api/postAPI";
 
 const PostDetail = () => {
   const { id: postId } = useParams<{ id: string }>();
@@ -23,54 +26,78 @@ const PostDetail = () => {
   const [postImages, setPostImages] = useState<string[]>([]);
   const [commentOffset, setCommentOffset] = useState<number>(0);
   const [hasMoreComments, setHasMoreComments] = useState<boolean>(true);
-  const commentsLimit = 10;
+  const commentsLimit = 5;
 
-  useEffect(() => {
-    const fetchPostImages = async () => {
-      try {
-        if (postId) {
-          const { data, error } = await supabase.rpc("get_post_image", {
-            post_id: parseInt(postId),
-          });
-          if (error) {
-            console.error("Error fetching post images:", error);
-          } else {
-            const images = data.map((image: any) => phraseImageUrl(image));
-            setPostImages(images);
-            setHImage(images.length > 0);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching post images:", error);
-      }
-    };
-
-    fetchPostImages();
-  }, [postId]);
-
-  const fetchComments = async (offset: number) => {
+  const fetchPostImage = async () => {
     try {
       if (postId) {
-        const { data, error } = await supabase.rpc("get_comments_for_post", {
-          this_limit: commentsLimit,
-          this_offset: offset,
-          this_post_id: parseInt(postId),
-        });
-        if (error) {
-          console.error("Error fetching comments:", error);
-        } else {
-          setComments((prev) => (offset === 0 ? data : [...prev, ...data]));
-          setCommentOffset(() => offset + commentsLimit);
-          setHasMoreComments(data.length === commentsLimit);
+        const images = await fetchPostImages(Number(postId));
+        setPostImages(images);
+        setHImage(images.length > 0);
+      }
+    } catch (error) {
+      console.error("Error fetching post images:", error);
+    }
+  };
 
-          // Fetch initial replies for each comment
-          data.forEach((comment: any) => {
-            fetchRepliesForComment(comment, 5); // Fetch 5 replies initially
-          });
-        }
+  const fetchCommentList = async (offset: number) => {
+    try {
+      if (postId) {
+        const data = await fetchComments(Number(postId), offset, commentsLimit);
+        setComments((prev) => (offset === 0 ? data : [...prev, ...data]));
+        setCommentOffset(() => offset + commentsLimit);
+        setHasMoreComments(data.length === commentsLimit);
+
+        // Fetch initial replies for each comment
+        data.forEach((comment: any) => {
+          fetchRepliesFComments(comment, 1); // Fetch 5 replies initially
+        });
       }
     } catch (error) {
       console.error("Error fetching comments:", error);
+    }
+  };
+
+  const fetchRepliesFComments = async (commentId: number, limit: number) => {
+    try {
+      const currentRepliesCount = replies[commentId]?.length || 0;
+
+      // Lấy thêm reply nếu cần
+      const data = await fetchRepliesForComment(
+        commentId,
+        currentRepliesCount,
+        limit
+      );
+
+      // Cập nhật state replies mà không thay đổi toàn bộ
+      setReplies((prevReplies) => {
+        const existingReplies = prevReplies[commentId] || [];
+        const newReplies = data.filter(
+          (reply: any) =>
+            !existingReplies.some(
+              (existingReply) => existingReply.id === reply.id
+            )
+        );
+        return {
+          ...prevReplies,
+          [commentId]: [...existingReplies, ...newReplies],
+        };
+      });
+
+      // Cập nhật số lượng visibleReplies
+      setVisibleReplies((prev) => ({
+        ...prev,
+        [commentId]: (prev[commentId] || 0) + limit,
+      }));
+
+      // Nếu chưa đủ replies, gọi thêm
+      const totalReplies = (replies[commentId]?.length || 0) + data.length;
+      if (totalReplies < 5 && data.length > 0) {
+        const remainingReplies = 5 - totalReplies;
+        fetchRepliesFComments(commentId, remainingReplies); // Lấy thêm nếu chưa đủ 5
+      }
+    } catch (error) {
+      console.error("Error fetching replies:", error);
     }
   };
 
@@ -78,49 +105,9 @@ const PostDetail = () => {
     setComments([]);
     setCommentOffset(0);
     setHasMoreComments(true);
-    fetchComments(0);
+    fetchPostImage();
+    fetchCommentList(0);
   }, [postId]);
-
-  const fetchRepliesForComment = async (commentId: number, limit: number) => {
-    try {
-      const { data, error } = await supabase.rpc("get_replies_for_comment", {
-        this_limit: limit,
-        this_offset: replies[commentId]?.length || 0,
-        this_comment_id: commentId,
-      });
-      if (error) {
-        console.error("Error fetching replies:", error);
-      } else {
-        setReplies((prevReplies) => {
-          const existingReplies = prevReplies[commentId] || [];
-          const newReplies = data.filter(
-            (reply: any) =>
-              !existingReplies.some(
-                (existingReply) => existingReply.id === reply.id
-              )
-          );
-          return {
-            ...prevReplies,
-            [commentId]: [...existingReplies, ...newReplies],
-          };
-        });
-        setVisibleReplies((prev) => ({
-          ...prev,
-          [commentId]: (prev[commentId] || 0) + limit,
-        }));
-
-        // If initial fetch has less than 5 replies, fetch more until we have 5
-        if (replies[commentId]?.length + data.length < 5 && data.length > 0) {
-          fetchRepliesForComment(
-            commentId,
-            5 - (replies[commentId]?.length + data.length)
-          );
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching replies:", error);
-    }
-  };
 
   const handleCommentSectionClick = () => {
     if (commentBoxRef?.current) {
@@ -148,11 +135,11 @@ const PostDetail = () => {
   };
 
   const handleSeeMoreReplies = (commentId: number) => {
-    fetchRepliesForComment(commentId, 5);
+    fetchRepliesFComments(commentId, 5);
   };
 
   const handleSeeMoreComments = () => {
-    fetchComments(commentOffset);
+    fetchCommentList(commentOffset);
   };
 
   return (
@@ -224,7 +211,7 @@ const PostDetail = () => {
             ref={commentBoxRef}
             placeholder={placeholder}
             postId={postId}
-            refreshList={() => fetchComments(0)}
+            refreshList={() => fetchCommentList(0)}
           />
         </div>
       </div>
