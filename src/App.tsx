@@ -8,7 +8,7 @@ import HeaderBar from "./components/mainComponents/headerBar/HeaderBar";
 import SideBar from "./components/mainComponents/sideBar/SideBar";
 import Profile from "./pages/SocialPage/profile/Profile";
 import RightBar from "./components/socialComponents/rightBar/RightBar";
-import RulePage from "./pages/policies/Policies";
+import RulePage from "./pages/Policies/Policies";
 import AboutUs from "./pages/aboutus/AboutUs";
 import Announcement from "./pages/announcement/Announcement";
 import Post from "./pages/SocialPage/ProfileChild/Post/Post";
@@ -18,7 +18,7 @@ import MangaDetails from "./pages/mangadetails/MangaDetails";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 import Feed from "./pages/SocialPage/feed/Feed";
-import SearchMangaPage from "./pages/searchMangaPage/SearchMangaPage";
+import SearchMangaPage from "./pages/searchmangapage/SearchMangaPage";
 import ReadChapter from "./pages/readchapter/ReadChapter";
 import ScrollToTop from "./hooks/useScrollToTop";
 import Discorver from "./pages/SocialPage/discorver/Discorver";
@@ -26,7 +26,7 @@ import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 import MangaHistory from "./pages/mangahistory/History";
 import ProtectedRoute from "./hooks/protectRouter";
-import LatestManga from "./pages/searchMangaPage/latestManga/LatestManga";
+import LatestManga from "./pages/searchmangapage/latestManga/LatestManga";
 
 function App() {
   const Layout = () => {
