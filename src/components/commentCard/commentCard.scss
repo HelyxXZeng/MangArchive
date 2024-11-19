@@ -1,4 +1,4 @@
-@import './../../global-styles/Color.scss';
+@import '../../global-styles/Color.scss';
 
 .commentCardContainer{
     display: flex;
@@ -59,6 +59,7 @@
                         display: -webkit-box;
                         width: 100%;
                         -webkit-line-clamp: 1;
+                        line-clamp: 1;
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
