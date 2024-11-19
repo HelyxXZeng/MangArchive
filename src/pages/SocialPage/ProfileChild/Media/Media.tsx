@@ -4,6 +4,8 @@ import "./media.scss";
 import useCheckSession from "../../../../hooks/session";
 import { supabase } from "../../../../utils/supabase";
 import { useParams, useNavigate } from "react-router-dom";
+import { phraseImageUrl } from "../../../../utils/imageLinkPhraser";
+import LoadingWave from "../../../../components/loadingWave/LoadingWave";
 
 const Media = () => {
   const session = useCheckSession();
@@ -53,8 +55,10 @@ const Media = () => {
           } else {
             console.log(data);
             const images = data.map((image: any) => {
-              const linkObj = JSON.parse(image.link);
-              return { publicUrl: linkObj.publicUrl, postId: image.post_id };
+              return {
+                publicUrl: phraseImageUrl(image.link),
+                postId: image.post_id,
+              };
             });
             setImages(images);
           }
@@ -72,7 +76,11 @@ const Media = () => {
   }, [userInfo]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="NoMedia">
+        <LoadingWave />
+      </div>
+    );
   }
 
   return (

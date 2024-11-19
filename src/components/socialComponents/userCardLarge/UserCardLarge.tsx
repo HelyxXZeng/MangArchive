@@ -25,7 +25,7 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
   const [profileImages, setProfileImages] = useState<{
     avatar: string;
   } | null>(null);
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(true);
   const [realUserID, setRealUserID] = useState<any>(null);
   const session = useCheckSession();
   const navigate = useNavigate();

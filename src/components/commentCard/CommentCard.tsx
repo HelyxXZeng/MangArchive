@@ -10,6 +10,7 @@ import {
 import "./commentCard.scss";
 import { fetchUserInfo, fetchUserProfileImages } from "../../api/userAPI";
 import { phraseImageUrl } from "../../utils/imageLinkPhraser";
+import LoadingWave from "../loadingWave/LoadingWave";
 
 interface CommentCardProps {
   className?: string;
@@ -114,7 +115,11 @@ const CommentCard: React.FC<CommentCardProps> = ({
   };
 
   if (!commentData || !userInfo) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loadingSmall">
+        <LoadingWave />
+      </div>
+    );
   }
 
   const level = Math.floor((userInfo?.level || 0) / 100);

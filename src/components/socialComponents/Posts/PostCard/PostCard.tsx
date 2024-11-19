@@ -13,6 +13,7 @@ import {
   toggleLikeStatus,
 } from "../../../../api/postAPI";
 import { fetchMangaById } from "../../../../api/mangaAPI";
+import LoadingWave from "../../../loadingWave/LoadingWave";
 
 interface PostCardProps {
   postId: any;
@@ -246,7 +247,12 @@ const PostCard = ({
       break;
   }
 
-  if (!postInfo) return <div>Loading Current Post...</div>;
+  if (!postInfo)
+    return (
+      <div className="loading">
+        <LoadingWave />
+      </div>
+    );
   const level = !isNaN(Math.floor(userInfo?.level / 100))
     ? Math.floor(userInfo?.level / 100)
     : 0;

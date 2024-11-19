@@ -119,8 +119,14 @@
                     .level{
                         font-weight: 400;
                         font-style: italic;
-                        .textHighlightBlue{
+                        .bluetext{
                             color: $blue-soft;
+                        }
+                        .redtext{
+                            color: $like-pink;
+                        }
+                        .yellowtext{
+                            color: $orange-yellow;
                         }
                     }
                     .level,.Name{

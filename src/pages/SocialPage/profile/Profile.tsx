@@ -208,7 +208,13 @@ import { Avatar, Button, Tab, Tabs } from "@mui/material";
 import UpdateProfileModal from "../../../components/modal/updateProfileModal/UpdateProfileModal";
 import { supabase } from "../../../utils/supabase";
 import useCheckSession from "../../../hooks/session";
-import { fetchUserIdByEmail } from "../../../api/userAPI";
+import {
+  fetchProfileCountData,
+  fetchUserIdByEmail,
+  fetchUserProfileImages,
+} from "../../../api/userAPI";
+import { followUserById, unfollowUserById } from "../../../api/scocialAPI";
+import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -275,15 +281,8 @@ const Profile = () => {
 
   const followUser = async () => {
     try {
-      const { error } = await supabase.rpc("follow_user", {
-        this_user_id: userID,
-        follow_user_id: userInfo.id,
-      });
-      if (error) {
-        console.error("Error following user:", error);
-      } else {
-        setIsFollowed(true);
-      }
+      await followUserById(userID, userInfo.id);
+      setIsFollowed(true);
     } catch (error) {
       console.error("Error following user:", error);
     }
@@ -291,15 +290,8 @@ const Profile = () => {
 
   const unfollowUser = async () => {
     try {
-      const { error } = await supabase.rpc("unfollow_user", {
-        this_user_id: userID,
-        follow_user_id: userInfo.id,
-      });
-      if (error) {
-        console.error("Error unfollowing user:", error);
-      } else {
-        setIsFollowed(false);
-      }
+      await unfollowUserById(userID, userInfo.id);
+      setIsFollowed(false);
     } catch (error) {
       console.error("Error unfollowing user:", error);
     }
@@ -335,54 +327,38 @@ const Profile = () => {
 
   //đếm bài đăng và following
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const fetchCountData = async () => {
       if (userInfo?.id) {
         try {
-          const [posts, groups, friends] = await Promise.all([
-            supabase.rpc("get_user_posts", {
-              this_limit: 1000,
-              this_offset: 0,
-              this_user_id: userInfo.id,
-            }),
-            supabase.rpc("get_follow_group", { this_user_id: userInfo.id }),
-            supabase.rpc("get_follow_user", { this_user_id: userInfo.id }),
-          ]);
-          // console.log(posts.data.length,groups.data.length,friends.data.length)
-          setPostCount(posts.data.length);
-          setGroupCount(groups.data.length);
-          setFriendCount(friends.data.length);
+          const { postCount, groupCount, friendCount } =
+            await fetchProfileCountData(userInfo.id);
+          setPostCount(postCount);
+          setGroupCount(groupCount);
+          setFriendCount(friendCount);
         } catch (error) {
           console.error("Error fetching profile data:", error);
         }
       }
     };
 
-    fetchProfileData();
+    fetchCountData();
   }, [userInfo]);
 
   useEffect(() => {
     const fetchProfileImages = async () => {
       try {
         if (userInfo?.id) {
-          const { data, error } = await supabase.rpc("get_profile_image", {
-            this_user_id: userInfo.id,
-          });
+          const { data, error } = await fetchUserProfileImages(userInfo.id);
           if (error) console.error(error);
           else {
             if (data[0]) {
-              const avatarLink = data[0].avatar_link
-                ? JSON.parse(data[0].avatar_link).publicUrl
-                : "";
-              const backgroundLink = data[0].background_link
-                ? JSON.parse(data[0].background_link).publicUrl
-                : "";
+              const avatarLink = phraseImageUrl(data[0].avatar_link);
+              const backgroundLink = phraseImageUrl(data[0].background_link);
 
               setProfileImages({
                 avatar: avatarLink || "",
                 background: backgroundLink || "",
               });
-            } else {
-              setProfileImages({ avatar: "", background: "" });
             }
           }
         } else {
@@ -496,8 +472,16 @@ const Profile = () => {
               <span className="Name">{userInfo?.username}</span>
               <span className="level">
                 LV
-                <span className="textHighlightBlue">
-                  {level >= 0 ? level : ""}
+                <span
+                  className={`textHighlight ${
+                    level < 4
+                      ? "bluetext"
+                      : level < 7
+                      ? "yellowtext"
+                      : "redtext"
+                  }`}
+                >
+                  {level}
                 </span>
               </span>
             </div>

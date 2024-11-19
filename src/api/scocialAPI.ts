@@ -45,6 +45,70 @@ export const fetchGroupSuggestList = async (
   }
 };
 
+export const fetchFollowingUsers = async (userId: string | undefined) => {
+  try {
+    if (userId) {
+      const { data, error } = await supabase.rpc("get_follow_user", {
+        this_user_id: userId,
+      });
+
+      if (error) {
+        console.error("Error fetching following users:", error);
+        throw error;
+      }
+      return data;
+    }
+    throw new Error("User ID is undefined");
+  } catch (error) {
+    console.error("Error in fetchFollowingUsers:", error);
+    throw error;
+  }
+};
+
+export const fetchFollowingGroups = async (userId: string | undefined) => {
+  try {
+    if (userId) {
+      const { data, error } = await supabase.rpc("get_follow_group", {
+        this_user_id: userId,
+      });
+
+      if (error) {
+        console.error("Error fetching following groups:", error);
+        throw error;
+      }
+      return data;
+    }
+    throw new Error("User ID is undefined");
+  } catch (error) {
+    console.error("Error in fetchFollowingGroups:", error);
+    throw error;
+  }
+};
+
+export const fetchUserPosts = async (
+  userId: string,
+  limit: number = 5,
+  offset: number = 0
+) => {
+  try {
+    const { data, error } = await supabase.rpc("get_user_posts", {
+      this_limit: limit,
+      this_offset: offset,
+      this_user_id: userId,
+    });
+
+    if (error) {
+      console.error("Error fetching user posts:", error);
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in fetchUserPosts:", error);
+    throw error;
+  }
+};
+
 //SET
 export const followUserById = async (realUserID: number, userID: number) => {
   try {
