@@ -26,7 +26,7 @@ import MangaLibrary from "./pages/mangalibrary/MangaLibrary";
 import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 import MangaHistory from "./pages/mangahistory/History";
 import ProtectedRoute from "./hooks/protectRouter";
-import LatestManga from "./pages/searchMangaPage/LatestManga";
+import LatestManga from "./pages/searchMangaPage/latestManga/LatestManga";
 
 function App() {
   const Layout = () => {
