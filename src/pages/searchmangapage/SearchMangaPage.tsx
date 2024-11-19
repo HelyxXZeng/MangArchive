@@ -6,7 +6,7 @@ import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import searchManga from "../../utils/MangaSearch";
 import TriStateCheckbox from "./checkbox/TriStateCheckbox"; // Adjust the path as necessary
 
-const MangaSearchPage: React.FC = () => {
+const SearchMangaPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -270,4 +270,4 @@ const MangaSearchPage: React.FC = () => {
   );
 };
 
-export default MangaSearchPage;
+export default SearchMangaPage;
