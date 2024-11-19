@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import "./SearchMangaPage.scss";
+import "../SearchMangaPage.scss";
 import MangaCard from "../../../components/mangaComponents/title/TitleCard2";
 import searchManga from "../../../utils/MangaSearch";
 

@@ -18,7 +18,7 @@ import MangaDetails from "./pages/mangadetails/MangaDetails";
 import Friends from "./pages/SocialPage/ProfileChild/Friends/Friends";
 import Groups from "./pages/SocialPage/ProfileChild/Groups/Groups";
 import Feed from "./pages/SocialPage/feed/Feed";
-import SearchMangaPage from "";
+import MangaSearchPage from "./pages/searchMangaPage/SearchMangaPage";
 import ReadChapter from "./pages/readchapter/ReadChapter";
 import ScrollToTop from "./hooks/useScrollToTop";
 import Discorver from "./pages/SocialPage/discorver/Discorver";
@@ -81,7 +81,7 @@ function App() {
         },
         {
           path: "/search",
-          element: <SearchMangaPage />,
+          element: <MangaSearchPage />,
           children: [],
         },
         {
