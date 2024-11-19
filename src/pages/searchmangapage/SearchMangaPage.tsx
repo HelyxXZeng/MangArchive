@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./SearchMangaPage.scss";
+import "./searchMangaPage.scss";
 import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import searchManga from "../../utils/MangaSearch";
-import TriStateCheckbox from "./TriStateCheckbox"; // Adjust the path as necessary
+import TriStateCheckbox from "./checkbox/TriStateCheckbox"; // Adjust the path as necessary
 
 const MangaSearchPage: React.FC = () => {
   const navigate = useNavigate();
