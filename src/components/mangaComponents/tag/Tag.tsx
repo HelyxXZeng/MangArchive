@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./Tag.scss";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 interface Props {
   tag: any;
@@ -10,7 +10,7 @@ interface Props {
 const Tag: React.FC<Props> = ({ tag, includedTags = [] }) => {
   const isTagIncluded = includedTags.includes(tag.id);
   const tagStyle = {
-    backgroundColor: isTagIncluded ? '#FFC122' : '',
+    backgroundColor: isTagIncluded ? "#FFC122" : "",
   };
 
   return (

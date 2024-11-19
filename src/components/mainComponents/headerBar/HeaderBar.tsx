@@ -27,7 +27,8 @@ const HeaderBar = () => {
       setStatus(true);
     }
   }, [session]);
-  const [notificationCount, setNotificationCount] = useState(1);
+  // const [notificationCount, setNotificationCount] = useState(1);
+  let notificationCount = 1;
   const [searchInput, setSearchInput] = useState<string>("");
   const [profileImages, setProfileImages] = useState<{
     avatar: string;
