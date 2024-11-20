@@ -68,13 +68,8 @@ const MangaHistory: React.FC<Props> = () => {
           return;
         }
         if (sessionData && sessionData.user?.email) {
-          let { data, error } = await fetchUserIdByEmail(
-            sessionData.user.email
-          );
-          if (error) console.error(error);
-          else {
-            setUserID(data);
-          }
+          const data = await fetchUserIdByEmail(sessionData.user.email);
+          setUserID(data);
         }
       } catch (error) {
         console.error("Error fetching user:", error);

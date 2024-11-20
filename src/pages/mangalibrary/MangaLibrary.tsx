@@ -78,14 +78,9 @@ const MangaLibrary: React.FC<Props> = () => {
           return;
         }
         if (sessionData && sessionData.user?.email) {
-          let { data, error } = await fetchUserIdByEmail(
-            sessionData.user.email
-          );
-          if (error) console.error(error);
-          else {
-            setUserID(data);
-            console.log("User ID: ", data);
-          }
+          const data = await fetchUserIdByEmail(sessionData.user.email);
+          setUserID(data);
+          console.log("User ID: ", data);
         }
       } catch (error) {
         console.error("Error fetching user:", error);
