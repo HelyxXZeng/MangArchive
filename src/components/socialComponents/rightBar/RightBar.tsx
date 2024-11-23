@@ -9,12 +9,13 @@ import {
   fetchMostSimilarUsers,
   fetchUserIdByEmail,
 } from "../../../api/userAPI";
+import { useTranslation } from "react-i18next";
 const RightBar = () => {
   const [comics, setComics] = useState([]);
   const [suggestUser, setSuggestUser] = useState<any>([]);
   const session = useCheckSession();
   const [userID, setUserID] = useState<any>(null);
-
+  const { t } = useTranslation("", { keyPrefix: "rightbar" });
   useEffect(() => {
     const getUserID = async () => {
       if (session && session.user) {
@@ -59,7 +60,7 @@ const RightBar = () => {
   return (
     <div className="rightBarContainer">
       <div className="sugesstCard">
-        <h1>Who to follow</h1>
+        <h1>{t("who_to_follow")}</h1>
         {suggestUser.map((user: any, index: any) => (
           <div key={index}>
             <UserCardSmall
@@ -69,11 +70,11 @@ const RightBar = () => {
           </div>
         ))}
         <NavLink to="/discover" className="seeMoreLink">
-          See more
+          {t("see_more")}
         </NavLink>
       </div>
       <div className="sugesstCard">
-        <h1>Translation groups</h1>
+        <h1>{t("translation_groups")}</h1>
         {suggestUser.map((user: any, index: any) => (
           <div key={index}>
             <UserCardSmall
@@ -83,11 +84,11 @@ const RightBar = () => {
           </div>
         ))}
         <NavLink to="/discover?is_group=true" className="seeMoreLink">
-          See more
+          {t("see_more")}
         </NavLink>
       </div>
       <div className="trend sugesstCard">
-        <h1>Trends</h1>
+        <h1>{t("trends")}</h1>
         {comics.map((comic: any, index: any) => (
           <ComicCard
             key={index}
@@ -102,7 +103,7 @@ const RightBar = () => {
           />
         ))}
         <NavLink to="latest" className="seeMoreLink">
-          See more
+          {t("see_more")}
         </NavLink>
       </div>
     </div>

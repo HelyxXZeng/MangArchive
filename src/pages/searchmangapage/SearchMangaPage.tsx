@@ -5,6 +5,7 @@ import "./SearchMangaPage.scss";
 import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import searchManga from "../../utils/MangaSearch";
 import TriStateCheckbox from "./checkbox/TriStateCheckbox"; // Adjust the path as necessary
+import { useTranslation } from "react-i18next";
 
 const SearchMangaPage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const SearchMangaPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageInput, setPageInput] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<number>(1);
-
+  const { t } = useTranslation("", { keyPrefix: "search-page" });
   // Fetch tags only once
   useEffect(() => {
     const fetchTags = async () => {
@@ -167,15 +168,13 @@ const SearchMangaPage: React.FC = () => {
 
   return (
     <div className="search-page">
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="error-message">{t("error-message", { error })}</div>
+      )}
       {mangaTags && mangaTags.length > 0 && (
         <>
+          <p style={{ color: "whitesmoke" }}>{t("tag-instruction")}</p>
           <div className={`tag-checkboxes ${show ? "show" : ""}`}>
-            <p style={{ color: "whitesmoke" }}>
-              For searching with each of the tags, click the tag once to have
-              that tag included in the results, click the second time to exclude
-              it, and the third time to back to normal
-            </p>
             {thisIncludedTags &&
               thisExcludedTags &&
               mangaTags.map((tag) => (
@@ -194,7 +193,7 @@ const SearchMangaPage: React.FC = () => {
             </button>
             <input
               type="text"
-              placeholder="Search something!"
+              placeholder={t("search-placeholder")}
               spellCheck="false"
               value={searchInput}
               onChange={handleSearchChange}
@@ -208,7 +207,7 @@ const SearchMangaPage: React.FC = () => {
             </button>
           </div>
           <button className="search-button" onClick={handleSearchPress}>
-            Search
+            {t("search-button")}
           </button>
         </>
       )}
@@ -221,7 +220,7 @@ const SearchMangaPage: React.FC = () => {
           <div className="loading-bar"></div>
         </div>
       ) : totalCount === 0 ? (
-        <div className="error-message">No results found</div>
+        <div className="error-message">{t("no-results")}</div>
       ) : (
         <div>
           <div className="manga-grid-container">
@@ -243,7 +242,7 @@ const SearchMangaPage: React.FC = () => {
                 className="previous-chapter-page"
                 onClick={handlePrevious}
               >
-                Previous
+                {t("previous-page")}
               </button>
             )}
             <input
@@ -257,10 +256,10 @@ const SearchMangaPage: React.FC = () => {
                 borderRadius: "4px",
               }}
             />
-            <span> / {totalPages}</span>
+            <span>{t("pagination", { totalPages })}</span>
             {currentPage < totalPages && (
               <button className="next-chapter-page" onClick={handleNext}>
-                Next
+                {t("next-page")}
               </button>
             )}
           </div>

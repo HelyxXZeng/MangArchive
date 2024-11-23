@@ -9,6 +9,7 @@ import {
   fetchUserProfileImages,
 } from "../../../../api/userAPI";
 import { phraseImageUrl } from "../../../../utils/imageLinkPhraser";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   refreshList?: () => void;
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const PostSection = (prop: Props) => {
+  const { t } = useTranslation("", { keyPrefix: "postSection" });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
@@ -69,16 +71,14 @@ const PostSection = (prop: Props) => {
             <Avatar
               className="Avatar"
               src={profileImages?.avatar}
-              alt="avatar"
+              alt={t("avatarAlt")}
               sx={{ width: "40px", height: "40px" }}
             />
           </NavLink>
         </div>
         <div className="press">
           <Button className="click" variant="contained" onClick={handleOpen}>
-            <span className="text">
-              What's your take? Share to enlighten others!
-            </span>
+            <span className="text">{t("promptText")}</span>
           </Button>
           <PostModal
             open={isModalOpen}
@@ -88,13 +88,11 @@ const PostSection = (prop: Props) => {
           />
         </div>
       </div>
-      <h4> Or you can </h4>
+      <h4>{t("orText")}</h4>
       <div className="navHistory">
         <NavLink to="/history">
           <Button className="click" variant="contained">
-            <span className="text">
-              Suggest your favorite Manga, Manhua, Manhwa to others!
-            </span>
+            <span className="text">{t("suggestButtonText")}</span>
           </Button>
         </NavLink>
       </div>

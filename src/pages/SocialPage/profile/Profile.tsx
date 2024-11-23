@@ -215,6 +215,7 @@ import {
 } from "../../../api/userAPI";
 import { followUserById, unfollowUserById } from "../../../api/scocialAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -240,7 +241,7 @@ const Profile = () => {
   const [postCount, setPostCount] = useState(0);
   const [groupCount, setGroupCount] = useState(0);
   const [friendCount, setFriendCount] = useState(0);
-
+  const { t } = useTranslation("", { keyPrefix: "profile" });
   useEffect(() => {
     const getUserID = async () => {
       if (session && session.user) {
@@ -411,12 +412,14 @@ const Profile = () => {
     <div className="profileFrame">
       <div className="main">
         <section className="headernav">
-          <button className="backbutton" onClick={handleBack} title="back">
+          <button className="backbutton" onClick={handleBack} title={t("back")}>
             <img src="/icons/arrow-left.svg" alt="" />
           </button>
           <div className="headerInfo">
             <div className="name">{userInfo?.name || username}</div>
-            <div className="postCount">{postCount || 0} Posts</div>
+            <div className="postCount">
+              {postCount || 0} {t("post", { count: postCount })}
+            </div>
           </div>
         </section>
         <div className="profileInfoFrame">
@@ -448,7 +451,7 @@ const Profile = () => {
                   variant="contained"
                   sx={{ borderRadius: "24px" }}
                 >
-                  Edit Profile
+                  {t("editProfile")}
                 </Button>
                 <UpdateProfileModal
                   open={isModalOpen}
@@ -463,7 +466,7 @@ const Profile = () => {
                 variant="contained"
                 sx={{ borderRadius: "24px" }}
               >
-                {isFollowed ? "Unfollow" : "Follow"}
+                {isFollowed ? t("unfollow") : t("follow")}
               </Button>
             )}
           </div>
@@ -471,7 +474,7 @@ const Profile = () => {
             <div className="userNameChild">
               <span className="Name">{userInfo?.username}</span>
               <span className="level">
-                LV
+                {t("level")}
                 <span
                   className={`textHighlight ${
                     level < 4
@@ -497,7 +500,7 @@ const Profile = () => {
               <div className="joinDate">
                 <img src="/icons/calendar.svg" alt="" />
                 <span>
-                  Joined in{" "}
+                  {t("joinedIn")}{" "}
                   <span className="textHighlight">
                     {new Date(userInfo?.join_date).toLocaleString("default", {
                       month: "long",
@@ -507,16 +510,22 @@ const Profile = () => {
                 </span>
               </div>
             </div>
-            <div className="friendCount">
-              <div className="friends">
-                <span className="textHighlight">{friendCount}</span>
-                <span> Friends</span>
+            {friendCount > 0 && (
+              <div className="friendCount">
+                <div className="friends">
+                  <span className="textHighlight">{friendCount}</span>
+                  <span> {t("friends", { count: friendCount })}</span>
+                </div>
               </div>
-              <div className="mutual">
-                <span className="textHighlight">{groupCount}</span>
-                <span> Groups</span>
+            )}
+            {groupCount > 0 && (
+              <div className="friendCount">
+                <div className="mutual">
+                  <span className="textHighlight">{groupCount}</span>
+                  <span> {t("groups")}</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         <div className="userThings">
@@ -549,25 +558,25 @@ const Profile = () => {
               }}
             >
               <Tab
-                label="Post"
+                label={t("post")}
                 to={`/profile/${username}`}
                 value={`/profile/${username}`}
                 component={Link}
               />
               <Tab
-                label="Media"
+                label={t("media")}
                 to={`/profile/${username}/media`}
                 value={`/profile/${username}/media`}
                 component={Link}
               />
               <Tab
-                label="Friends"
+                label={t("friends")}
                 to={`/profile/${username}/friends`}
                 value={`/profile/${username}/friends`}
                 component={Link}
               />
               <Tab
-                label="Groups"
+                label={t("groups")}
                 to={`/profile/${username}/groups`}
                 value={`/profile/${username}/groups`}
                 component={Link}

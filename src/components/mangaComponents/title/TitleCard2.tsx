@@ -6,6 +6,7 @@ import Tag from "../tag/Tag";
 import { getDataApi } from "../../../utils/MangaData";
 import { getStatsApi } from "../../../utils/MangaStatistic";
 import { Link, NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   manga: any;
@@ -20,7 +21,7 @@ const MangaCard: React.FC<Props> = ({ manga, includedTags = [] }) => {
   const [lastUpdated, setLastUpdated] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [rating, setRating] = useState<number | null>(null);
-
+  const { t } = useTranslation("", { keyPrefix: "utils-time" });
   const getCover = async () => {
     manga.relationships.forEach((relate: any) => {
       if (relate.type === "cover_art") {
@@ -47,14 +48,16 @@ const MangaCard: React.FC<Props> = ({ manga, includedTags = [] }) => {
         let adjustedTime = "";
 
         if (months > 0) {
-          adjustedTime += `${months} month${months > 1 ? "s" : ""} ago`;
+          adjustedTime = t("months", { count: months });
         } else if (days > 0) {
-          adjustedTime += `${days} day${days > 1 ? "s" : ""} ago`;
+          adjustedTime = t("days", { count: days });
         } else if (hours > 0) {
-          adjustedTime += `${hours} hour${hours > 1 ? "s" : ""} ago`;
+          adjustedTime = t("hours", { count: hours });
         } else if (minutes > 0) {
-          adjustedTime += `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-        } else adjustedTime += `${seconds} second${seconds > 1 ? "s" : ""} ago`;
+          adjustedTime = t("minutes", { count: minutes });
+        } else {
+          adjustedTime = t("seconds", { count: seconds });
+        }
 
         setLastUpdated(adjustedTime);
       })

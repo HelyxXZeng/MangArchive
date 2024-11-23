@@ -1,17 +1,30 @@
 import { useCallback, useEffect, useState } from "react";
 import "./headerBar.scss";
 import { Avatar, Badge, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import useCheckSession from "../../../hooks/session";
 import {
   fetchUserIdByEmail,
+  fetchUserInfo,
   fetchUserProfileImages,
 } from "../../../api/userAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
+import { useTranslation } from "react-i18next";
 
 const HeaderBar = () => {
   const navigate = useNavigate();
   const [realUserID, setRealUserID] = useState<any>(null);
+  const session = useCheckSession();
+  const [status, setStatus] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
+  let notificationCount = 1;
+  // const [notificationCount, setNotificationCount] = useState(1);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [profileImages, setProfileImages] = useState<{
+    avatar: string;
+  } | null>(null);
+  const { t } = useTranslation("", { keyPrefix: "header-bar" });
+
   const onLoginButtonClick = useCallback(() => {
     navigate("/auth/login");
   }, [navigate]);
@@ -19,20 +32,11 @@ const HeaderBar = () => {
   const onSignUpContainerClick = useCallback(() => {
     navigate("/auth/signup");
   }, [navigate]);
-  const session = useCheckSession();
-
-  const [status, setStatus] = useState<boolean>(false);
   useEffect(() => {
     if (session !== null) {
       setStatus(true);
     }
   }, [session]);
-  // const [notificationCount, setNotificationCount] = useState(1);
-  let notificationCount = 1;
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [profileImages, setProfileImages] = useState<{
-    avatar: string;
-  } | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -48,10 +52,26 @@ const HeaderBar = () => {
         }
       }
     };
-
     getUserID();
   }, [session]);
 
+  useEffect(() => {
+    const getUserName = async () => {
+      try {
+        if (realUserID) {
+          const { data, error } = await fetchUserInfo(realUserID);
+          if (error) console.error(error);
+          else {
+            console.log(data[0].username);
+            setUsername(data[0].username);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+    getUserName();
+  }, [realUserID]);
   useEffect(() => {
     const fetchProfileImages = async () => {
       try {
@@ -99,7 +119,7 @@ const HeaderBar = () => {
           </button>
           <input
             type="text"
-            placeholder="Search something!"
+            placeholder={t("search")}
             spellCheck="false"
             value={searchInput}
             onChange={handleSearchChange}
@@ -130,16 +150,18 @@ const HeaderBar = () => {
                   <img src="/icons/messagetext.svg" alt="Notifications" />
                 </Badge>
               </div>
-              <Avatar
-                className="avatar"
-                src={profileImages?.avatar}
-                alt="avatar"
-                sx={{
-                  width: "48px",
-                  height: "48px",
-                  border: "2px solid #1F1F1F",
-                }}
-              />
+              <NavLink to={`/profile/${username}`}>
+                <Avatar
+                  className="avatar"
+                  src={profileImages?.avatar}
+                  alt="avatar"
+                  sx={{
+                    width: "48px",
+                    height: "48px",
+                    border: "2px solid #1F1F1F",
+                  }}
+                />
+              </NavLink>
             </div>
           ) : (
             <div className="authButton">
@@ -157,7 +179,7 @@ const HeaderBar = () => {
                   },
                 }}
               >
-                Login
+                {t("login")}
               </Button>
               <Button
                 variant="contained"
@@ -174,7 +196,7 @@ const HeaderBar = () => {
                   },
                 }}
               >
-                Sign Up
+                {t("signup")}
               </Button>
             </div>
           )}

@@ -18,6 +18,7 @@ import {
 import { uploadImage } from "../../api/fileUploadAPI";
 import { fetchUserIdByEmail, fetchUserProfileImages } from "../../api/userAPI";
 import { phraseImageUrl } from "../../utils/imageLinkPhraser";
+import { useTranslation } from "react-i18next";
 
 interface CommentBoxProps {
   postId?: string | any;
@@ -54,7 +55,7 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+  const { t } = useTranslation("", { keyPrefix: "utils-reply" });
   useImperativeHandle(ref, () => ({
     focusTextarea: () => {
       textareaRef.current?.focus();
@@ -213,7 +214,7 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
             onChange={(e) => setComment(e.target.value)}
             placeholder={
               replyInfo
-                ? `Replying to ${replyInfo.username}`
+                ? `${t("reply-user")}${replyInfo.username}`
                 : props.placeholder || "Nhập bình luận..."
             }
             // placeholder={replyInfo ? `Replying to ${replyInfo.username} (ID: ${replyInfo.userId}) (Comment ID: ${replyInfo.commentId})` : (props.placeholder || "Nhập bình luận...")}

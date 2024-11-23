@@ -1,0 +1,151 @@
+{
+  "header-bar": {
+    "search": "Tìm kiếm gì đó đi!",
+    "login": "Đăng nhập",
+    "signup": "Đăng ký"
+  },
+  "sidebar": {
+    "MangArchive": "MangArchive -",
+    "Home": "Trang chủ",
+    "Latest": "Mới nhất",
+    "Advance Search": "Tìm kiếm nâng cao",
+    "Social": "Mạng xã hội -",
+    "Feed": "Bảng tin",
+    "Discover": "Khám phá",
+    "Translation": "Dịch thuật",
+    "Notification": "Thông báo",
+    "General": "Chung -",
+    "Profile": "Hồ sơ",
+    "Library": "Thư viện",
+    "Recent History": "Lịch sử gần đây",
+    "Other": "Khác -",
+    "Setting": "Cài đặt",
+    "Site Policies": "Chính sách trang",
+    "Announcements": "Thông báo chung",
+    "About Us": "Về chúng tôi"
+  },
+  "manga-home": {
+    "recent": "Cập Nhật",
+    "updated": "Gần Đây",
+    "all_category": "Tất cả thể loại",
+    "random": "Truyện",
+    "manga": "Ngẫu Nhiên"
+  },
+  "login": {
+    "welcome": "Welcome",
+    "back": "back",
+    "slogan": "Khám phá manga, manhua và manhwa, theo dõi tiến độ của bạn và tham gia mạng xã hội! Chúc vui vẻ!",
+    "emailPlaceholder": "Email hoặc Tên người dùng",
+    "passwordPlaceholder": "Mật khẩu",
+    "rememberMe": "Ghi nhớ tôi",
+    "recoveryPassword": "Khôi phục mật khẩu",
+    "loginWithGoogle": "Đăng nhập với Google",
+    "dontHaveAccount": "Chưa có tài khoản?",
+    "signUp": "Đăng ký",
+    "invalidEmailPassword": "Email hoặc mật khẩu không đúng",
+    "captchaError": "Lỗi CAPTCHA, vui lòng thử lại",
+    "existUsername": "Tên người dùng không tồn tại",
+    "emailrequire": "Phải nhập tên người dùng hoặc Email",
+    "passRequire": "Phải nhập mật khẩu",
+    "invalidUsernamePassword": "Sai tên người dùng hoặc mật khẩu",
+    "supportFeature": "Tính năng này chưa hỗ trợ nha!",
+    "login": "Đăng nhập"
+  },
+  "signup": {
+    "welcome": "Chào mừng",
+    "slogan": "Khám phá manga, manhua và manhwa, theo dõi tiến độ của bạn và tham gia mạng xã hội! Chúc vui vẻ!",
+    "emailPlaceholder": "Email",
+    "usernamePlaceholder": "Tên người dùng (không dấu, tối đa 32 ký tự)",
+    "passwordPlaceholder": "Mật khẩu",
+    "retypePasswordPlaceholder": "Nhập lại mật khẩu",
+    "supportFeature": "Tính năng này chưa hỗ trợ nha!",
+    "captchaError": "Lỗi CAPTCHA, vui lòng thử lại",
+    "emailError": {
+      "empty": "Email không được để trống",
+      "invalid": "Email không đúng định dạng",
+      "exists": "Email đã tồn tại"
+    },
+    "usernameError": {
+      "empty": "Tên người dùng không được để trống",
+      "whitespace": "Tên người dùng không được chứa khoảng trắng",
+      "exists": "Tên người dùng đã tồn tại"
+    },
+    "passwordError": {
+      "empty": "Mật khẩu không được để trống",
+      "mismatch": "Mật khẩu không khớp"
+    },
+    "signupButton": "Đăng ký",
+    "googleSignup": "Đăng ký với Google",
+    "alreadyHaveAccount": "Đã có tài khoản?",
+    "loginHere": "Đăng nhập"
+  },
+  "utils-time": {
+    "months": "{{count}} tháng trước",
+    "days": "{{count}} ngày trước",
+    "hours": "{{count}} giờ trước",
+    "minutes": "{{count}} phút trước",
+    "seconds": "{{count}} giây trước"
+  },
+  "search-page": {
+    "error-message": "Đã xảy ra lỗi: {{error}}",
+    "tag-instruction": "Để tìm kiếm với từng thẻ, nhấp vào thẻ một lần để bao gồm trong kết quả, nhấp lần hai để loại trừ và nhấp lần ba để đặt lại.",
+    "search-placeholder": "Tìm kiếm gì đó đi!",
+    "no-results": "Không tìm thấy kết quả （＞人＜；）",
+    "search-button": "Tìm kiếm",
+    "previous-page": "Trước",
+    "next-page": "Sau",
+    "pagination": " / {{totalPages}}"
+  },
+  "discover": {
+    "back": "Quay lại",
+    "Discover": "Khám phá",
+    "navTabsExample": "Ví dụ các tab điều hướng",
+    "suggestFollowing": "Gợi ý theo dõi",
+    "translationGroupForYou": "Nhóm dịch cho bạn",
+    "loadMore": "Tải thêm",
+    "noMoreUsers": "Không còn người dùng để tải"
+  },
+  "feed": {
+    "loading": "Đang tải bản tin",
+    "Feed": "Bảng tin"
+  },
+  "utils-reply": {
+    "reply-user": "Trả lời bình luận của @"
+  },
+  "profile": {
+    "back": "Quay lại",
+    "post": "Bài viết",
+    "media": "Hình ảnh",
+    "editProfile": "Chỉnh sửa hồ sơ",
+    "unfollow": "Bỏ theo dõi",
+    "follow": "Theo dõi",
+    "level": "LV",
+    "joinedIn": "Gia nhập vào",
+    "friends": "Bạn bè",
+    "groups": "Nhóm"
+  },
+  "rightbar": {
+    "who_to_follow": "Nên theo dõi ai?",
+    "translation_groups": "Nhóm dịch",
+    "trends": "Xu hướng",
+    "see_more": "Xem thêm"
+  },
+  "postSection": {
+    "avatarAlt": "ảnh đại diện",
+    "promptText": "Bạn nghĩ gì? Hãy chia sẻ để khai sáng người khác!",
+    "orText": "Hoặc bạn có thể",
+    "suggestButtonText": "Gợi ý Manga, Manhua, Manhwa yêu thích của bạn cho mọi người!"
+  },
+  "setting": {
+    "setting-header": "Cài đặt",
+    "general": "Chung",
+    "language": "Ngôn ngữ",
+    "account": "Tài khoản",
+    "current-role": "Vai trò hiện tại của tài khoản bạn",
+    "ask-admin": "Yêu cầu Quản trị viên nâng cấp tài khoản lên Nhóm Dịch thuật",
+    "logout": "Đăng xuất",
+    "cant-undon": "Quá trình này không thể hoàn tác sau khi bạn gửi biểu mẫu. Biểu mẫu sẽ được xử lý trong 24-72 giờ.",
+    "danger-zone": "Khu vực nguy hiểm",
+    "delete": "Tôi muốn xóa tài khoản của mình"
+  }
+}

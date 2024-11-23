@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { TextField, InputAdornment, IconButton, Button } from "@mui/material";
 import "./login.scss";
 import { supabase } from "../../../utils/supabase";
+import axios from "axios";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { useTranslation } from "react-i18next";
 
 const Login: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -13,9 +16,9 @@ const Login: FunctionComponent = () => {
     email: "",
     password: "",
   });
-
+  const [captchaToken, setCaptchaToken] = useState("");
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-
+  const { t } = useTranslation("", { keyPrefix: "login" });
   const onLoginButtonClick = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -24,22 +27,41 @@ const Login: FunctionComponent = () => {
       if (!email) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          email: "Email or Username is required",
+          email: t("emailrequire"),
         }));
       }
       if (!password) {
         setErrors((prevErrors) => ({
           ...prevErrors,
-          password: "Password is required",
+          password: t("passRequire"),
         }));
       }
 
       if (!email || !password) return;
-
+      if (!captchaToken) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: t("captchaError"),
+          password: t("captchaError"),
+        }));
+        return;
+      }
       try {
         const isEmail = email.includes("@");
 
-        if (isEmail) {
+        if (isEmail && captchaToken) {
+          const { data } = await axios.get(
+            "https://test.alse.workers.dev/?token=" + captchaToken
+          );
+
+          if (!data.success) {
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email: t("captchaError"),
+              password: t("captchaError"),
+            }));
+            return;
+          }
           const response = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
@@ -51,47 +73,61 @@ const Login: FunctionComponent = () => {
           } else {
             setErrors((prevErrors) => ({
               ...prevErrors,
-              email: "Invalid email or password",
-              password: "Invalid email or password",
+              email: t("invalidEmailPassword"),
+              password: t("invalidEmailPassword"),
             }));
           }
         } else {
-          const { data, error } = await supabase
-            .from("User")
-            .select("email")
-            .eq("username", email);
+          if (captchaToken) {
+            const { data } = await axios.get(
+              "https://test.alse.workers.dev/?token=" + captchaToken
+            );
 
-          if (error) throw error;
+            if (!data.success) {
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                email: t("captchaError"),
+                password: t("captchaError"),
+              }));
+              return;
+            }
+            const { data: udata, error } = await supabase
+              .from("User")
+              .select("email")
+              .eq("username", email);
 
-          if (data && data.length > 0) {
-            const response = await supabase.auth.signInWithPassword({
-              email: data[0].email,
-              password: password,
-            });
+            if (error) throw error;
 
-            if (response.error) throw response.error;
+            if (udata && udata.length > 0) {
+              const response = await supabase.auth.signInWithPassword({
+                email: udata[0].email,
+                password: password,
+              });
 
-            if (response.data.user) {
-              navigate(`/`, { replace: true });
+              if (response.error) throw response.error;
+
+              if (response.data.user) {
+                navigate(`/`, { replace: true });
+              } else {
+                setErrors((prevErrors) => ({
+                  ...prevErrors,
+                  email: t("invalidUsernamePassword"),
+                }));
+              }
             } else {
               setErrors((prevErrors) => ({
                 ...prevErrors,
-                email: "Invalid username or password",
+                email: t("existUsername"),
               }));
             }
-          } else {
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              email: "Username does not exist",
-            }));
           }
         }
       } catch (error) {
         console.error("Error signing in:", error);
         setErrors((prevErrors) => ({
           ...prevErrors,
-          email: "Invalid username or password",
-          password: "Invalid username or password",
+          email: t("invalidUsernamePassword"),
+          password: t("invalidUsernamePassword"),
         }));
       }
     },
@@ -99,7 +135,7 @@ const Login: FunctionComponent = () => {
   );
 
   const onGoogleLoginContainerClick = useCallback(() => {
-    alert("Tính năng hiện chưa được hỗ trợ");
+    alert(t("supportFeature"));
   }, []);
 
   const onSignUpClick = useCallback(() => {
@@ -127,15 +163,12 @@ const Login: FunctionComponent = () => {
         </div>
         <div className="welcome-content">
           <h1 className="welcome-back">
-            <span>{`Welcome `}</span>
-            <span className="back">back</span>
+            <span>{t("welcome")} </span>
+            <span className="back">{t("back")}</span>
             <span>!</span>
           </h1>
           <div className="description">
-            <div className="slogan">
-              Discover manga, manhua and manhwa, track your progress and join
-              the social network! Have fun!
-            </div>
+            <div className="slogan">{t("slogan")}</div>
           </div>
         </div>
         <div className="loginFrame">
@@ -143,7 +176,7 @@ const Login: FunctionComponent = () => {
             <TextField
               className="username-input-field"
               color="primary"
-              placeholder="Email or Username"
+              placeholder={t("emailPlaceholder")}
               variant="outlined"
               onChange={(event) => {
                 setEmail(event.target.value);
@@ -154,7 +187,7 @@ const Login: FunctionComponent = () => {
             />
             <TextField
               className="password-input-field"
-              placeholder="Password"
+              placeholder={t("passwordPlaceholder")}
               variant="outlined"
               type={showPassword ? "text" : "password"}
               onChange={(event) => {
@@ -180,12 +213,19 @@ const Login: FunctionComponent = () => {
               error={!!errors.password}
               helperText={errors.password}
             />
+            <Turnstile
+              siteKey="0x4AAAAAAA0okrGozsUNzGd-"
+              onSuccess={(token) => setCaptchaToken(token)}
+              onError={() => setCaptchaToken("")}
+              options={{ theme: "light" }}
+              lang="auto"
+            />
             <div className="loginOption">
               <div className="remember-me-button">
                 <input className="checkbox" type="checkbox" />
-                <div className="remember-me">Remember me</div>
+                <div className="remember-me">{t("rememberMe")}</div>
               </div>
-              <b className="recovery-password">Recovery password</b>
+              <b className="recovery-password">{t("recoveryPassword")}</b>
             </div>
           </div>
           <div className="buttonOption">
@@ -202,7 +242,7 @@ const Login: FunctionComponent = () => {
                 },
               }}
             >
-              Login
+              {t("login")}
             </Button>
             <Button
               variant="contained"
@@ -224,15 +264,15 @@ const Login: FunctionComponent = () => {
                 src="/icons/logo_google_icon.png"
               />
               <div className="log-in-with-google-wrapper">
-                <div className="log-in-with">Log in with Google</div>
+                <div className="log-in-with">{t("loginWithGoogle")}</div>
               </div>
             </Button>
           </div>
           <div className="otherOption">
             <div className="signup">
-              Don't have an account?
+              {t("dontHaveAccount")}
               <span onClick={onSignUpClick}>
-                <b> Sign up</b>
+                <b> {t("signUp")}</b>
               </span>
             </div>
           </div>

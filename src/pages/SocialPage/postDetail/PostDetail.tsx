@@ -12,6 +12,7 @@ import {
   fetchPostImages,
   fetchRepliesForComment,
 } from "../../../api/postAPI";
+import { useTranslation } from "react-i18next";
 
 const PostDetail = () => {
   const { id: postId } = useParams<{ id: string }>();
@@ -27,7 +28,7 @@ const PostDetail = () => {
   const [commentOffset, setCommentOffset] = useState<number>(0);
   const [hasMoreComments, setHasMoreComments] = useState<boolean>(true);
   const commentsLimit = 5;
-
+  const { t } = useTranslation("", { keyPrefix: "utils-reply" });
   const fetchPostImage = async () => {
     try {
       if (postId) {
@@ -121,7 +122,7 @@ const PostDetail = () => {
     username: string,
     isReplyToReply: boolean
   ) => {
-    setPlaceholder(`Trả lời bình luận của ${username}`);
+    setPlaceholder(`${t("reply-user")}${username}`);
     if (commentBoxRef.current) {
       commentBoxRef.current.focusTextarea();
       // Assuming commentBoxRef has a setReplyInfo method to pass reply info

@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { TextField, InputAdornment, IconButton, Button } from "@mui/material";
 import "./signup.scss";
 import { supabase } from "../../../utils/supabase";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 const Signup: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -17,6 +20,8 @@ const Signup: FunctionComponent = () => {
     password: "",
     checkPassword: "",
   });
+  const [captchaToken, setCaptchaToken] = useState("");
+  const { t } = useTranslation("", { keyPrefix: "signup" });
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -33,30 +38,43 @@ const Signup: FunctionComponent = () => {
       checkPassword: "",
     };
     if (!email) {
-      validationErrors.email = "Email không được để trống";
+      validationErrors.email = t("emailError.empty");
     } else if (!validateEmail(email)) {
-      validationErrors.email = "Email không đúng định dạng";
+      validationErrors.email = t("emailError.invalid");
     }
 
     if (!username) {
-      validationErrors.username = "Username không được để trống";
+      validationErrors.username = t("usernameError.empty");
     } else if (username.includes(" ")) {
-      validationErrors.username = "Username không được chứa khoảng trắng";
+      validationErrors.username = t("usernameError.whitespace");
     }
 
     if (!password) {
-      validationErrors.password = "Password không được để trống";
+      validationErrors.password = t("passwordError.empty");
     }
 
     if (!checkPassword) {
-      validationErrors.checkPassword = "Nhập lại Password không được để trống";
+      validationErrors.checkPassword = t("passwordError.empty");
     } else if (password !== checkPassword) {
-      validationErrors.checkPassword = "Mật khẩu không khớp";
+      validationErrors.checkPassword = t("passwordError.mismatch");
     }
 
     setErrors(validationErrors);
     if (Object.values(validationErrors).some((error) => error !== "")) return;
+    const { data } = await axios.get(
+      "https://test.alse.workers.dev/?token=" + captchaToken
+    );
 
+    if (!data.success) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: t("captchaError"),
+        password: t("captchaError"),
+        checkPassword: t("captchaError"),
+        username: t("captchaError"),
+      }));
+      return;
+    }
     try {
       let { data, error: rpcError } = await supabase.rpc("register_user", {
         p_birthdate: "2000-01-01",
@@ -74,18 +92,18 @@ const Signup: FunctionComponent = () => {
         if (data === 0) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            email: "Email already exists",
-            username: "Username already exists",
+            email: t("emailError.exists"),
+            username: t("usernameError.exists"),
           }));
         } else if (data === -1) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            email: "Email already exists",
+            email: t("emailError.exists"),
           }));
         } else if (data === -2) {
           setErrors((prevErrors) => ({
             ...prevErrors,
-            username: "Username already exists",
+            username: t("usernameError.exists"),
           }));
         } else {
           const {
@@ -95,8 +113,7 @@ const Signup: FunctionComponent = () => {
             email: email,
             password: password,
           });
-          if (!session)
-            console.log("Please check your inbox for email verification!");
+          if (!session) console.log(t("signupError.emailVerification"));
           if (error) {
             console.log(error, " - 29");
             throw error;
@@ -108,10 +125,10 @@ const Signup: FunctionComponent = () => {
     } catch (err) {
       console.error("Error signing up:", err);
     }
-  }, [email, username, password, checkPassword, navigate]);
+  }, [email, username, password, checkPassword, navigate, t]);
 
   const onGoogleLoginContainerClick = useCallback(() => {
-    alert("Tính năng hiện chưa được hỗ trợ");
+    alert(t("supportFeature"));
   }, []);
 
   const onLoginClick = useCallback(() => {
@@ -130,14 +147,11 @@ const Signup: FunctionComponent = () => {
         </div>
         <div className="welcome-content">
           <h1 className="welcome-back">
-            <span>{`Welcome`}</span>
+            <span>{t("welcome")}</span>
             <span>!</span>
           </h1>
           <div className="description">
-            <div className="slogan">
-              Discover manga, manhua and manhwa, track your progress and join
-              the social network! Have fun!
-            </div>
+            <div className="slogan">{t("slogan")}</div>
           </div>
         </div>
         <div className="loginFrame">
@@ -151,7 +165,7 @@ const Signup: FunctionComponent = () => {
               <TextField
                 className="username-input-field"
                 color="primary"
-                placeholder="Email"
+                placeholder={t("emailPlaceholder")}
                 variant="outlined"
                 type="email"
                 onChange={(event) => {
@@ -164,7 +178,7 @@ const Signup: FunctionComponent = () => {
               <TextField
                 className="username-input-field"
                 color="primary"
-                placeholder="Username (không dấu, tối đa 32 ký tự)"
+                placeholder={t("usernamePlaceholder")}
                 variant="outlined"
                 type="text"
                 onChange={(event) => {
@@ -179,7 +193,7 @@ const Signup: FunctionComponent = () => {
               />
               <TextField
                 className="password-input-field"
-                placeholder="Password"
+                placeholder={t("passwordPlaceholder")}
                 variant="outlined"
                 onChange={(event) => {
                   setPassword(event.target.value);
@@ -210,7 +224,7 @@ const Signup: FunctionComponent = () => {
               />
               <TextField
                 className="password-input-field"
-                placeholder="Nhập lại Password"
+                placeholder={t("retypePasswordPlaceholder")}
                 variant="outlined"
                 onChange={(event) => {
                   setCheckPassword(event.target.value);
@@ -239,6 +253,13 @@ const Signup: FunctionComponent = () => {
                 error={!!errors.checkPassword}
                 helperText={errors.checkPassword}
               />
+              <Turnstile
+                siteKey="0x4AAAAAAA0okrGozsUNzGd-"
+                onSuccess={(token) => setCaptchaToken(token)}
+                onError={() => setCaptchaToken("")}
+                options={{ theme: "light" }}
+                lang="auto"
+              />
             </div>
             <div className="buttonOption">
               <Button
@@ -254,7 +275,7 @@ const Signup: FunctionComponent = () => {
                   },
                 }}
               >
-                Sign up
+                {t("signupButton")}
               </Button>
               <Button
                 variant="contained"
@@ -276,15 +297,15 @@ const Signup: FunctionComponent = () => {
                   src="/icons/logo_google_icon.png"
                 />
                 <div className="log-in-with-google-wrapper">
-                  <div className="log-in-with">Sign in with Google</div>
+                  <div className="log-in-with">{t("googleSignup")}</div>
                 </div>
               </Button>
             </div>
             <div className="otherOption">
               <div className="signup">
-                Already have an account?
+                {t("alreadyHaveAccount")}
                 <span onClick={onLoginClick}>
-                  <b> Login</b>
+                  <b> {t("loginHere")}</b>
                 </span>
               </div>
             </div>

@@ -9,6 +9,7 @@ import {
   fetchGroupSuggestList,
   fetchUserSuggestList,
 } from "../../../api/scocialAPI";
+import { useTranslation } from "react-i18next";
 
 const NotFound: React.FC = () => (
   <div className="notFound">
@@ -28,7 +29,7 @@ const Discover: React.FC = () => {
   const [page, setPage] = useState(1);
   const session = useCheckSession();
   const [userID, setUserID] = useState<any>(null);
-
+  const { t } = useTranslation("", { keyPrefix: "discover" });
   useEffect(() => {
     const getUserID = async () => {
       if (session && session.user) {
@@ -109,11 +110,11 @@ const Discover: React.FC = () => {
   return (
     <div className="discoverFrame">
       <section className="headernav">
-        <button className="backbutton" onClick={handleBack} title="back">
-          <img src="/icons/arrow-left.svg" alt="" />
+        <button className="backbutton" onClick={handleBack} title={t("back")}>
+          <img src="/icons/arrow-left.svg" alt={t("back")} />
         </button>
         <div className="headerInfo">
-          <h2>Discover</h2>
+          <h2>{t("Discover")}</h2>
         </div>
       </section>
       <section className="mainContent">
@@ -121,7 +122,7 @@ const Discover: React.FC = () => {
           <Tabs
             value={currentTab}
             className="tabstest"
-            aria-label="nav tabs example"
+            aria-label={t("navTabsExample")}
             role="navigation"
             scrollButtons="auto"
             sx={{
@@ -148,13 +149,13 @@ const Discover: React.FC = () => {
             }}
           >
             <Tab
-              label="Suggest following"
+              label={t("suggestFollowing")}
               to="/discover"
               value="/discover"
               component={Link}
             />
             <Tab
-              label="Translation group for you"
+              label={t("translationGroupForYou")}
               to="/discover?is_group=true"
               value="/discover?is_group=true"
               component={Link}
@@ -178,10 +179,10 @@ const Discover: React.FC = () => {
             ))}
         {hasMore ? (
           <div className="loadMore" onClick={handleLoadMore}>
-            Load more
+            {t("loadMore")}
           </div>
         ) : (
-          <div className="noMoreUsers">No more users to load</div>
+          <div className="noMoreUsers">{t("noMoreUsers")}</div>
         )}
       </section>
     </div>
