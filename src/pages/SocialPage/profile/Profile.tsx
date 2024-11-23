@@ -204,7 +204,7 @@ import {
   useParams,
 } from "react-router-dom";
 import "./profile.scss";
-import { Avatar, Button, Tab, Tabs } from "@mui/material";
+import { Avatar, Button, IconButton, Tab, Tabs } from "@mui/material";
 import UpdateProfileModal from "../../../components/modal/updateProfileModal/UpdateProfileModal";
 import { supabase } from "../../../utils/supabase";
 import useCheckSession from "../../../hooks/session";
@@ -460,14 +460,31 @@ const Profile = () => {
                 />
               </div>
             ) : (
-              <Button
-                className={!isFollowed ? "textblack" : "textwhite"}
-                onClick={handleFollowUser}
-                variant="contained"
-                sx={{ borderRadius: "24px" }}
-              >
-                {isFollowed ? t("unfollow") : t("follow")}
-              </Button>
+              <div className="rightOption">
+                <Button
+                  className={!isFollowed ? "textblack" : "textwhite"}
+                  onClick={handleFollowUser}
+                  variant="contained"
+                  sx={{ borderRadius: "24px" }}
+                >
+                  {isFollowed ? t("unfollow") : t("follow")}
+                </Button>
+                <IconButton
+                  className="directMessage"
+                  onClick={() => console.log("DM", userInfo?.username)}
+                >
+                  <img src="/icons/direct-message.svg" alt="DM Button" />
+                </IconButton>
+
+                <IconButton
+                  className="more-circle"
+                  onClick={() =>
+                    console.log("More about this user:", userInfo?.username)
+                  }
+                >
+                  <img src="/icons/more-circle.svg" alt="DM Button" />
+                </IconButton>
+              </div>
             )}
           </div>
           <div className="userNameInfo">

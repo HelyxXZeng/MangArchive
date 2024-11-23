@@ -59,8 +59,8 @@ const SideBar = () => {
         },
         {
           id: 4,
-          title: t("Notification"),
-          url: "/notification",
+          title: t("Message"),
+          url: "/chat",
           icon: "/icons/notification.svg",
         },
       ],

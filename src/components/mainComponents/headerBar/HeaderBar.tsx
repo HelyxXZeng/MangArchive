@@ -62,7 +62,7 @@ const HeaderBar = () => {
           const { data, error } = await fetchUserInfo(realUserID);
           if (error) console.error(error);
           else {
-            console.log(data[0].username);
+            // console.log(data[0].username);
             setUsername(data[0].username);
           }
         }

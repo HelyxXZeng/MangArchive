@@ -21,7 +21,7 @@ const Post = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        if (username) {
+        if (username && session?.user) {
           const { data, error } = await supabase
             .from("User")
             .select("*")

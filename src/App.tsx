@@ -27,6 +27,7 @@ import PostDetail from "./pages/SocialPage/postDetail/PostDetail";
 import MangaHistory from "./pages/mangahistory/History";
 import ProtectedRoute from "./hooks/protectRouter";
 import LatestManga from "./pages/searchmangapage/latestManga/LatestManga";
+import Message from "./pages/message/Message";
 
 function App() {
   const Layout = () => {
@@ -149,13 +150,25 @@ function App() {
         },
         {
           path: "discover/",
-          element: <Discorver />,
+          element: (
+            <ProtectedRoute>
+              <Discorver />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/profile/:username/post/:id",
           element: (
             <ProtectedRoute>
               <PostDetail />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/chat",
+          element: (
+            <ProtectedRoute>
+              <Message />
             </ProtectedRoute>
           ),
         },
