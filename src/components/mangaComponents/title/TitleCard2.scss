@@ -1,0 +1,236 @@
+@import "../../../global-styles/Color.scss";
+
+.manga-card {
+  // width: calc(20% - 20px); /* Adjust width to fit 5 cards in a row */
+  // margin: 1%;
+  // float: left; /* Ensure cards are floated left */
+  clear: none;
+  /* Clear any previous float settings */
+  overflow: hidden;
+  display: inline-block;
+  height: inherit;
+  width: 200px;
+  max-width: 200px;
+  flex: 1 1 auto;
+}
+
+.manga-card-content1 {
+  display: flex;
+  flex-direction: column;
+  // background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  height: fit-content;
+  max-height: 500px;
+  margin-bottom: 10px;
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 1));
+}
+
+// .manga-card::after {
+//   content: '';
+//   position: absolute;
+//   bottom: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 20px; /* Adjust this value to control the size of the shadow */
+//   background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0)); /* Transparent shadow */
+// }
+
+.top-tag {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 30;
+}
+
+.rating-tag {
+  background-color: $blue-main;
+  color: $text-white-new;
+  border-radius: 5px;
+  padding: 2px 8px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  svg {
+    fill: $orange-yellow;
+  }
+
+  span {
+    font-size: 14px;
+  }
+}
+
+.manga-card-image {
+  position: relative;
+  width: 100%;
+  height: auto; // auto;
+  object-fit: cover;
+  overflow: hidden;
+
+  // img {
+  //   width: 100%;
+  //   height: 350px;
+  // }
+}
+
+// .manga-card-image:hover {
+//   opacity: 0.5;
+// }
+
+.manga-card-content {
+  flex: 1;
+  padding: 16px;
+  height: fit-content;
+  padding-top: 0px;
+  // margin-bottom: 10px;
+}
+
+.title-and-artist-container {
+  width: 100%;
+  height: fit-content;
+  background-color: $blue-main;
+  padding: 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    height: 21px;
+    overflow: hidden;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $text-white;
+  }
+
+  p {
+    // width: 100%;
+    margin-top: 8px;
+    font-size: 14px;
+    color: $text-white;
+    text-align: center;
+    margin-bottom: 8px;
+    // max-height: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    // font-weight: lighter;
+    font-style: italic;
+  }
+}
+
+.manga-card-content h2 {
+  margin: 0;
+  font-size: 18px;
+  height: 21px;
+  overflow: hidden;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: $text-white;
+}
+
+.manga-card-content p {
+  // width: 100%;
+  margin-top: 8px;
+  font-size: 14px;
+  color: $text-white;
+  text-align: center;
+  margin-bottom: 8px;
+  // max-height: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  // font-weight: lighter;
+  font-style: italic;
+}
+
+.tags {
+  // display: flex;
+  // flex-wrap: wrap; /* Ensures tags wrap onto new lines if container width is exceeded */
+  // justify-content: center; /* Aligns tags horizontally in the center */
+  // align-items: center; /* Aligns tags vertically in the center */
+  margin-top: 16px;
+  overflow: hidden;
+  height: 66px;
+  text-align: center;
+  /* Aligns tags horizontally in the center */
+}
+
+.tags>* {
+  display: inline-block;
+  /* Display tags as inline-block elements */
+  // margin-right: 8px; /* Add some space between tags */
+}
+
+// .tags span {
+//   display: inline-block;
+//   margin-right: 4px;
+//   padding: 4px 4px;
+//   background-color: #f0f0f0;
+//   border-radius: 4px;
+//   font-size: 10px;
+// }
+
+.popup-container::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar */
+}
+
+.popup-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Cover the entire .manga-card-image */
+  height: 100%;
+  /* Cover the entire .manga-card-image */
+  background-color: rgba(0, 0, 0, 0.6);
+  color: $text-white;
+  padding: 10px;
+  border-radius: 4px;
+  display: none;
+  /* Initially hidden */
+  z-index: 40;
+  overflow-y: auto;
+
+  h1 {
+    width: 100%;
+    font-size: 16px;
+    margin-top: 0px;
+    height: fit-content;
+    color: $text-white;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
+  }
+
+  h2 {
+    font-size: 10px;
+    font-weight: lighter;
+    font-style: italic;
+    margin-top: 0px;
+    height: fit-content;
+  }
+
+  p {
+    font-size: 14px;
+    margin-top: 0px;
+    // padding-bottom: 50px;
+    width: 100%;
+    height: auto;
+    text-overflow: ellipsis;
+  }
+}
+
+.manga-card-image:hover .popup-container,
+.manga-card-content h2:hover+.popup-container {
+  display: block;
+  /* Show the container when image or title is hovered over */
+}

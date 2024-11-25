@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
-import PostCard from '../../../../components/socialComponents/Posts/PostCard/PostCard';
-import PostSection from '../../../../components/socialComponents/Posts/PostSection/PostSection';
-import './post.scss';
-import useCheckSession from '../../../../hooks/session';
-import { useParams } from 'react-router-dom';
-import { supabase } from '../../../../utils/supabase';
+import { useEffect, useState } from "react";
+import PostCard from "../../../../components/socialComponents/Posts/PostCard/PostCard";
+import PostSection from "../../../../components/socialComponents/Posts/PostSection/PostSection";
+import "./post.scss";
+import useCheckSession from "../../../../hooks/session";
+import { useParams } from "react-router-dom";
+import { supabase } from "../../../../utils/supabase";
+import { fetchUserPosts } from "../../../../api/scocialAPI";
+import LoadingWave from "../../../../components/loadingWave/LoadingWave";
 
 const Post = () => {
   const session = useCheckSession();
@@ -19,7 +21,7 @@ const Post = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        if (username) {
+        if (username && session?.user) {
           const { data, error } = await supabase
             .from("User")
             .select("*")
@@ -40,25 +42,29 @@ const Post = () => {
     fetchUserInfo();
   }, [username, session]);
 
-  const fetchPostList = async (reset: boolean = false) => {
+  const fetchPostList = async (
+    reset: boolean = false,
+    currentOffset: number = offset
+  ) => {
     if (userInfo && userInfo.id) {
       try {
-        const { data, error } = await supabase.rpc('get_user_posts', {
-          this_limit: 10,
-          this_offset: reset ? 0 : offset,
-          this_user_id: userInfo.id,
-        });
-        if (error) console.error(error);
-        else {
-          if (data.length < 10) {
-            setHasMore(false);
-          } else {
-            setHasMore(true);
-          }
-          setPostList(prevPostList => reset ? data : [...prevPostList, ...data]);
+        const data = await fetchUserPosts(
+          userInfo.id,
+          5,
+          reset ? 0 : currentOffset
+        );
+
+        if (data.length < 5) {
+          setHasMore(false);
+        } else {
+          setHasMore(true);
         }
+
+        setPostList((prevPostList) =>
+          reset ? data : [...prevPostList, ...data]
+        );
       } catch (error) {
-        console.error("Error fetching post list:", error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -72,22 +78,29 @@ const Post = () => {
   }, [userInfo]);
 
   const loadMorePosts = () => {
-    setOffset(prevOffset => prevOffset + 10);
-    fetchPostList();
+    const newOffset = offset + 5; // Tính offset mới
+    setOffset(newOffset); // Cập nhật state để re-render
+    fetchPostList(false, newOffset); // Gọi fetchPostList với offset mới
   };
 
   if (isLoading && offset === 0) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading">
+        <LoadingWave />
+      </div>
+    );
   }
 
   if (postList.length === 0) {
     return (
       <div className="postContainer">
         <div className="postsection">
-          {showPostSection && <PostSection refreshList={() => fetchPostList(true)} />}
+          {showPostSection && (
+            <PostSection refreshList={() => fetchPostList(true)} />
+          )}
         </div>
         <div className="postlist">
-          <div className='noPost'>No posts found</div>
+          <div className="noPost">No posts found</div>
         </div>
       </div>
     );
@@ -96,7 +109,9 @@ const Post = () => {
   return (
     <div className="postContainer">
       <div className="postsection">
-        {showPostSection && <PostSection refreshList={() => fetchPostList(true)} />}
+        {showPostSection && (
+          <PostSection refreshList={() => fetchPostList(true)} />
+        )}
       </div>
       <div className="postlist">
         {postList.map((post, index) => (
@@ -104,15 +119,11 @@ const Post = () => {
         ))}
       </div>
       {hasMore && !isLoading && (
-        <div className="loadMore">
-          <button onClick={loadMorePosts}>Load More Posts</button>
+        <div className="loadMore" onClick={loadMorePosts}>
+          <strong>Load More Posts</strong>
         </div>
       )}
-      {!hasMore && (
-        <div className="noMorePosts">
-          There are no more posts
-        </div>
-      )}
+      {!hasMore && <div className="noMorePosts">There are no more posts</div>}
     </div>
   );
 };

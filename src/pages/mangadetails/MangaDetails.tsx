@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import MangaBanner from "../mangabanner/MangaBanner";
+import MangaBanner from "../../components/mangaComponents/bannerVariant/mangabanner/MangaBanner";
 import "./MangaDetails.scss";
 import { getDataApi } from "../../utils/MangaData";
-import Chapter from "../chaptercomponent/Chapter";
+import Chapter from "../../components/mangaComponents/chapterComponent/Chapter";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 import CustomSelect from "../../components/mangaComponents/customSelection/CustomSelect";
@@ -14,6 +14,14 @@ import CommentCard from "../../components/commentCard/CommentCard";
 import { getStatsApi } from "../../utils/MangaStatistic";
 import RatingStars from "./RatingStars";
 import ProtectedRoute from "../../hooks/protectRouter";
+import { fetchUserIdByEmail } from "../../api/userAPI";
+import {
+  addCollection,
+  addRating,
+  fetchMangaPosts,
+  getCollection,
+  getRating,
+} from "../../api/mangaAPI";
 
 interface Props {}
 
@@ -27,7 +35,7 @@ const MangaDetails: React.FC<Props> = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageInput, setPageInput] = useState("1");
   const chaptersPerPage = 10;
-  const commentsLimit = 10;
+  const commentsLimit = 5;
 
   const [collection, setCollection] = useState("");
   const [rating, setRating] = useState(0);
@@ -135,17 +143,12 @@ const MangaDetails: React.FC<Props> = () => {
           console.error(sessionError);
           return;
         }
-        if (sessionData && sessionData.user) {
+        if (sessionData && sessionData.user?.email) {
           // console.log(sessionData.user.email);
 
-          let { data, error } = await supabase.rpc("get_user_id_by_email", {
-            p_email: sessionData.user.email,
-          });
-          if (error) console.error(error);
-          else {
-            setUserID(data);
-            // console.log("User ID: ", data);
-          }
+          const data = await fetchUserIdByEmail(sessionData.user.email);
+          // console.log("User ID: ", data, sessionData.user.email);
+          setUserID(data);
         }
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -155,100 +158,123 @@ const MangaDetails: React.FC<Props> = () => {
   }, []);
 
   useEffect(() => {
-    addCollection(collection);
+    if (manga_id && userID)
+      addCollection({
+        collection: collection,
+        manga_id: manga_id,
+        userID: userID,
+      });
   }, [collection]);
 
   useEffect(() => {
-    addRating(rating);
+    if (manga_id && userID)
+      addRating({ rating: rating, manga_id: manga_id, userID: userID });
   }, [rating]);
 
   useEffect(() => {
-    getCollection();
-    getRating();
-  }, [userID]);
-  useEffect(() => {
-    if (userID) {
-      fetchMangaPosts();
-    }
+    const fetchCollectionAndRating = async () => {
+      console.log(manga_id, userID);
+
+      if (userID && manga_id) {
+        const collectionData = await getCollection(manga_id, userID);
+        const ratingData = await getRating(manga_id, userID);
+        setCollection(collectionData);
+        setRating(ratingData);
+        console.log(collection, rating, collectionData, ratingData);
+      }
+    };
+    fetchCollectionAndRating();
   }, [userID, manga_id]);
+  useEffect(() => {
+    const fetchPost = async () => {
+      if (manga_id) {
+        setLoadingPosts(true);
+        const data = await fetchMangaPosts(manga_id);
+        setPostIds(data);
+        setLoadingPosts(false);
+      }
+    };
+    fetchPost();
+  }, [manga_id]);
 
   useEffect(() => {
-    if (userID) {
+    if (manga_id) {
       fetchComments();
     }
   }, [userID, manga_id]);
 
-  async function addCollection(collection: any) {
-    if (collection) {
-      let { error } = await supabase.rpc("add_to_collection", {
-        this_collection_name: collection,
-        this_slug: manga_id,
-        this_user_id: userID,
-      });
-      if (error) console.error("Error in add collection: ", error);
-      else getCollection();
-    } else getCollection();
-  }
+  // async function addCollection(collection: any) {
+  //   if (collection) {
+  //     let { error } = await supabase.rpc("add_to_collection", {
+  //       this_collection_name: collection,
+  //       this_slug: manga_id,
+  //       this_user_id: userID,
+  //     });
+  //     if (error) console.error("Error in add collection: ", error);
+  //     else getCollection();
+  //   } else getCollection();
+  // }
 
-  async function getCollection() {
-    let { data, error } = await supabase.rpc("get_collection_for_manga", {
-      this_slug: manga_id,
-      this_user_id: userID,
-    });
-    if (error) console.error("Error in get collection: ", error);
-    else {
-      // console.log("this collection is: ", data);
-      setCollection(data);
-    }
-  }
+  // async function getCollection() {
+  //   let { data, error } = await supabase.rpc("get_collection_for_manga", {
+  //     this_slug: manga_id,
+  //     this_user_id: userID,
+  //   });
+  //   if (error) console.error("Error in get collection: ", error);
+  //   else {
+  //     // console.log("this collection is: ", data);
+  //     setCollection(data);
+  //   }
+  // }
 
-  async function addRating(rating: any) {
-    if (rating) {
-      let { error } = await supabase.rpc("add_rating", {
-        this_rating: rating,
-        this_slug: manga_id,
-        this_user_id: userID,
-      });
-      if (error) console.error("Error in add collection: ", error);
-      else getRating();
-    } else getRating();
-  }
+  // async function addRating(rating: any) {
+  //   if (rating) {
+  //     let { error } = await supabase.rpc("add_rating", {
+  //       this_rating: rating,
+  //       this_slug: manga_id,
+  //       this_user_id: userID,
+  //     });
+  //     if (error) console.error("Error in add collection: ", error);
+  //     else getRating();
+  //   } else getRating();
+  // }
 
-  async function getRating() {
-    let { data, error } = await supabase.rpc("get_rating", {
-      this_slug: manga_id,
-      this_user_id: userID,
-    });
-    if (error) console.error("Error in get collection: ", error);
-    else {
-      // console.log("this collection is: ", data);
-      setRating(data);
-    }
-  }
+  // async function getRating() {
+  //   let { data, error } = await supabase.rpc("get_rating", {
+  //     this_slug: manga_id,
+  //     this_user_id: userID,
+  //   });
+  //   if (error) console.error("Error in get collection: ", error);
+  //   else {
+  //     // console.log("this collection is: ", data);
+  //     setRating(data);
+  //   }
+  // }
 
-  const fetchMangaPosts = async () => {
-    try {
-      setLoadingPosts(true);
-      const { data, error } = await supabase.rpc("get_posts_for_truyen", {
-        this_limit: 10,
-        this_offset: 0,
-        this_truyen: manga_id,
-      });
-      if (error) {
-        console.error("Error fetching manga posts:", error);
-      } else {
-        setPostIds(data);
-      }
-    } catch (error) {
-      console.error("Error fetching manga posts:", error);
-    } finally {
-      setLoadingPosts(false);
-    }
-  };
+  // const fetchMangaPosts = async () => {
+  //   try {
+  //     setLoadingPosts(true);
+  //     const { data, error } = await supabase.rpc("get_posts_for_truyen", {
+  //       this_limit: 10,
+  //       this_offset: 0,
+  //       this_truyen: manga_id,
+  //     });
+  //     if (error) {
+  //       console.error("Error fetching manga posts:", error);
+  //     } else {
+  //       console.log("post", data);
+  //       setPostIds(data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching manga posts:", error);
+  //   } finally {
+  //     setLoadingPosts(false);
+  //   }
+  // };
 
   const fetchComments = async (offset = 0) => {
     try {
-      console.log(manga_id, offset);
+      // console.log(manga_id, offset);
       if (manga_id) {
         const { data, error } = await supabase.rpc("get_comments_for_truyen", {
           this_truyen: manga_id,
@@ -643,7 +669,7 @@ const MangaDetails: React.FC<Props> = () => {
                         {userID ? (
                           <div className="newFeedSection">
                             <PostSection
-                              refreshList={fetchMangaPosts}
+                              refreshList={() => fetchMangaPosts(manga_id!)}
                               manga_id={manga_id}
                             />
                           </div>

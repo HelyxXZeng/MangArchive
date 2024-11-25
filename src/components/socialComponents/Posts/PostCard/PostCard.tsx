@@ -2,374 +2,350 @@ import { Avatar } from "@mui/material";
 import "./PostCard.scss";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "../../../../utils/supabase";
 import ComicCard from "../../comicCardSmall/ComicCard";
-import axios from "axios";
+import { phraseImageUrl } from "../../../../utils/imageLinkPhraser";
+import { fetchUserInfo, fetchUserProfileImages } from "../../../../api/userAPI";
+import {
+  fetchCommentsAndReplies,
+  fetchLikeStatus,
+  fetchPostImages,
+  fetchPostInfo,
+  toggleLikeStatus,
+} from "../../../../api/postAPI";
+import { fetchMangaById } from "../../../../api/mangaAPI";
+import LoadingWave from "../../../loadingWave/LoadingWave";
 
 interface PostCardProps {
-    postId: any;
-    onCommentSectionClick?: () => void;
-    displayImage?: boolean;
-    mangaid?: string;
+  postId: any;
+  onCommentSectionClick?: () => void;
+  displayImage?: boolean;
+  mangaid?: string;
 }
 
 const PostCard = ({
-    postId,
-    onCommentSectionClick,
-    displayImage = true,
-    mangaid
+  postId,
+  onCommentSectionClick,
+  displayImage = true,
+  mangaid,
 }: PostCardProps) => {
-    const [mangaSuggestContent, setMangaSuggestContent] = useState(mangaid || "");
-    const [comic, setComic] = useState<any>(null);
-    const [postInfo, setPostInfo] = useState<any>(null);
-    const [postImages, setPostImages] = useState<string[]>([]);
-    const [totalComments, setTotalComments] = useState<number>(0);
-    const [userInfo, setUserInfo] = useState<any>(null);
-    const [profileImages, setProfileImages] = useState<{ avatar: string, background: string } | null>(null);
-    const [liked, setLiked] = useState<boolean>(false);
+  const [mangaSuggestContent, setMangaSuggestContent] = useState(mangaid || "");
+  const [comic, setComic] = useState<any>(null);
+  const [postInfo, setPostInfo] = useState<any>(null);
+  const [postImages, setPostImages] = useState<string[]>([]);
+  const [totalComments, setTotalComments] = useState<number>(0);
+  const [userInfo, setUserInfo] = useState<any>(null);
+  const [profileImages, setProfileImages] = useState<{
+    avatar: string;
+  } | null>(null);
+  const [liked, setLiked] = useState<boolean>(false);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const fetchPostInfo = async () => {
-        if (postId) {
-            try {
-                const { data: post, error } = await supabase.rpc('get_post_info', { this_post_id: postId });
-                if (error) {
-                    console.error("Error fetching post info:", error);
-                } else {
-                    setPostInfo(post[0]);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        }
+  const getPostInfo = async () => {
+    const post = await fetchPostInfo(postId);
+    setPostInfo(post);
+  };
+
+  useEffect(() => {
+    getPostInfo();
+  }, [postId]);
+
+  useEffect(() => {
+    const getPostImages = async () => {
+      if (postId) {
+        const images = await fetchPostImages(postId);
+        setPostImages(images);
+      }
     };
+    getPostImages();
+  }, [postId, displayImage]);
 
-    useEffect(() => {
-        fetchPostInfo();
-    }, [postId]);
-
-    useEffect(() => {
-        if (displayImage) {
-            const fetchPostImages = async () => {
-                try {
-                    if (postId) {
-                        const { data, error } = await supabase.rpc('get_post_image', { post_id: postId });
-                        if (error) {
-                            console.error("Error fetching post images:", error);
-                        } else {
-                            const images = data.map((image: any) => JSON.parse(image).publicUrl);
-                            setPostImages(images);
-                        }
-                    }
-                } catch (error) {
-                    console.error("Error fetching post images:", error);
-                }
-            };
-
-            fetchPostImages();
-        }
-    }, [postId, displayImage]);
-
-    useEffect(() => {
-        if (postInfo && postInfo.truyen) {
-            setMangaSuggestContent(postInfo.truyen);
-        }
-    }, [postInfo]);
-
-    useEffect(() => {
-        if (mangaSuggestContent) {
-            axios.get(`https://api.mangadex.org/manga/${mangaSuggestContent.trim()}?includes[]=cover_art&includes[]=artist&includes[]=author`)
-                .then(response => {
-                    setComic(response.data.data);
-                })
-                .catch(error => {
-                    console.error("Invalid manga ID:", error);
-                    setComic(null);
-                });
-        } else {
-            setComic(null);
-        }
-    }, [mangaSuggestContent]);
-
-    useEffect(() => {
-        const fetchCommentsAndReplies = async () => {
-            try {
-                if (postId) {
-                    const { data: comments, error: commentsError } = await supabase.rpc('get_comments_for_post', { this_limit: 99999, this_offset: 0, this_post_id: postId });
-                    if (commentsError) {
-                        console.error("Error fetching comments:", commentsError);
-                    }
-                    let totalRepliesCount = 0;
-                    if (comments && comments.length > 0) {
-                        const repliesPromises = comments.map(async (comment: any) => {
-                            const { data: replies, error: repliesError } = await supabase.rpc('get_replies_for_comment', { this_limit: 99999, this_offset: 0, this_comment_id: comment });
-                            if (repliesError) {
-                                console.error("Error fetching replies:", repliesError);
-                            }
-                            return replies ? replies.length : 0;
-                        });
-                        const repliesCounts = await Promise.all(repliesPromises);
-                        totalRepliesCount = repliesCounts.reduce((acc, count) => acc + count, 0);
-                    }
-                    setTotalComments(comments.length + totalRepliesCount);
-                    // console.log("postID: ",postId,comments,comments.length,totalRepliesCount)
-                }
-            } catch (error) {
-                console.error("Error fetching comments and replies:", error);
-            }
-        };
-
-        fetchCommentsAndReplies();
-    }, [postId]);
-
-    const handleLikeClick = async () => {
-        try {
-            const newLikedState = !liked;
-            const { error } = await supabase.rpc('add_interact_for_post', {
-                this_post_id: postId,
-                this_user_id: userInfo?.this_id,
-                this_type: newLikedState ? 'LIKE' : 'NONE'
-            });
-
-            if (error) {
-                console.error("Error updating like status:", error);
-                return;
-            }
-
-            setLiked(newLikedState);
-            fetchPostInfo(); // Fetch new post info including updated like count
-        } catch (error) {
-            console.error("Error handling like click:", error);
-        }
-    };
-
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                if (postInfo) {
-                    const { data, error } = await supabase.rpc("get_user_info", { this_user_id: postInfo.this_user });
-                    if (error) console.error(error);
-                    else {
-                        setUserInfo(data[0]);
-                    }
-                }
-            } catch (error) {
-                console.error("Error fetching user info:", error);
-            }
-        };
-
-        fetchUserInfo();
-    }, [postInfo]);
-
-    useEffect(() => {
-        const fetchProfileImages = async () => {
-            try {
-                if (userInfo?.this_id) {
-                    const { data, error } = await supabase.rpc("get_profile_image", { this_user_id: userInfo.this_id });
-                    if (error) console.error(error);
-                    else {
-                        if (data[0]) {
-                            const avatarLink = data[0].avatar_link ? JSON.parse(data[0].avatar_link).publicUrl : "";
-                            const backgroundLink = data[0].background_link ? JSON.parse(data[0].background_link).publicUrl : "";
-
-                            setProfileImages({ avatar: avatarLink || "", background: backgroundLink || "" });
-                        } else {
-                            setProfileImages({ avatar: "", background: "" });
-                        }
-                    }
-                } else {
-                    setProfileImages({ avatar: "", background: "" });
-                }
-            } catch (error) {
-                console.error("Error fetching profile images:", error);
-            }
-        };
-
-        fetchProfileImages();
-    }, [userInfo, postInfo]);
-
-    const fetchLikeStatus = async () => {
-        try {
-            if (postId && userInfo?.this_id) {
-                const { data, error } = await supabase.rpc('check_like_for_post', {
-                    this_post_id: postId,
-                    this_user_id: userInfo.this_id
-                });
-                if (error) {
-                    console.error("Error checking like status:", error);
-                } else {
-                    setLiked(data);
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching like status:", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchLikeStatus();
-    }, [postId, userInfo]);
-
-    const handleImageClick = (index: any) => {
-        navigate(`/profile/${userInfo?.username}/post/${postId}`, { state: { displayImageIndex: index } });
-    };
-
-    const handleCommentClick = () => {
-        if (onCommentSectionClick) {
-            onCommentSectionClick();
-        } else {
-            navigate(`/profile/${userInfo?.username}/post/${postId}`);
-        }
-    };
-
-    const { username: CurrentuserName } = useParams();
-    const handleNavigate = () => {
-        if (userInfo && userInfo.username !== CurrentuserName) {
-            navigate(`/profile/${userInfo.username}`);
-        }
-    };
-
-    const galleryItems = [];
-
-    switch (postImages.length) {
-        case 1:
-            galleryItems.push(
-                <img
-                    key={0}
-                    className="gallery_item fullWidth"
-                    src={postImages[0]}
-                    alt={`Image 1`}
-                    onClick={() => handleImageClick(0)}
-                />
-            );
-            break;
-        case 2:
-            postImages.forEach((image, index) => {
-                galleryItems.push(
-                    <img
-                        key={index}
-                        className={`gallery_item halfWidth image${index}`}
-                        src={image}
-                        alt={`Image ${index + 1}`}
-                        onClick={() => handleImageClick(index)}
-                    />
-                );
-            });
-            break;
-        case 3:
-            galleryItems.push(
-                <img
-                    key={0}
-                    className={`gallery_item halfWidth image0`}
-                    src={postImages[0]}
-                    alt={`Image 1`}
-                    onClick={() => handleImageClick(0)}
-                />
-            );
-            galleryItems.push(
-                <div key={1} className={`gallery_item halfWidth`}>
-                    <img
-                        className={`image1`}
-                        src={postImages[1]}
-                        alt={`Image 2`}
-                        onClick={() => handleImageClick(1)}
-                    />
-                    <img
-                        className={`image2`}
-                        src={postImages[2]}
-                        alt={`Image 3`}
-                        onClick={() => handleImageClick(2)}
-                    />
-                </div>
-            );
-            break;
-        case 4:
-            postImages.forEach((image, index) => {
-                galleryItems.push(
-                    <img
-                        key={index}
-                        className={`gallery_item quarterWidth image${index}`}
-                        src={image}
-                        alt={`Image ${index + 1}`}
-                        onClick={() => handleImageClick(index)}
-                    />
-                );
-            });
-            break;
-        default:
-            break;
+  useEffect(() => {
+    if (postInfo && postInfo.truyen) {
+      setMangaSuggestContent(postInfo.truyen);
     }
+  }, [postInfo]);
 
-    if (!postInfo) return <div>Loading Current Post...</div>;
-    const level = !isNaN(Math.floor(userInfo?.level / 100)) ? Math.floor(userInfo?.level / 100) : 0;
+  useEffect(() => {
+    const fetchManga = async () => {
+      try {
+        if (mangaSuggestContent) {
+          const mangaDetailed = await fetchMangaById(mangaSuggestContent);
+          setComic(mangaDetailed);
+        } else {
+          setComic(null);
+        }
+      } catch (error) {
+        console.error("Error fetching manga details:", error);
+        setComic(null); // Đảm bảo không set state với dữ liệu lỗi
+      }
+    };
 
-    return (
-        <div className="postCardContainer">
-            <div className="cardHeader">
-                <div className="avatarContainer">
-                    <NavLink to={`/profile/${userInfo?.username}`}>
-                        <Avatar
-                            className="Avatar"
-                            src={profileImages?.avatar}
-                            alt="avatar"
-                            sx={{ width: "40px", height: "40px" }} />
-                    </NavLink>
-                </div>
-                <div className="leftContainer">
-                    <div className="nameNId" onClick={handleNavigate}>
-                        <div className="userNameChild">
-                            <span className="name">{userInfo?.name}</span>
-                            <span className="level">LV<span className={`textHighlight ${level < 4 ? "bluetext" : level < 7 ? "yellowtext" : "redtext"}`}>{level}</span></span>
-                        </div>
-                        <div className="idNameAndDate">
-                            <span className="idName">@{userInfo?.username} · </span>
-                            <span className="datetime">{new Date(postInfo.post_time).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
-                        </div>
-                    </div>
-                    <div className="moreOption">...</div>
-                </div>
-            </div>
-            <div className="cardContent">
-                <div className="textContent">
-                    <span>{postInfo.content}</span>
-                </div>
-                {comic &&
-                    <div className="comicslug">
-                        <ComicCard
-                            cover={comic?.relationships.find((r: any) => r.type === "cover_art")?.attributes.fileName}
-                            title={comic?.attributes.title.en}
-                            comictype={comic?.type}
-                            maintag={comic?.attributes.tags[0].attributes.name.en}
-                            id={comic?.id}
-                        />
-                    </div>
-                }
-                {displayImage && postImages.length > 0 &&
-                    <div className="gallery">
-                        {galleryItems}
-                    </div>
-                }
-            </div>
-            <div className="optionBar">
-                <div className="likeSection">
-                    <div className="iconNnumber" onClick={handleLikeClick}>
-                        <div className={`heart-icon ${liked ? 'liked' : ''}`}>
-                            {/* <img className={`heart-icon ${liked? 'liked' : ''}`} src="/heart.svg" alt="heart" /> */}
-                        </div>
-                    </div>
-                    <span className={`likes-amount ${liked ? 'liked' : ''}`}>{postInfo.likecount}</span>
-                </div>
-                <div className="line"></div>
-                <div className="commentSection" onClick={handleCommentClick}>
-                    <div className="imgwrapper">
-                        <img src="/icons/message.svg" alt="message" />
-                    </div>
-                    {totalComments}
-                </div>
-            </div>
+    fetchManga();
+  }, [mangaSuggestContent]);
+
+  useEffect(() => {
+    const getCommentsAndReplies = async () => {
+      if (postId) {
+        const count = await fetchCommentsAndReplies(postId);
+        setTotalComments(count);
+      }
+    };
+    getCommentsAndReplies();
+  }, [postId]);
+
+  const handleLikeClick = async () => {
+    try {
+      await toggleLikeStatus(postId, userInfo?.this_id, !liked);
+      setLiked(!liked);
+      getPostInfo();
+    } catch (error) {
+      console.error("Failed to update like status", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserInfos = async () => {
+      try {
+        if (postInfo) {
+          const { data, error } = await fetchUserInfo(postInfo?.this_user); // Đảm bảo có await trước
+          if (error) {
+            console.error("Error fetching user info:", error);
+          } else {
+            setUserInfo(data[0]); // Đảm bảo truy xuất data đúng cách
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchUserInfos();
+  }, [postInfo]);
+
+  useEffect(() => {
+    const fetchProfileImages = async () => {
+      try {
+        if (userInfo?.this_id) {
+          const { data, error } = await fetchUserProfileImages(
+            userInfo.this_id
+          );
+          if (error) console.error(error);
+          else {
+            setProfileImages({ avatar: phraseImageUrl(data[0]?.avatar_link) });
+          }
+        } else {
+          setProfileImages({ avatar: "" });
+        }
+      } catch (error) {
+        console.error("Error fetching profile images:", error);
+      }
+    };
+
+    fetchProfileImages();
+  }, [userInfo, postInfo]);
+
+  useEffect(() => {
+    const fetchLikeStatusData = async () => {
+      if (postId && userInfo?.this_id) {
+        const status = await fetchLikeStatus(postId, userInfo.this_id);
+        setLiked(status);
+      }
+    };
+    fetchLikeStatusData();
+  }, [postId, userInfo]);
+
+  const handleImageClick = (index: any) => {
+    navigate(`/profile/${userInfo?.username}/post/${postId}`, {
+      state: { displayImageIndex: index },
+    });
+  };
+
+  const handleCommentClick = () => {
+    if (onCommentSectionClick) {
+      onCommentSectionClick();
+    } else {
+      navigate(`/profile/${userInfo?.username}/post/${postId}`);
+    }
+  };
+
+  const { username: CurrentuserName } = useParams();
+  const handleNavigate = () => {
+    if (userInfo && userInfo.username !== CurrentuserName) {
+      navigate(`/profile/${userInfo.username}`);
+    }
+  };
+
+  const galleryItems = [];
+
+  switch (postImages.length) {
+    case 1:
+      galleryItems.push(
+        <img
+          key={0}
+          className="gallery_item fullWidth"
+          src={postImages[0]}
+          alt={`Image 1`}
+          onClick={() => handleImageClick(0)}
+        />
+      );
+      break;
+    case 2:
+      postImages.forEach((image, index) => {
+        galleryItems.push(
+          <img
+            key={index}
+            className={`gallery_item halfWidth image${index}`}
+            src={image}
+            alt={`Image ${index + 1}`}
+            onClick={() => handleImageClick(index)}
+          />
+        );
+      });
+      break;
+    case 3:
+      galleryItems.push(
+        <img
+          key={0}
+          className={`gallery_item halfWidth image0`}
+          src={postImages[0]}
+          alt={`Image 1`}
+          onClick={() => handleImageClick(0)}
+        />
+      );
+      galleryItems.push(
+        <div key={1} className={`gallery_item halfWidth`}>
+          <img
+            className={`image1`}
+            src={postImages[1]}
+            alt={`Image 2`}
+            onClick={() => handleImageClick(1)}
+          />
+          <img
+            className={`image2`}
+            src={postImages[2]}
+            alt={`Image 3`}
+            onClick={() => handleImageClick(2)}
+          />
         </div>
+      );
+      break;
+    case 4:
+      postImages.forEach((image, index) => {
+        galleryItems.push(
+          <img
+            key={index}
+            className={`gallery_item quarterWidth image${index}`}
+            src={image}
+            alt={`Image ${index + 1}`}
+            onClick={() => handleImageClick(index)}
+          />
+        );
+      });
+      break;
+    default:
+      break;
+  }
+
+  if (!postInfo)
+    return (
+      <div className="loading">
+        <LoadingWave />
+      </div>
     );
-}
+  const level = !isNaN(Math.floor(userInfo?.level / 100))
+    ? Math.floor(userInfo?.level / 100)
+    : 0;
+
+  return (
+    <div className="postCardContainer">
+      <div className="cardHeader">
+        <div className="avatarContainer">
+          <NavLink to={`/profile/${userInfo?.username}`}>
+            <Avatar
+              className="Avatar"
+              src={profileImages?.avatar}
+              alt="avatar"
+              sx={{ width: "40px", height: "40px" }}
+            />
+          </NavLink>
+        </div>
+        <div className="leftContainer">
+          <div className="nameNId" onClick={handleNavigate}>
+            <div className="userNameChild">
+              <span className="name">{userInfo?.name}</span>
+              <span className="level">
+                LV
+                <span
+                  className={`textHighlight ${
+                    level < 4
+                      ? "bluetext"
+                      : level < 7
+                      ? "yellowtext"
+                      : "redtext"
+                  }`}
+                >
+                  {level}
+                </span>
+              </span>
+            </div>
+            <div className="idNameAndDate">
+              <span className="idName">@{userInfo?.username} · </span>
+              <span className="datetime">
+                {new Date(postInfo.post_time).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}
+              </span>
+            </div>
+          </div>
+          <div className="moreOption">...</div>
+        </div>
+      </div>
+      <div className="cardContent">
+        <div className="textContent">
+          <span>{postInfo.content}</span>
+        </div>
+        {comic && (
+          <div className="comicslug">
+            <ComicCard
+              cover={
+                comic?.relationships.find((r: any) => r.type === "cover_art")
+                  ?.attributes.fileName
+              }
+              title={comic?.attributes.title.en}
+              comictype={comic?.type}
+              maintag={comic?.attributes.tags[0].attributes.name.en}
+              id={comic?.id}
+            />
+          </div>
+        )}
+        {displayImage && postImages.length > 0 && (
+          <div className="gallery">{galleryItems}</div>
+        )}
+      </div>
+      <div className="optionBar">
+        <div className="likeSection">
+          <div className="iconNnumber" onClick={handleLikeClick}>
+            <div className={`heart-icon ${liked ? "liked" : ""}`}>
+              {/* <img className={`heart-icon ${liked? 'liked' : ''}`} src="/heart.svg" alt="heart" /> */}
+            </div>
+          </div>
+          <span className={`likes-amount ${liked ? "liked" : ""}`}>
+            {postInfo.likecount}
+          </span>
+        </div>
+        <div className="line"></div>
+        <div className="commentSection" onClick={handleCommentClick}>
+          <div className="imgwrapper">
+            <img src="/icons/message.svg" alt="message" />
+          </div>
+          {totalComments}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default PostCard;

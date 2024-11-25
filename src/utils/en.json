@@ -1,0 +1,161 @@
+{
+  "header-bar": {
+    "search": "Search something!",
+    "login": "Log In",
+    "signup": "Sign Up"
+  },
+  "sidebar": {
+    "MangArchive": "MangArchive -",
+    "Home": "Home",
+    "Latest": "Latest",
+    "Advance Search": "Advance Search",
+    "Social": "Social -",
+    "Feed": "Feed",
+    "Discover": "Discover",
+    "Translation": "Translation",
+    "Message": "Message",
+    "General": "General -",
+    "Profile": "Profile",
+    "Library": "Library",
+    "Recent History": "Recent History",
+    "Other": "Other -",
+    "Setting": "Setting",
+    "Site Policies": "Site Policies",
+    "Announcements": "Announcements",
+    "About Us": "About Us"
+  },
+  "manga-home": {
+    "recent": "Recent",
+    "updated": "Updated",
+    "all_category": "All Category",
+    "random": "Random",
+    "manga": "Manga"
+  },
+  "login": {
+    "welcome": "Welcome",
+    "back": "back",
+    "slogan": "Discover manga, manhua and manhwa, track your progress and join the social network! Have fun!",
+    "emailPlaceholder": "Email or Username",
+    "passwordPlaceholder": "Password",
+    "rememberMe": "Remember me",
+    "recoveryPassword": "Recovery password",
+    "loginWithGoogle": "Log in with Google",
+    "dontHaveAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "invalidEmailPassword": "Invalid username or password",
+    "captchaError": "CAPTCHA error, please try again",
+    "existUsername": "Username does not exist",
+    "emailrequire": "Email or Username is required",
+    "passRequire": "Password is required",
+    "invalidUsernamePassword": "Invalid username or password",
+    "supportFeature": "This feature haven't support yet!",
+    "login": "Log In"
+  },
+  "signup": {
+    "welcome": "Welcome",
+    "slogan": "Discover manga, manhua and manhwa, track your progress and join the social network! Have fun!",
+    "emailPlaceholder": "Email",
+    "usernamePlaceholder": "Username (no spaces, max 32 characters)",
+    "passwordPlaceholder": "Password",
+    "retypePasswordPlaceholder": "Retype Password",
+    "captchaError": "CAPTCHA error, please try again",
+    "emailError": {
+      "empty": "Email cannot be empty",
+      "invalid": "Invalid email format",
+      "exists": "Email already exists"
+    },
+    "usernameError": {
+      "empty": "Username cannot be empty",
+      "whitespace": "Username cannot contain spaces",
+      "exists": "Username already exists"
+    },
+    "passwordError": {
+      "empty": "Password cannot be empty",
+      "mismatch": "Passwords do not match"
+    },
+    "signupButton": "Sign up",
+    "googleSignup": "Sign up with Google",
+    "alreadyHaveAccount": "Already have an account?",
+    "loginHere": "Login"
+  },
+  "search-page": {
+    "error-message": "An error occurred: {{error}}",
+    "tag-instruction": "For searching with each of the tags, click the tag once to include it in the results, click again to exclude it, and click a third time to reset it.",
+    "search-placeholder": "Search something!",
+    "no-results": "No results found （＞人＜；）",
+    "search-button": "Search",
+    "previous-page": "Previous",
+    "next-page": "Next",
+    "pagination": " / {{totalPages}}"
+  },
+  "discover": {
+    "back": "Back",
+    "Discover": "Discover",
+    "navTabsExample": "Navigation Tabs Example",
+    "suggestFollowing": "Suggest following",
+    "translationGroupForYou": "Translation group for you",
+    "loadMore": "Load more",
+    "noMoreUsers": "No more users to load"
+  },
+  "feed": {
+    "loading": "Loading feed",
+    "Feed": "Feed"
+  },
+  "utils-reply": {
+    "reply-user": "Replying to @"
+  },
+  "profile": {
+    "back": "Back",
+    "post": "Post",
+    "post_one": "Post",
+    "post_other": "Posts",
+    "media": "Media",
+    "editProfile": "Edit Profile",
+    "unfollow": "Unfollow",
+    "follow": "Follow",
+    "level": "Level",
+    "joinedIn": "Joined in",
+    "friends": "Friend",
+    "friend_one": "Friend",
+    "friend_other": "Friends",
+    "groups": "Groups",
+    "group_one": "Group",
+    "group_other": "Groups"
+  },
+  "rightbar": {
+    "who_to_follow": "Who to follow",
+    "translation_groups": "Translation groups",
+    "trends": "Trends",
+    "see_more": "See more"
+  },
+  "postSection": {
+    "avatarAlt": "avatar",
+    "promptText": "What's your take? Share to enlighten others!",
+    "orText": "Or you can",
+    "suggestButtonText": "Suggest your favorite Manga, Manhua, Manhwa to others!"
+  },
+  "utils-time": {
+    "months_one": "{{count}} month ago",
+    "months_other": "{{count}} months ago",
+    "days_one": "{{count}} day ago",
+    "days_other": "{{count}} days ago",
+    "hours_one": "{{count}} hour ago",
+    "hours_other": "{{count}} hours ago",
+    "minutes_one": "{{count}} minute ago",
+    "minutes_other": "{{count}} minutes ago",
+    "seconds_one": "{{count}} second ago",
+    "seconds_other": "{{count}} seconds ago"
+  },
+  "setting": {
+    "setting-header": "Setting",
+    "general": "General",
+    "language": "Language",
+    "account": "Tài khoản",
+    "current-role": "The current role of your account",
+    "ask-admin": "Ask Admin to upgrade your Role to a Translation Group",
+    "logout": "Logout",
+    "cant-undon": "This process can not be undone after you send form to us. The form will take care in 24-72h.",
+    "danger-zone": "Danger Zone",
+    "delete": "I want to delete my account"
+  }
+}

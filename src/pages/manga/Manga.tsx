@@ -4,24 +4,25 @@ import "./Manga.scss";
 import { useNavigate } from "react-router-dom";
 // import searchManga from './MangaSearch.js';
 
-import MangaCard from "../title/TitleCard2";
-import BannerSwiper from "../bannerswiper/BannerSwiper";
-import MangaCardSwiper from "../mangaswiper/MangaSwiper";
+import MangaCard from "../../components/mangaComponents/title/TitleCard2";
+import BannerSwiper from "../../components/mangaComponents/bannerVariant/bannerswiper/BannerSwiper";
+import MangaCardSwiper from "../../components/mangaComponents/mangaswiper/MangaSwiper";
 // import MangaBanner from "../mangabanner/MangaBanner";
 // import Banner from '../banner/Banner';
 import { suggestManga } from "../../utils/SuggestManga";
+import { useTranslation } from "react-i18next";
 
 const Manga = () => {
   const [mangaList, setMangaList] = useState([]);
   const [suggestMangas, setSuggestManga] = useState([]);
   // const [mangaSlugs, setMangaSlugs] = useState({});
   const navigate = useNavigate();
-
+  const { t } = useTranslation("", { keyPrefix: "manga-home" });
   const handleRandomClick = async () => {
     try {
       const resp = await axios({
         method: "GET",
-        url: `${baseUrl}/manga/random`
+        url: `${baseUrl}/manga/random`,
       });
       console.log("random: ", resp.data.data);
       navigate(`/manga/${resp.data.data.id}`);
@@ -92,8 +93,8 @@ const Manga = () => {
 
           <div className="textbox">
             <h1 style={{ paddingLeft: "20px" }}>
-              <span>Recent </span>
-              <span style={{ color: "#1B6FA8" }}>Updated</span>
+              <span>{t("recent")} </span>
+              <span style={{ color: "#1B6FA8" }}>{t("updated")}</span>
             </h1>
           </div>
 
@@ -101,7 +102,7 @@ const Manga = () => {
 
           <div className="category-selection">
             <span>
-              <div className="category-selection-tag">All Category</div>
+              <div className="category-selection-tag">{t("all_category")}</div>
             </span>
             <span>
               <div className="category-selection-tag">Shounen</div>
@@ -162,8 +163,8 @@ const Manga = () => {
             </div>
             <div className="textbox" onClick={() => handleRandomClick()}>
               <h1 style={{ paddingLeft: "20px" }}>
-                <span style={{ color: "#E7E9EA" }}>Random </span>
-                <span style={{ color: "#4296cf" }}>Manga</span>
+                <span style={{ color: "#E7E9EA" }}>{t("random")} </span>
+                <span style={{ color: "#4296cf" }}>{t("manga")}</span>
               </h1>
             </div>
             <div className="horizontal-manga-list">
