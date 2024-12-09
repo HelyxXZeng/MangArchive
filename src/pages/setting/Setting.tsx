@@ -15,8 +15,10 @@ const Setting = () => {
   const { langState } = useSelector((state: any) => state.langState);
   const { t } = useTranslation("", { keyPrefix: "setting" });
   useEffect(() => {
-    const currentLang = localStorage.getItem("i18nextLng") || "vi";
-    dispatch(setLangState(currentLang));
+    // Lấy ngôn ngữ hiện tại từ i18n hoặc fallback
+    const detectedLang =
+      i18n.language || localStorage.getItem("i18nextLng") || "vi";
+    dispatch(setLangState(detectedLang)); // Cập nhật state trong Redux
   }, []);
   const handleChangeLanguage = (event: any) => {
     const newLang = event.target.value;
