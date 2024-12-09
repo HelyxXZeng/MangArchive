@@ -8,7 +8,7 @@ import React, {
 import { TextField, Avatar, IconButton, Box, Button } from "@mui/material";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import "./commentFunc.scss";
-import { supabase } from "../../utils/supabase"; // Adjust the path to your supabase client setup
+import { supabase } from "../../utils/supabase";
 import useCheckSession from "../../hooks/session";
 import {
   uploadComment,
@@ -72,7 +72,7 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
           data: { user },
         } = await supabase.auth.getUser();
         if (user !== null) {
-          setUserId(user.id);
+          setUserId(user.id); //id dành cho upload file
         } else {
           setUserId("");
         }

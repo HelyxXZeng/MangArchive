@@ -471,7 +471,9 @@ const Profile = () => {
                 </Button>
                 <IconButton
                   className="directMessage"
-                  onClick={() => console.log("DM", userInfo?.username)}
+                  onClick={() => {
+                    navigate("/chat");
+                  }}
                 >
                   <img src="/icons/direct-message.svg" alt="DM Button" />
                 </IconButton>
