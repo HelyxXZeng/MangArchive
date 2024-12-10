@@ -1,0 +1,36 @@
+@import "../../../../global-styles/Color.scss";
+
+.messageBubbleContainer {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  width: 100%;
+  &.isMine {
+    justify-content: flex-end; // Khi isMine là true, bong bóng chat sẽ nằm bên phải
+  }
+
+  .bubbleText {
+    max-width: 70%; // Giới hạn độ rộng của bong bóng chat
+    padding: 10px;
+    border-radius: 10px;
+    margin: 0 10px;
+    color: $text-white-new;
+    justify-content: center;
+    border-radius: 20px;
+    margin-top: 8px;
+    &.isMine {
+      background-color: $blue-main; // Màu nền cho bong bóng chat của người dùng
+      align-self: flex-end;
+    }
+
+    &.isTheir {
+      background-color: $gray-bg; // Màu nền cho bong bóng chat của người khác
+      align-self: flex-start;
+    }
+  }
+
+  .MuiAvatar-root {
+    width: 32px;
+    height: 32px;
+  }
+}

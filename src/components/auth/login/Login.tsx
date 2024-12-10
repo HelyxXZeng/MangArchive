@@ -1,24 +1,36 @@
-import React, { FunctionComponent, useCallback, useState } from "react";
+import React, { FunctionComponent, useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, InputAdornment, IconButton, Button } from "@mui/material";
-import "./login.scss";
 import { supabase } from "../../../utils/supabase";
 import axios from "axios";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import { useTranslation } from "react-i18next";
+import "./login.scss";
+import { useDispatch } from "react-redux";
+import { setSessionState } from "../../../reduxState/reducer/sessionReducer";
 
 const Login: FunctionComponent = () => {
   const navigate = useNavigate();
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const dispact = useDispatch();
   const [errors, setErrors] = useState({
     email: "",
     password: "",
   });
   const [captchaToken, setCaptchaToken] = useState("");
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
   const { t } = useTranslation("", { keyPrefix: "login" });
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  const resetCaptcha = () => {
+    if (turnstileRef.current) {
+      turnstileRef.current.reset();
+    }
+  };
+
   const onLoginButtonClick = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -44,31 +56,36 @@ const Login: FunctionComponent = () => {
           email: t("captchaError"),
           password: t("captchaError"),
         }));
+        resetCaptcha();
         return;
       }
+
       try {
+        const { data } = await axios.get(
+          `https://test.alse.workers.dev/?token=${captchaToken}`
+        );
+
+        if (!data.success) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: t("captchaError"),
+            password: t("captchaError"),
+          }));
+          resetCaptcha();
+          return;
+        }
+
         const isEmail = email.includes("@");
 
-        if (isEmail && captchaToken) {
-          const { data } = await axios.get(
-            "https://test.alse.workers.dev/?token=" + captchaToken
-          );
-
-          if (!data.success) {
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              email: t("captchaError"),
-              password: t("captchaError"),
-            }));
-            return;
-          }
+        if (isEmail) {
           const response = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
           });
-          if (response.error) throw response.error;
 
+          if (response.error) throw response.error;
           if (response.data.user) {
+            dispact(setSessionState(false));
             navigate(`/`, { replace: true });
           } else {
             setErrors((prevErrors) => ({
@@ -76,50 +93,41 @@ const Login: FunctionComponent = () => {
               email: t("invalidEmailPassword"),
               password: t("invalidEmailPassword"),
             }));
+            resetCaptcha();
           }
         } else {
-          if (captchaToken) {
-            const { data } = await axios.get(
-              "https://test.alse.workers.dev/?token=" + captchaToken
-            );
+          const { data: udata, error } = await supabase
+            .from("User")
+            .select("email")
+            .eq("username", email);
 
-            if (!data.success) {
-              setErrors((prevErrors) => ({
-                ...prevErrors,
-                email: t("captchaError"),
-                password: t("captchaError"),
-              }));
-              return;
-            }
-            const { data: udata, error } = await supabase
-              .from("User")
-              .select("email")
-              .eq("username", email);
+          if (error) throw error;
 
-            if (error) throw error;
+          if (udata && udata.length > 0) {
+            const response = await supabase.auth.signInWithPassword({
+              email: udata[0].email,
+              password: password,
+            });
 
-            if (udata && udata.length > 0) {
-              const response = await supabase.auth.signInWithPassword({
-                email: udata[0].email,
-                password: password,
-              });
+            if (response.error) throw response.error;
 
-              if (response.error) throw response.error;
-
-              if (response.data.user) {
-                navigate(`/`, { replace: true });
-              } else {
-                setErrors((prevErrors) => ({
-                  ...prevErrors,
-                  email: t("invalidUsernamePassword"),
-                }));
-              }
+            if (response.data.user) {
+              dispact(setSessionState(false));
+              console.log(response.data);
+              navigate(`/`, { replace: true });
             } else {
               setErrors((prevErrors) => ({
                 ...prevErrors,
-                email: t("existUsername"),
+                email: t("invalidUsernamePassword"),
               }));
+              resetCaptcha();
             }
+          } else {
+            setErrors((prevErrors) => ({
+              ...prevErrors,
+              email: t("existUsername"),
+            }));
+            resetCaptcha();
           }
         }
       } catch (error) {
@@ -129,14 +137,15 @@ const Login: FunctionComponent = () => {
           email: t("invalidUsernamePassword"),
           password: t("invalidUsernamePassword"),
         }));
+        resetCaptcha();
       }
     },
-    [email, password, navigate]
+    [email, password, captchaToken, navigate, t]
   );
 
   const onGoogleLoginContainerClick = useCallback(() => {
     alert(t("supportFeature"));
-  }, []);
+  }, [t]);
 
   const onSignUpClick = useCallback(() => {
     navigate("/auth/signup");
@@ -219,6 +228,7 @@ const Login: FunctionComponent = () => {
               onError={() => setCaptchaToken("")}
               options={{ theme: "light" }}
               lang="auto"
+              ref={turnstileRef}
             />
             <div className="loginOption">
               <div className="remember-me-button">

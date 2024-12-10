@@ -10,10 +10,13 @@ import {
 } from "../../../api/userAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 const HeaderBar = () => {
   const navigate = useNavigate();
   const [realUserID, setRealUserID] = useState<any>(null);
+  const isSignOut = useSelector((state: any) => state.sessionState.isSignOut);
+  // console.log("isSignouT:", isSignOut);
   const session = useCheckSession();
   const [status, setStatus] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
@@ -33,10 +36,22 @@ const HeaderBar = () => {
     navigate("/auth/signup");
   }, [navigate]);
   useEffect(() => {
-    if (session !== null) {
+    // console.log(
+    //   "condition:",
+    //   session !== null || !isSignOut,
+    //   session !== null,
+    //   !isSignOut
+    // );
+    if (session !== null || !isSignOut) {
       setStatus(true);
+    } else {
+      setStatus(false);
     }
-  }, [session]);
+  }, [session, isSignOut]);
+
+  // useEffect(() => {
+  //   setStatus(!isSignOut);
+  // }, [isSignOut]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
