@@ -5,8 +5,9 @@ import { supabase } from "../../../utils/supabase";
 import axios from "axios";
 import { Turnstile, TurnstileInstance } from "@marsidev/react-turnstile";
 import { useTranslation } from "react-i18next";
-
 import "./login.scss";
+import { useDispatch } from "react-redux";
+import { setSessionState } from "../../../reduxState/reducer/sessionReducer";
 
 const Login: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Login: FunctionComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const dispact = useDispatch();
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -82,8 +84,8 @@ const Login: FunctionComponent = () => {
           });
 
           if (response.error) throw response.error;
-
           if (response.data.user) {
+            dispact(setSessionState(false));
             navigate(`/`, { replace: true });
           } else {
             setErrors((prevErrors) => ({
@@ -110,6 +112,8 @@ const Login: FunctionComponent = () => {
             if (response.error) throw response.error;
 
             if (response.data.user) {
+              dispact(setSessionState(false));
+              console.log(response.data);
               navigate(`/`, { replace: true });
             } else {
               setErrors((prevErrors) => ({

@@ -7,6 +7,7 @@ import { setLangState } from "../../reduxState/reducer/langReducer";
 import i18n from "../../utils/i18next";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import { setSessionState } from "../../reduxState/reducer/sessionReducer";
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -17,7 +18,10 @@ const Setting = () => {
   useEffect(() => {
     // Lấy ngôn ngữ hiện tại từ i18n hoặc fallback
     const detectedLang =
-      i18n.language || localStorage.getItem("i18nextLng") || "vi";
+      i18n.language?.split("-")[0] ||
+      localStorage.getItem("i18nextLng")?.split("-")[0] ||
+      "vi";
+    console.log(i18n.language, detectedLang);
     dispatch(setLangState(detectedLang)); // Cập nhật state trong Redux
   }, []);
   const handleChangeLanguage = (event: any) => {
@@ -35,6 +39,7 @@ const Setting = () => {
 
   const handleLogout = async () => {
     try {
+      dispatch(setSessionState(true));
       await supabase.auth.signOut();
     } catch (error) {
       console.error(error);
