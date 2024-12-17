@@ -206,11 +206,12 @@ import {
 import "./profile.scss";
 import { Avatar, Button, IconButton, Tab, Tabs } from "@mui/material";
 import UpdateProfileModal from "../../../components/modal/updateProfileModal/UpdateProfileModal";
-import { supabase } from "../../../utils/supabase";
 import useCheckSession from "../../../hooks/session";
 import {
+  checkIsFollowingUser,
   fetchProfileCountData,
   fetchUserIdByEmail,
+  fetchUserInfoByUsername,
   fetchUserProfileImages,
 } from "../../../api/userAPI";
 import { followUserById, unfollowUserById } from "../../../api/scocialAPI";
@@ -261,16 +262,16 @@ const Profile = () => {
     const fetchUserInfo = async () => {
       try {
         if (username) {
-          const { data, error } = await supabase
-            .from("User")
-            .select("*")
-            .eq("username", username)
-            .single();
-          if (error) console.error(error);
-          else {
-            setUserInfo(data);
-            setIsCurrentUser(data.email === session?.user?.email);
-          }
+          const data = await fetchUserInfoByUsername(username);
+          setUserInfo(data[0]);
+          setIsCurrentUser(data[0].email === session?.user?.email!);
+          // console.log(
+          //   "check",
+          //   data[0].email === session?.user?.email,
+          //   isCurrentUser,
+          //   data[0].email,
+          //   session?.user?.email
+          // );
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -298,30 +299,19 @@ const Profile = () => {
     }
   };
 
-  const checkIfFollowed = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("UserFollowing")
-        .select("*")
-        .eq("user", userID)
-        .eq("follow", userInfo.id)
-        .single();
-
-      if (error && error.code !== "PGRST116") {
-        throw error;
-        // console.error("Error checking follow status:", error);
-      } else {
-        setIsFollowed(!!data);
-      }
-    } catch (error) {
-      throw error;
-
-      // console.error("Error checking follow status:", error);
-    }
-  };
-
   useEffect(() => {
+    const checkIfFollowed = async () => {
+      try {
+        const isFollowing = await checkIsFollowingUser(userID, userInfo.id);
+        setIsFollowed(isFollowing);
+      } catch (error) {
+        throw error;
+
+        // console.error("Error checking follow status:", error);
+      }
+    };
     if (userID && userInfo && !isCurrentUser) {
+      // console.log(userID, userInfo, isCurrentUser);
       checkIfFollowed();
     }
   }, [userID, userInfo, isCurrentUser]);
@@ -377,7 +367,7 @@ const Profile = () => {
     // Reset profile-related states when the username changes
     setUserInfo(null);
     setProfileImages(null);
-    setIsCurrentUser(false);
+    // setIsCurrentUser(false);
   }, [username]);
 
   const handleOpenProfile = () => setIsModalOpen(true);

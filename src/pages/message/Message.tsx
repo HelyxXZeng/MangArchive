@@ -1,5 +1,5 @@
 // Message.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getMessageSenders, getMessagesFromUser } from "../../api/messageAPI";
 import UserCardMess from "../../components/socialComponents/message/userCardMess/UserCardMess"; // Import UserCardMess
 import useCheckSession from "../../hooks/session";
@@ -37,6 +37,15 @@ const Message = () => {
   const [profileImages, setProfileImages] = useState<{
     avatar: string;
   } | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]); // Lắng nghe thay đổi của messages
 
   useEffect(() => {
     const getUserID = async () => {
@@ -189,6 +198,7 @@ const Message = () => {
               isMine={message.sender_id === userID}
             />
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="messageSend">
           <MessagetBox receiver_id={activeSenderId!} />

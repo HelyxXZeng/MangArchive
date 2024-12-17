@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import "./login.scss";
 import { useDispatch } from "react-redux";
 import { setSessionState } from "../../../reduxState/reducer/sessionReducer";
+import { fetchEmailByUsername } from "../../../api/userAPI";
 
 const Login: FunctionComponent = () => {
   const navigate = useNavigate();
@@ -96,16 +97,11 @@ const Login: FunctionComponent = () => {
             resetCaptcha();
           }
         } else {
-          const { data: udata, error } = await supabase
-            .from("User")
-            .select("email")
-            .eq("username", email);
-
-          if (error) throw error;
+          const udata = await fetchEmailByUsername(email);
 
           if (udata && udata.length > 0) {
             const response = await supabase.auth.signInWithPassword({
-              email: udata[0].email,
+              email: udata,
               password: password,
             });
 
