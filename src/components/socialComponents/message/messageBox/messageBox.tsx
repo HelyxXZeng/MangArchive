@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "../../../../utils/supabase";
 import { Box, Button, IconButton, TextField } from "@mui/material";
 import EmojiPicker from "emoji-picker-react";
@@ -11,6 +11,9 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [realUserID, setRealUserID] = useState<any>(null);
   const session = useCheckSession();
+
+  // Ref để theo dõi EmojiPicker
+  const emojiPickerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const getUserID = async () => {
@@ -40,8 +43,8 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
           sender_id: realUserID,
           receiver_id: receiver_id,
           message: Messaget,
-          created_at: new Date().toISOString(), // Automatically set created_at
-          is_deleted: false, // Default to false (if this column is required)
+          created_at: new Date().toISOString(),
+          is_deleted: false,
         },
       ]);
 
@@ -53,35 +56,57 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
     }
   };
 
+  // Ẩn EmojiPicker khi click bên ngoài
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <Box className="Messaget-box">
-      <Box className="Messaget-header">
-        <Box className="textarea-wrapper customScrollbar">
-          <TextField
-            multiline
-            minRows={1}
-            maxRows={10}
-            variant="outlined"
-            value={Messaget}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Nhắn tin với ..."
-            className="Messaget-textarea customScrollbar"
-            fullWidth
-          />
-          <Box className="Messaget-actions">
-            <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-              <img src="/icons/emoji-happy.svg" alt="emoji" />
-            </IconButton>
-            <Button onClick={handleSend} disabled={!Messaget.trim()}>
-              Send
-            </Button>
-          </Box>
+      <Box className="text-wrapper customScrollbar">
+        <TextField
+          multiline
+          minRows={1}
+          maxRows={6}
+          variant="outlined"
+          value={Messaget}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Aa"
+          className="Messaget-textarea customScrollbar"
+          fullWidth
+        />
+        <Box className="Messaget-actions">
+          <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+            <img src="/icons/emoji-happy.svg" alt="emoji" />
+          </IconButton>
+          <Button
+            onClick={handleSend}
+            disabled={!Messaget.trim()}
+            className="send-button"
+          >
+            Send
+          </Button>
         </Box>
       </Box>
       {showEmojiPicker && (
-        <EmojiPicker
-          onEmojiClick={(emoji) => setMessage((prev) => prev + emoji.emoji)}
-        />
+        <Box className="emoji-picker" ref={emojiPickerRef}>
+          <EmojiPicker
+            autoFocusSearch={false}
+            onEmojiClick={(emoji) => setMessage((prev) => prev + emoji.emoji)}
+          />
+        </Box>
       )}
     </Box>
   );

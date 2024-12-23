@@ -7,6 +7,7 @@
   gap: 16px;
   margin-top: 16px;
   max-height: calc(100vh - 56px);
+  // overflow: hidden;
   .mainMessageFrame {
     width: 100%;
     max-width: 960px;
@@ -17,6 +18,8 @@
     margin-left: 16px;
     // border: 1px solid $gray-bg;
     margin-right: auto;
+    position: relative;
+    justify-content: flex-end;
     .nameBar {
       max-height: 48px;
       background-color: $gray-bg;
@@ -31,8 +34,9 @@
       align-items: flex-end;
       display: flex; /* Đặt flexbox */
       flex-direction: column; /* Nội dung theo chiều dọc */
-      align-items: flex-start; /* Tin nhắn bắt đầu từ trái */
-      max-height: calc(100% - 160px); /* Trừ đi phần header */
+      // align-items: flex-start; /* Tin nhắn bắt đầu từ trái */
+      height: calc(100% - 188px);
+      // max-height: calc(100% - 98px); /* Trừ đi phần header */
       overflow-y: scroll; /* Thêm thanh cuộn nếu cần */
       padding-bottom: 16px; // Tạo khoảng trống ở dưới cùng
       &::-webkit-scrollbar {
