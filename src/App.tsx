@@ -165,7 +165,7 @@ function App() {
           ),
         },
         {
-          path: "/chat",
+          path: "/chat/:id",
           element: (
             <ProtectedRoute>
               <Message />
