@@ -144,9 +144,9 @@ export const unfollowUserById = async (realUserID: number, userID: number) => {
 
 export const followGroupById = async (realUserID: number, groupID: number) => {
   try {
-    const { error } = await supabase.rpc("follow_user", {
+    const { error } = await supabase.rpc("follow_group", {
       this_user_id: realUserID,
-      follow_user_id: groupID,
+      follow_group_id: groupID,
     });
     if (error) {
       console.error("Error following user:", error);
@@ -160,9 +160,9 @@ export const followGroupById = async (realUserID: number, groupID: number) => {
 
 export const unfollowGroupById = async (realUserID: number, groupID: number) => {
   try {
-    const { error } = await supabase.rpc("unfollow_user", {
+    const { error } = await supabase.rpc("unfollow_group", {
       this_user_id: realUserID,
-      follow_user_id: groupID,
+      unfollow_group_id: groupID,
     });
     if (error) {
       console.error("Error unfollowing user:", error);
@@ -170,6 +170,38 @@ export const unfollowGroupById = async (realUserID: number, groupID: number) => 
     }
   } catch (error) {
     console.error("Error in unfollowUserById:", error);
+    throw error;
+  }
+};
+
+export const joinGroupById = async (realUserID: number, groupID: number) => {
+  try {
+    const { error } = await supabase.rpc("join_group", {
+      this_user_id: realUserID,
+      join_group_id: groupID,
+    });
+    if (error) {
+      console.error("Error following user:", error);
+      throw error;
+    }
+  } catch (error) {
+    console.error("Error in followUserById:", error);
+    throw error;
+  }
+};
+
+export const unjoinGroupById = async (realUserID: number, groupID: number) => {
+  try {
+    const { error } = await supabase.rpc("unjoin_group", {
+      this_user_id: realUserID,
+      unjoin_group_id: groupID,
+    });
+    if (error) {
+      console.error("Error following user:", error);
+      throw error;
+    }
+  } catch (error) {
+    console.error("Error in followUserById:", error);
     throw error;
   }
 };

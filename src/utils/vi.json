@@ -124,7 +124,9 @@
     "friends": "Bạn bè",
     "groups": "Nhóm",
     "members": "Thành viên",
-    "followers": "Người theo dõi"
+    "followers": "Người theo dõi",
+    "join": "Tham gia nhóm",
+    "unjoin": "Rời nhóm"
   },
   "rightbar": {
     "who_to_follow": "Nên theo dõi ai?",

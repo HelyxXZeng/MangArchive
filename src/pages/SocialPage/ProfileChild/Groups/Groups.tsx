@@ -1,5 +1,4 @@
 import "./groups.scss";
-import UserCardLarge from "../../../../components/socialComponents/userCardLarge/UserCardLarge";
 import { useEffect, useState } from "react";
 import useCheckSession from "../../../../hooks/session";
 import { supabase } from "../../../../utils/supabase";

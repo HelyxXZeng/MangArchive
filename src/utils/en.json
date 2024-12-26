@@ -122,7 +122,9 @@
     "group_one": "Group",
     "group_other": "Groups",
     "members": "Members",
-    "followers": "Followers"
+    "followers": "Followers",
+    "join": "Join Group",
+    "unjoin": "Leave Group"
   },
   "rightbar": {
     "who_to_follow": "Who to follow",

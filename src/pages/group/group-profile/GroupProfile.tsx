@@ -18,7 +18,9 @@ import {
 } from "../../../api/groupApi";
 import {
     followGroupById,
-    unfollowGroupById
+    joinGroupById,
+    unfollowGroupById,
+    unjoinGroupById
 } from "../../../api/scocialAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 import { useTranslation } from "react-i18next";
@@ -38,6 +40,13 @@ const GroupProfile = () => {
             followGroup();
         }
     };
+    const handleJoinGroup = () => {
+        if (isJoined) {
+            unjoinGroup();
+        } else {
+            joinGroup();
+        }
+    };
     const [userId, setUserId] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [GroupInfo, setGroupInfo] = useState<any>(null);
@@ -45,7 +54,7 @@ const GroupProfile = () => {
         avatar: string;
         background: string;
     } | null>(null);
-    const [isJoined, setIsJoined] = useState(true);
+    const [isJoined, setIsJoined] = useState(false);
 
     const [postCount, setPostCount] = useState(0);
     const [followerCount, setFollowerCount] = useState(0);
@@ -95,6 +104,34 @@ const GroupProfile = () => {
         }
     };
 
+    const joinGroup = async () => {
+        if (session && session.user) {
+            try {
+                await joinGroupById(userId, GroupInfo.id);
+                setIsJoined(true);
+            } catch (error) {
+                console.error("Error following Group:", error);
+            }
+        }
+        else {
+
+        }
+    };
+
+    const unjoinGroup = async () => {
+        if (session && session.user) {
+            try {
+                await unjoinGroupById(userId, GroupInfo.id);
+                setIsJoined(false);
+            } catch (error) {
+                console.error("Error following Group:", error);
+            }
+        }
+        else {
+
+        }
+    };
+
     const checkIfFollowed = async () => {
         if (session && session.user) {
             try {
@@ -120,9 +157,35 @@ const GroupProfile = () => {
         else setIsFollowed(false);
     };
 
+    const checkIfJoined = async () => {
+        if (session && session.user) {
+            try {
+                var thisUserId = await fetchUserIdByEmail(session.user.email);
+                setUserId(thisUserId);
+                const { data, error } = await supabase
+                    .from("GroupMembers")
+                    .select("*")
+                    .eq("user_id", thisUserId)
+                    .eq("group_id", GroupInfo.id)
+                    .single();
+
+                if (error && error.code !== "PGRST116") {
+                    throw error;
+                    // console.error("Error checking follow status:", error);
+                } else {
+                    setIsJoined(!!data);
+                }
+            } catch (error) {
+                throw error;
+            }
+        }
+        else setIsJoined(false);
+    };
+
     useEffect(() => {
         if (groupid && GroupInfo) {
             checkIfFollowed();
+            checkIfJoined();
         }
     }, [groupid, GroupInfo]);
 
@@ -242,49 +305,59 @@ const GroupProfile = () => {
                                 border: "4px solid #1F1F1F",
                             }}
                         />
-                        {isJoined ? (
-                            <div className="profile">
-                                <Button
-                                    className="textwhite"
-                                    onClick={handleOpenProfile}
-                                    variant="contained"
-                                    sx={{ borderRadius: "24px" }}
-                                >
-                                    {t("editProfile")}
-                                </Button>
-                                <UpdateGroupProfileModal
-                                    open={isModalOpen}
-                                    handleClose={handleCloseProfile}
-                                    group={GroupInfo}
-                                />
-                            </div>
-                        ) : (
-                            <div className="rightOption">
-                                <Button
-                                    className={!isFollowed ? "textblack" : "textwhite"}
-                                    onClick={handleFollowGroup}
-                                    variant="contained"
-                                    sx={{ borderRadius: "24px" }}
-                                >
-                                    {isFollowed ? t("unfollow") : t("follow")}
-                                </Button>
-                                <IconButton
-                                    className="directMessage"
-                                    onClick={() => console.log("DM", GroupInfo?.name_id)}
-                                >
-                                    <img src="/icons/direct-message.svg" alt="DM Button" />
-                                </IconButton>
+                        <div className="rightOption">
+                            {isJoined ? (
+                                <div className="profile">
+                                    <Button
+                                        className="textwhite"
+                                        onClick={handleOpenProfile}
+                                        variant="contained"
+                                        sx={{ borderRadius: "24px" }}
+                                    >
+                                        {t("editProfile")}
+                                    </Button>
+                                    <UpdateGroupProfileModal
+                                        open={isModalOpen}
+                                        handleClose={handleCloseProfile}
+                                        group={GroupInfo}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="profile">
+                                    <Button
+                                        className={!isFollowed ? "textblack" : "textwhite"}
+                                        onClick={handleFollowGroup}
+                                        variant="contained"
+                                        sx={{ borderRadius: "24px" }}
+                                    >
+                                        {isFollowed ? t("unfollow") : t("follow")}
+                                    </Button>
+                                    <Button
+                                        className={"textwhite"}
+                                        onClick={handleJoinGroup}
+                                        variant="contained"
+                                        sx={{ borderRadius: "24px" }}
+                                    >
+                                        {isJoined ? t("unjoin") : t("join")}
+                                    </Button>
+                                </div>
+                            )}
+                            <IconButton
+                                className="directMessage"
+                                onClick={() => console.log("DM", GroupInfo?.name_id)}
+                            >
+                                <img src="/icons/direct-message.svg" alt="DM Button" />
+                            </IconButton>
 
-                                <IconButton
-                                    className="more-circle"
-                                    onClick={() =>
-                                        console.log("More about this Group:", GroupInfo?.name_id)
-                                    }
-                                >
-                                    <img src="/icons/more-circle.svg" alt="DM Button" />
-                                </IconButton>
-                            </div>
-                        )}
+                            <IconButton
+                                className="more-circle"
+                                onClick={() =>
+                                    console.log("More about this Group:", GroupInfo?.name_id)
+                                }
+                            >
+                                <img src="/icons/more-circle.svg" alt="DM Button" />
+                            </IconButton>
+                        </div>
                     </div>
                     <div className="userNameInfo">
                         <div className="userNameChild">
