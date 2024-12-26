@@ -8,6 +8,9 @@ import {
 } from "../../../api/groupApi";
 import { fetchGroupPosts } from "../../../api/scocialAPI";
 import LoadingWave from "../../../components/loadingWave/LoadingWave";
+import useCheckSession from "../../../hooks/session";
+import { fetchUserIdByEmail } from "../../../api/userAPI";
+import { supabase } from "../../../utils/supabase";
 
 const Post = () => {
     const [GroupInfo, setGroupInfo] = useState<any>(null);
@@ -16,7 +19,8 @@ const Post = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [offset, setOffset] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
-    const [showPostSection, setShowPostSection] = useState<boolean>(true); // State to control visibility of PostSection
+    const [showPostSection, setShowPostSection] = useState<boolean>(false); // State to control visibility of PostSection
+    const session = useCheckSession();
 
     useEffect(() => {
         const fetchGroupInfo = async () => {
@@ -61,6 +65,36 @@ const Post = () => {
             }
         }
     };
+
+    const checkIfJoined = async () => {
+        if (session && session.user) {
+            try {
+                var thisUserId = await fetchUserIdByEmail(session.user.email);
+                const { data, error } = await supabase
+                    .from("GroupMembers")
+                    .select("*")
+                    .eq("user_id", thisUserId)
+                    .eq("group_id", GroupInfo.id)
+                    .single();
+
+                if (error && error.code !== "PGRST116") {
+                    throw error;
+                    // console.error("Error checking follow status:", error);
+                } else {
+                    setShowPostSection(!!data);
+                }
+            } catch (error) {
+                throw error;
+            }
+        }
+        else setShowPostSection(false);
+    };
+
+    useEffect(() => {
+        if (groupid && GroupInfo) {
+            checkIfJoined();
+        }
+    }, [groupid, GroupInfo]);
 
     useEffect(() => {
         if (GroupInfo?.id) {
