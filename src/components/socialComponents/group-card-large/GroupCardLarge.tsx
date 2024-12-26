@@ -1,23 +1,22 @@
 import { Avatar, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import "./userCardLarge.scss";
+import "../userCardLarge/userCardLarge.scss";
 import useCheckSession from "../../../hooks/session";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../utils/supabase";
 import {
-  checkIsFollowingUser,
   fetchUserIdByEmail,
-  fetchUserInfo,
-  fetchUserProfileImages,
 } from "../../../api/userAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 import { followUserById, unfollowUserById } from "../../../api/scocialAPI";
+import { fetchGroupDataByID, fetchGroupProfileImages } from "../../../api/groupApi";
 
-interface UserCardLargeProps {
+interface GroupCardLargeProps {
   userID: number;
   fetchSuggestUser: () => void; // Add level prop
 }
 
-const UserCardLarge: React.FC<UserCardLargeProps> = ({
+const GroupCardLarge: React.FC<GroupCardLargeProps> = ({
   userID,
   fetchSuggestUser,
 }) => {
@@ -52,11 +51,8 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
     const fetchUserInfos = async () => {
       try {
         if (userID) {
-          const { data, error } = await fetchUserInfo(userID.toString());
-          if (error) console.error(error);
-          else {
-            setUserInfo(data[0]);
-          }
+          const data = await fetchGroupDataByID(userID);
+          setUserInfo(data);
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -70,7 +66,7 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
     const fetchProfileImages = async () => {
       try {
         if (userID) {
-          const { data, error } = await fetchUserProfileImages(
+          const { data, error } = await fetchGroupProfileImages(
             userID.toString()
           );
           if (error) console.error(error);
@@ -97,9 +93,18 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
   useEffect(() => {
     const checkIfFollowed = async () => {
       try {
-        // console.log(realUserID, userID);
-        const isFollowing = await checkIsFollowingUser(realUserID, userID);
-        setIsFollowed(isFollowing);
+        const { data, error } = await supabase
+          .from("GroupFollowing")
+          .select("*")
+          .eq("user", realUserID)
+          .eq("follow", userID)
+          .single();
+
+        if (error && error.code !== "PGRST116") {
+          throw error;
+        } else {
+          setIsFollowed(!!data);
+        }
       } catch (error) {
         console.error("Error checking follow status:", error);
       }
@@ -131,7 +136,7 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
   };
 
   const handleNavigate = () => {
-    navigate(`/profile/${userInfo.username}`);
+    navigate(`/group/${userInfo.name_id}`);
   };
 
   return (
@@ -162,7 +167,7 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
                 </span>
               </span>
             </div>
-            <span className="idName">@{userInfo?.username}</span>
+            <span className="idName">@{userInfo?.name_id}</span>
           </div>
           <div className="followedbutton">
             <Button
@@ -178,10 +183,10 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
             </Button>
           </div>
         </div>
-        <div className="des">{userInfo?.bio}</div>
+        <div className="des">{userInfo?.description}</div>
       </div>
     </div>
   );
 };
 
-export default UserCardLarge;
+export default GroupCardLarge;

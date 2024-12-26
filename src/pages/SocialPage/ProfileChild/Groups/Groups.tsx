@@ -1,11 +1,11 @@
 import "./groups.scss";
-import UserCardLarge from "../../../../components/socialComponents/userCardLarge/UserCardLarge";
 import { useEffect, useState } from "react";
 import useCheckSession from "../../../../hooks/session";
 import { supabase } from "../../../../utils/supabase";
 import { useParams } from "react-router-dom";
 import { fetchFollowingGroups } from "../../../../api/scocialAPI";
 import LoadingWave from "../../../../components/loadingWave/LoadingWave";
+import GroupCardLarge from "../../../../components/socialComponents/group-card-large/GroupCardLarge";
 const Groups = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const { username } = useParams<{ username: string }>();
@@ -64,7 +64,7 @@ const Groups = () => {
     <div className="groupListContainer">
       {followingUsers.length > 0 ? (
         followingUsers.map((user, index) => (
-          <UserCardLarge
+          <GroupCardLarge
             key={index}
             userID={user}
             fetchSuggestUser={loadFollowingGroups}
