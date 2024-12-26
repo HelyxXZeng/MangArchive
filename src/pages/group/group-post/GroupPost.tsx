@@ -2,18 +2,14 @@ import { useEffect, useState } from "react";
 import PostCard from "../../../components/socialComponents/Posts/PostCard/PostCard";
 import PostSection from "../../../components/socialComponents/Posts/PostSection/PostSection";
 import "../../SocialPage/ProfileChild/Post/post.scss";
-import useCheckSession from "../../../hooks/session";
 import { useParams } from "react-router-dom";
 import {
     fetchGroupData,
-    fetchProfileCountData, // test
-    fetchGroupProfileImages, // test
 } from "../../../api/groupApi";
-import { fetchGroupPosts, fetchUserPosts } from "../../../api/scocialAPI";
+import { fetchGroupPosts } from "../../../api/scocialAPI";
 import LoadingWave from "../../../components/loadingWave/LoadingWave";
 
 const Post = () => {
-    const session = useCheckSession();
     const [GroupInfo, setGroupInfo] = useState<any>(null);
     const { groupid } = useParams<{ groupid: string }>();
     const [postList, setPostList] = useState<any[]>([]);
