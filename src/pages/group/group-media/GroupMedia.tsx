@@ -49,7 +49,6 @@ const GroupMedia = () => {
                     if (data.length === 0) {
                         setImages([]);
                     } else {
-                        console.log(data);
                         const images = data.map((image: any) => {
                             return {
                                 username: image.username,

@@ -19,6 +19,25 @@ export const fetchGroupData = async (groupID: string) => {
     }
 };
 
+export const fetchGroupDataByID = async (groupID: number) => {
+    try {
+        if (groupID) {
+            const { data, error } = await supabase
+                .from("Groups")
+                .select("*")
+                .eq("id", groupID)
+                .single();
+
+            if (error) console.error(error);
+            else {
+                return data;
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching Group info:", error);
+    }
+};
+
 export const fetchGroupProfileImages = async (groupID: string) => {
     return await supabase.rpc("get_group_profile_images", { this_group_id: groupID });
 };
