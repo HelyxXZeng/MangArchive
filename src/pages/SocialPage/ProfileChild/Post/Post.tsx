@@ -4,9 +4,9 @@ import PostSection from "../../../../components/socialComponents/Posts/PostSecti
 import "./post.scss";
 import useCheckSession from "../../../../hooks/session";
 import { useParams } from "react-router-dom";
-import { supabase } from "../../../../utils/supabase";
 import { fetchUserPosts } from "../../../../api/scocialAPI";
 import LoadingWave from "../../../../components/loadingWave/LoadingWave";
+import { fetchUserInfoByUsername } from "../../../../api/userAPI";
 
 const Post = () => {
   const session = useCheckSession();
@@ -17,22 +17,14 @@ const Post = () => {
   const [offset, setOffset] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [showPostSection, setShowPostSection] = useState<boolean>(false); // State to control visibility of PostSection
-
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         if (username && session?.user) {
-          const { data, error } = await supabase
-            .from("User")
-            .select("*")
-            .eq("username", username)
-            .single();
-          if (error) console.error(error);
-          else {
-            setUserInfo(data);
-            // Set showPostSection to true only if email matches session user's email
-            setShowPostSection(data?.email === session.user.email);
-          }
+          const data = await fetchUserInfoByUsername(username);
+          setUserInfo(data[0]);
+          // Set showPostSection to true only if email matches session user's email
+          setShowPostSection(data?.email === session.user.email);
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -53,7 +45,6 @@ const Post = () => {
           5,
           reset ? 0 : currentOffset
         );
-
         if (data.length < 5) {
           setHasMore(false);
         } else {
@@ -73,7 +64,7 @@ const Post = () => {
 
   useEffect(() => {
     if (userInfo?.id) {
-      fetchPostList(true); // Initial fetch with reset
+      fetchPostList(false); // Initial fetch with reset
     }
   }, [userInfo]);
 
@@ -90,7 +81,6 @@ const Post = () => {
       </div>
     );
   }
-
   if (postList.length === 0) {
     return (
       <div className="postContainer">

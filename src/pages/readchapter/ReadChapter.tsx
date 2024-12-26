@@ -163,7 +163,9 @@ const MangaDetails: React.FC<Props> = () => {
           >
             {data.chapter.data.map((chap: any, index: number) => (
               <SwiperSlide key={index} style={{ width: "100%" }}>
-                <div className={`swiper-slide-content ${imgStyle}`}>
+                <div
+                  className={`swiper-slide-content ${imgStyle} customScrollbar`}
+                >
                   <img
                     src={`${data.baseUrl}/data/${data.chapter.hash}/${chap}`}
                     alt={`Page ${index + 1}`}

@@ -1,0 +1,53 @@
+@import "../../../../global-styles/Color.scss";
+
+.messCardContainer {
+  display: flex;
+  flex-direction: row;
+  margin-top: 16px;
+  gap: 8px;
+  pointer-events: auto;
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+  padding: 16px 12px;
+  width: 100%;
+  min-width: 192px;
+
+  &:hover {
+    background-color: $gray-bg;
+  }
+  &:active {
+    background-color: $blue-main-active;
+  }
+
+  &.active {
+    background-color: $blue-main-active; // Màu cho trạng thái active
+  }
+
+  .leftInfor {
+    .upperInfor {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      .senderName {
+        width: 80px;
+        margin-right: auto;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .latestDate {
+        width: 96px;
+        text-align: right;
+        align-self: flex-end;
+        color: $text-gray-soft;
+      }
+    }
+    .latestMessage {
+      color: $text-gray-soft;
+      line-clamp: 2;
+    }
+  }
+}

@@ -1,1 +1,100 @@
 @import "../../global-styles/Color.scss";
+
+.messagePageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  max-height: calc(100vh - 56px);
+  // overflow: hidden;
+  .mainMessageFrame {
+    width: 100%;
+    max-width: 960px;
+    max-height: 100%;
+    height: calc(100vh - 84px);
+    flex: 1;
+    transition: 0.5s ease;
+    margin-left: 16px;
+    // border: 1px solid $gray-bg;
+    margin-right: auto;
+    position: relative;
+    justify-content: flex-end;
+    .nameBar {
+      max-height: 48px;
+      background-color: $gray-bg;
+      font-size: 24px;
+      text-align: center;
+      color: $text-white-new;
+    }
+    .renderlist {
+      flex-grow: 1;
+      margin-left: 16px;
+      margin-right: 16px;
+      align-items: flex-end;
+      display: flex; /* Đặt flexbox */
+      flex-direction: column; /* Nội dung theo chiều dọc */
+      // align-items: flex-start; /* Tin nhắn bắt đầu từ trái */
+      height: calc(100% - 188px);
+      // max-height: calc(100% - 98px); /* Trừ đi phần header */
+      overflow-y: scroll; /* Thêm thanh cuộn nếu cần */
+      padding-bottom: 16px; // Tạo khoảng trống ở dưới cùng
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: $gray-bg;
+        border-radius: 4px;
+      }
+      &::-webkit-scrollbar-track {
+        background-color: $soft-bg;
+      }
+    }
+  }
+  .rightSection {
+    flex: 0.25;
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-left: auto;
+    .senderList {
+      color: $text-white-new;
+      background-color: $soft-bg;
+      border-radius: 20px;
+      border: 1px solid $gray-bg;
+      margin-bottom: 16px;
+      min-height: 500px;
+      width: 100%;
+      min-width: 192px;
+      max-width: 260px;
+      display: flex;
+      flex-direction: column; // Đặt flexbox theo chiều dọc
+      justify-content: space-between; // Đẩy phần tử xuống cuối container
+
+      h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+
+      .see-more {
+        color: $blue-soft;
+        width: 100%;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+        pointer-events: auto;
+        align-self: flex-end;
+        margin-top: auto; // Đẩy phần tử này xuống đáy
+        align-items: center;
+        text-align: center;
+      }
+
+      h2,
+      .see-more {
+        padding: 16px 12px;
+      }
+    }
+  }
+}
