@@ -165,12 +165,22 @@ function App() {
           ),
         },
         {
-          path: "/chat/:id",
+          path: "/chat/",
           element: (
             <ProtectedRoute>
               <Message />
             </ProtectedRoute>
           ),
+          children: [
+            {
+              path: "/chat/:id",
+              element: (
+                <ProtectedRoute>
+                  <Message />
+                </ProtectedRoute>
+              ),
+            },
+          ],
         },
         {
           path: "/policies",

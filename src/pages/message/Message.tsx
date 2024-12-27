@@ -99,6 +99,16 @@ const Message = () => {
     fetchSenders();
   }, [userID]);
 
+  // Nếu URL là "/chat/", tự động chọn sender mới nhất
+  useEffect(() => {
+    if (!id && senders.length > 0) {
+      const latestSender = senders[senders.length - 1]; // Lấy sender mới nhất
+      if (latestSender) {
+        navigate(`/chat/${latestSender.sender_id}`);
+      }
+    }
+  }, [id, senders, navigate]);
+
   useEffect(() => {
     const fetchMessages = async () => {
       if (userID && id) {
