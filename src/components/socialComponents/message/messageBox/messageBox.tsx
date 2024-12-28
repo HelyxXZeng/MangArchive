@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "../../../../utils/supabase";
 import { Box, Button, IconButton, TextField } from "@mui/material";
 import EmojiPicker from "emoji-picker-react";
 import "./messageBox.scss";
 import { fetchUserIdByEmail } from "../../../../api/userAPI";
 import useCheckSession from "../../../../hooks/session";
+import { uploadImage } from "../../../../api/fileUploadAPI";
+import { uploadMessage, uploadMessageImage } from "../../../../api/messageAPI";
+import { supabase } from "../../../../utils/supabase";
 
 const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
   const [message, setMessage] = useState("");
@@ -12,8 +14,29 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
   const [realUserID, setRealUserID] = useState<any>(null);
   const [image, setImage] = useState<string | null>(null);
   const session = useCheckSession();
+  const [userId, setUserId] = useState<string>("");
   const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState<boolean>(false);
+
+  useEffect(() => {
+    // dùng cho get user ID từ supabase đề gửi file
+    const getUser = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user !== null) {
+          setUserId(user.id); //id dành cho upload file
+        } else {
+          setUserId("");
+        }
+      } catch (e) {
+        console.error("Error fetching user:", e);
+      }
+    };
+    getUser();
+  }, [session]);
 
   useEffect(() => {
     const getUserID = async () => {
@@ -55,39 +78,36 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
 
   const handleSend = async () => {
     if (message.trim() || image) {
-      // Gửi tin nhắn trước nếu có
-      if (message.trim()) {
+      setUploading(true);
+      try {
+        let messageID;
         if (!realUserID || !receiver_id) {
           console.error("Invalid user IDs:", realUserID, receiver_id);
           return;
         }
 
-        const { error } = await supabase.from("Messages").insert([
-          {
-            sender_id: realUserID,
-            receiver_id: receiver_id,
-            message: message,
-            created_at: new Date().toISOString(),
-            is_deleted: false,
-          },
-        ]);
-
-        if (error) {
-          console.error("Error inserting message:", error);
-          return;
-        } else {
-          setMessage(""); // Clear message input
+        messageID = await uploadMessage(realUserID, receiver_id, message);
+        if (image) {
+          const imageFile = fileInputRef.current?.files?.[0];
+          if (imageFile) {
+            console.log("Image file:", imageFile); // Thay vì upload, chỉ log ra file hình
+            const uploadResult = await uploadImage(userId, imageFile);
+            if (uploadResult) {
+              await uploadMessageImage(
+                uploadResult.publicUrl,
+                uploadResult.imageName,
+                messageID
+              );
+            }
+          }
+          fileInputRef.current!.value = ""; // Reset giá trị của input file
+          setImage(null);
+          setUploading(false);
+          setMessage("");
         }
-      }
-
-      // Gửi hình ảnh (nếu có)
-      if (image) {
-        const imageFile = fileInputRef.current?.files?.[0];
-        if (imageFile) {
-          console.log("Image file:", imageFile); // Thay vì upload, chỉ log ra file hình
-        }
-        fileInputRef.current!.value = ""; // Reset giá trị của input file
-        setImage(null);
+      } catch (error) {
+        console.error("Upload failed:", error);
+        setUploading(false);
       }
     }
   };
@@ -158,7 +178,7 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
             disabled={isSendButtonDisabled}
             className="send-button"
           >
-            Send
+            {uploading ? "Uploading..." : "Send"}
           </Button>
         </Box>
       </Box>
