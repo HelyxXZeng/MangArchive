@@ -175,7 +175,11 @@ const MangaCard: React.FC<Props> = ({ manga, includedTags = [] }) => {
               cover +
               ".512.jpg"
             }
-            alt={manga.attributes.title.en}
+            alt={manga.attributes.title.en ||
+              manga.attributes.title.ja ||
+              manga.attributes.title.ko ||
+              manga.attributes.title["ja-ro"] ||
+              manga.attributes.title["ko-ro"]}
             ratio="4/6"
           />
         </div>

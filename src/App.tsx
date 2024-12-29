@@ -129,7 +129,7 @@ function App() {
               element: <GroupMedia />,
             },
             {
-              path: "friends",
+              path: "members",
               element: <GroupMembers />,
             },
             {
