@@ -2,8 +2,8 @@ import { NavLink, useLocation, matchPath } from "react-router-dom";
 import "./sideBar.scss";
 import { useEffect, useState } from "react";
 import useCheckSession from "../../../hooks/session";
-import { supabase } from "../../../utils/supabase";
 import { useTranslation } from "react-i18next";
+import { fetchUsernameByEmail } from "../../../api/userAPI";
 
 const SideBar = () => {
   const [username, setUsername] = useState(null);
@@ -127,18 +127,10 @@ const SideBar = () => {
         try {
           const { user } = session;
           if (user) {
-            const { data, error } = await supabase
-              .from("User")
-              .select("username")
-              .eq("email", user.email)
-              .single();
-
-            if (error) {
-              throw error;
-            }
+            const data = await fetchUsernameByEmail(user.email);
 
             if (data) {
-              setUsername(data.username);
+              setUsername(data);
             }
           }
         } catch (error) {
@@ -151,7 +143,6 @@ const SideBar = () => {
   }, [session]);
 
   const isProfilePath = matchPath("/profile/:username", location.pathname);
-
   return (
     <div className="menu">
       {menu.map((item) => (

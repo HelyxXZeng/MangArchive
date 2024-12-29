@@ -8,6 +8,45 @@ export const fetchUserProfileImages = async (userID: string) => {
   return await supabase.rpc("get_profile_image", { this_user_id: userID });
 };
 
+export const fetchEmailByUsername = async (username: string) => {
+  try {
+    const { data, error } = await supabase.rpc("get_email_by_username", {
+      user_name: username,
+    });
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error fetching UserName Login:", error);
+    throw error;
+  }
+};
+
+export const fetchUsernameByEmail = async (email: string) => {
+  try {
+    const { data, error } = await supabase.rpc("get_username_by_email", {
+      user_email: email,
+    });
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error fetching Username:", error);
+    throw error;
+  }
+};
+
+export const fetchUserInfoByUsername = async (username: string) => {
+  try {
+    const { data, error } = await supabase.rpc("get_user_info_by_username", {
+      user_name: username,
+    });
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error fetching User Info:", error);
+    throw error;
+  }
+};
+
 export const fetchUserIdByEmail = async (email: string) => {
   try {
     const { data, error } = await supabase.rpc("get_user_id_by_email", {
@@ -61,6 +100,23 @@ export const fetchMostSimilarUsers = async (
     return data;
   } catch (error) {
     console.error("Error fetching most similar users:", error);
+    throw error;
+  }
+};
+
+export const checkIsFollowingUser = async (
+  userid: number,
+  target_userid: number
+) => {
+  try {
+    const { data, error } = await supabase.rpc("is_user_following", {
+      user_id: userid,
+      target_user_id: target_userid,
+    });
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error checking is following user:", error);
     throw error;
   }
 };

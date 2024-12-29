@@ -109,6 +109,10 @@
     "loading": "Đang tải bản tin",
     "Feed": "Bảng tin"
   },
+  "message-page": {
+    "message": "Tin nhắn",
+    "see_more": "Hiển thị thêm"
+  },
   "utils-reply": {
     "reply-user": "Trả lời bình luận của @"
   },

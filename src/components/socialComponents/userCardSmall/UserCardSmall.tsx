@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, Button } from "@mui/material";
 import "./userCardSmall.scss";
-import { supabase } from "../../../utils/supabase";
 import { useNavigate } from "react-router-dom";
 import useCheckSession from "../../../hooks/session";
 import {
+  checkIsFollowingUser,
   fetchUserIdByEmail,
   fetchUserInfo,
   fetchUserProfileImages,
@@ -94,18 +94,9 @@ const UserCardSmall: React.FC<UserCardSmallProps> = ({
   useEffect(() => {
     const checkIfFollowed = async () => {
       try {
-        const { data, error } = await supabase
-          .from("UserFollowing")
-          .select("*")
-          .eq("user", realUserID)
-          .eq("follow", userID)
-          .single();
-
-        if (error && error.code !== "PGRST116") {
-          throw error;
-        } else {
-          setIsFollowed(!!data);
-        }
+        // console.log(realUserID, userID);
+        const isFollowing = await checkIsFollowingUser(realUserID, userID);
+        setIsFollowed(isFollowing);
       } catch (error) {
         console.error("Error checking follow status:", error);
       }

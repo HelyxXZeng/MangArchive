@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import "./userCardLarge.scss";
 import useCheckSession from "../../../hooks/session";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../../utils/supabase";
 import {
+  checkIsFollowingUser,
   fetchUserIdByEmail,
   fetchUserInfo,
   fetchUserProfileImages,
@@ -97,18 +97,9 @@ const UserCardLarge: React.FC<UserCardLargeProps> = ({
   useEffect(() => {
     const checkIfFollowed = async () => {
       try {
-        const { data, error } = await supabase
-          .from("UserFollowing")
-          .select("*")
-          .eq("user", realUserID)
-          .eq("follow", userID)
-          .single();
-
-        if (error && error.code !== "PGRST116") {
-          throw error;
-        } else {
-          setIsFollowed(!!data);
-        }
+        // console.log(realUserID, userID);
+        const isFollowing = await checkIsFollowingUser(realUserID, userID);
+        setIsFollowed(isFollowing);
       } catch (error) {
         console.error("Error checking follow status:", error);
       }

@@ -101,6 +101,10 @@
     "loading": "Loading feed",
     "Feed": "Feed"
   },
+  "message-page": {
+    "message": "Message",
+    "see_more": "See more"
+  },
   "utils-reply": {
     "reply-user": "Replying to @"
   },
