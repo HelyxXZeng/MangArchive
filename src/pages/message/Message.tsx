@@ -155,7 +155,7 @@ const Message = () => {
       subscription.unsubscribe();
     };
   }, [userID, id, dispatch]);
-
+  console.log(messages);
   return (
     <div className="messagePageContainer">
       <div className="mainMessageFrame">
@@ -163,7 +163,7 @@ const Message = () => {
         <div className="renderlist">
           {[...messages].reverse().map((message, index) => (
             <MessageBubble
-              id={parseInt(message.message_id)}
+              id={message.message_id}
               avatar={phraseImageUrl(
                 message.sender_id === userID
                   ? profileImages?.avatar!
@@ -176,6 +176,7 @@ const Message = () => {
                   : message.message_content
               }
               isMine={message.sender_id === userID}
+              time={message.message_time}
             />
           ))}
           <div ref={messagesEndRef} />

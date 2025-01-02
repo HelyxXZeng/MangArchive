@@ -2,11 +2,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Message {
-  message_id: string;
+  message_id: number;
   sender_id: number;
   message_content: string;
   is_deleted: boolean;
-  created_at: string;
+  message_time: string;
+  is_read: boolean;
+  receiver_id: number;
 }
 
 interface MessagesState {
