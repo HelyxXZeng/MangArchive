@@ -29,6 +29,17 @@ export const getMessagesFromUser = async (
   return data;
 };
 
+export const getMessageImage = async (id: number) => {
+  const { data, error } = await supabase.rpc("get_message_image", {
+    message_id: id,
+  });
+  if (error) {
+    console.error("Error fetching image for message:", id, error);
+    throw error;
+  }
+  return data;
+};
+
 export const uploadMessage = async (
   sender: number,
   receiver: number,

@@ -28,7 +28,17 @@
       align-self: flex-start;
     }
   }
-
+  .messageImage {
+    img {
+      border-radius: 18px;
+      width: auto;
+      height: auto;
+      max-width: 256px;
+      max-height: 256px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
   .MuiAvatar-root {
     width: 32px;
     height: 32px;

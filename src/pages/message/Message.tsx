@@ -163,6 +163,7 @@ const Message = () => {
         <div className="renderlist">
           {[...messages].reverse().map((message, index) => (
             <MessageBubble
+              id={parseInt(message.message_id)}
               avatar={phraseImageUrl(
                 message.sender_id === userID
                   ? profileImages?.avatar!
