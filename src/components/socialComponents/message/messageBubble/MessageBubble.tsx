@@ -14,31 +14,38 @@ interface BubbleProps {
 }
 
 const formatTime = (time: string): string => {
-  const messageDate = new Date(time);
-  const currentDate = new Date();
+  if (!time) return "Invalid Date"; // Kiểm tra time có giá trị hay không
 
-  // Kiểm tra cùng ngày hay không
-  const isSameDay =
-    messageDate.getFullYear() === currentDate.getFullYear() &&
-    messageDate.getMonth() === currentDate.getMonth() &&
-    messageDate.getDate() === currentDate.getDate();
+  try {
+    const messageDate = new Date(time); // Parse time thành Date
+    if (isNaN(messageDate.getTime())) throw new Error(); // Kiểm tra date có hợp lệ không
 
-  if (isSameDay) {
-    // Cùng ngày -> Hiển thị giờ:phút:giây
-    return messageDate.toLocaleTimeString("vi-VN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-  } else {
-    // Khác ngày -> Hiển thị ngày/tháng/năm giờ:phút
-    return messageDate.toLocaleString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    // Cộng thêm 7 giờ
+    messageDate.setHours(messageDate.getHours() + 7);
+
+    const currentDate = new Date();
+    const isSameDay =
+      messageDate.getFullYear() === currentDate.getFullYear() &&
+      messageDate.getMonth() === currentDate.getMonth() &&
+      messageDate.getDate() === currentDate.getDate();
+
+    // Định dạng thời gian
+    return isSameDay
+      ? messageDate.toLocaleTimeString("vi-VN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      : messageDate.toLocaleString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+  } catch (error) {
+    console.error("Invalid time format:", time);
+    return "Invalid Date";
   }
 };
 
