@@ -40,6 +40,20 @@ export const getMessageImage = async (id: number) => {
   return data;
 };
 
+export const markMessageAsRead = async (
+  sender_id: number,
+  receiver_id: number
+) => {
+  const { error } = await supabase.rpc("mark_message_as_read", {
+    sender_user_id: sender_id,
+    receiver_user_id: receiver_id,
+  });
+  if (error) {
+    console.log("Error mark read message:", error);
+    throw error;
+  }
+};
+
 export const uploadMessage = async (
   sender: number,
   receiver: number,
@@ -69,6 +83,16 @@ export const uploadMessageImage = async (
   });
   if (error) {
     console.error("Error upload image for message:", error);
+    throw error;
+  }
+};
+
+export const deleteMessage = async (messageId: number) => {
+  const { error } = await supabase.rpc("delete_message", {
+    message_id: messageId,
+  });
+  if (error) {
+    console.error("Error delete message:", error);
     throw error;
   }
 };

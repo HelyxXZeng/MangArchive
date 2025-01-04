@@ -29,8 +29,20 @@ const messagesSlice = createSlice({
     addMessage(state, action: PayloadAction<Message>) {
       state.messages.push(action.payload);
     },
+    updateMessageStatus(
+      state,
+      action: PayloadAction<{ id: number; isDeleted: boolean }>
+    ) {
+      const message = state.messages.find(
+        (msg) => msg.message_id === action.payload.id
+      );
+      if (message) {
+        message.is_deleted = action.payload.isDeleted;
+      }
+    },
   },
 });
 
-export const { setMessages, addMessage } = messagesSlice.actions;
+export const { setMessages, addMessage, updateMessageStatus } =
+  messagesSlice.actions;
 export default messagesSlice.reducer;

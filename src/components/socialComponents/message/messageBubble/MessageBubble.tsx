@@ -1,8 +1,11 @@
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import "./messageBubble.scss";
 import { useEffect, useState } from "react";
-import { getMessageImage } from "../../../../api/messageAPI";
+import { deleteMessage, getMessageImage } from "../../../../api/messageAPI";
 import { phraseImageUrl } from "../../../../utils/imageLinkPhraser";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../reduxState/store";
+import { updateMessageStatus } from "../../../../reduxState/reducer/messageReducer";
 
 interface BubbleProps {
   id?: number;
@@ -50,13 +53,15 @@ const formatTime = (time: string): string => {
 };
 
 const MessageBubble = (props: BubbleProps) => {
-  const { id, avatar, text, isMine = false, time } = props;
+  const { id, avatar, text, isDeleted, isMine = false, time } = props;
   const [messageImages, setMessageImages] = useState<string>("");
-
+  const dispatch = useDispatch<AppDispatch>();
+  console.log(isDeleted);
   useEffect(() => {
     const fetchMessageImage = async () => {
       try {
-        if (id) {
+        if (id && !isDeleted) {
+          // Chỉ fetch nếu không bị xóa
           const data = await getMessageImage(id);
           const imageUrl = phraseImageUrl(data);
           setMessageImages(imageUrl);
@@ -66,12 +71,29 @@ const MessageBubble = (props: BubbleProps) => {
       }
     };
     fetchMessageImage();
-  }, [id]);
+  }, [id, isDeleted]);
+
+  const handleDeleteMessage = async (messageId?: number) => {
+    if (!messageId) return;
+    try {
+      await deleteMessage(messageId);
+      dispatch(updateMessageStatus({ id: messageId, isDeleted: true })); // Cập nhật trạng thái
+      console.log("Deleted message:", messageId);
+    } catch (error) {
+      console.error("Error deleting message:", error);
+    }
+  };
 
   return (
     <div className={`messageBubbleContainer ${isMine ? "isMine" : ""}`}>
       {!isMine && <Avatar src={avatar ? avatar : ""} alt="Avatar" />}
       {time && isMine && <span className="time">{formatTime(time)}</span>}
+      {/* Nút xóa chỉ hiển thị nếu isMine là true */}
+      {isMine && !isDeleted && (
+        <div className="deleteOption">
+          <Button onClick={() => handleDeleteMessage(id!)}>Xóa</Button>
+        </div>
+      )}
       <div className="messageContentWrapper">
         {text &&
           text.trim() !== "" &&
@@ -80,7 +102,7 @@ const MessageBubble = (props: BubbleProps) => {
           ) : (
             <div className="bubbleText isTheir">{text}</div>
           ))}
-        {messageImages && (
+        {!isDeleted && messageImages && (
           <div className="messageImage">
             <img src={messageImages} alt="Image of message" loading="lazy" />
           </div>

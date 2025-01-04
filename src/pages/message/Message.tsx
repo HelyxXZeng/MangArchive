@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getMessageSenders, getMessagesFromUser } from "../../api/messageAPI";
+import {
+  getMessageSenders,
+  getMessagesFromUser,
+  markMessageAsRead,
+} from "../../api/messageAPI";
 import UserCardMess from "../../components/socialComponents/message/userCardMess/UserCardMess";
 import useCheckSession from "../../hooks/session";
 import { fetchUserIdByEmail, fetchUserProfileImages } from "../../api/userAPI";
@@ -146,6 +150,7 @@ const Message = () => {
             const senderId = parseInt(id, 10);
             const messagesData = await getMessagesFromUser(senderId, userID!);
             dispatch(setMessages(messagesData));
+            markMessageAsRead(senderId, userID!);
           }
         }
       )
@@ -155,7 +160,7 @@ const Message = () => {
       subscription.unsubscribe();
     };
   }, [userID, id, dispatch]);
-  console.log(messages);
+  // console.log(messages);
   return (
     <div className="messagePageContainer">
       <div className="mainMessageFrame">
@@ -177,6 +182,7 @@ const Message = () => {
               }
               isMine={message.sender_id === userID}
               time={message.message_time}
+              isDeleted={message.is_deleted}
             />
           ))}
           <div ref={messagesEndRef} />

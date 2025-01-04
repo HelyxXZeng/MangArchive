@@ -9,6 +9,28 @@
   &.isMine {
     justify-content: flex-end; // Khi isMine là true, bong bóng chat sẽ nằm bên phải
   }
+  &:hover {
+    background-color: $gray-bg;
+  }
+  &:hover .deleteOption {
+    display: block; // Hiển thị nút xóa khi hover vào bubble
+  }
+  .deleteOption {
+    display: none; // Ẩn nút xóa mặc định
+    position: absolute;
+    top: 50%; // Đặt giữa chiều cao bong bóng
+    left: 45%; // Canh phải
+    transform: translateY(-50%); // Để căn giữa
+    button {
+      background-color: transparent;
+      border: none;
+      color: $text-gray-soft-new;
+      cursor: pointer;
+      &:hover {
+        color: $like-pink; // Thay đổi màu khi hover vào nút xóa
+      }
+    }
+  }
 
   .bubbleText {
     max-width: fit-content; // Giới hạn độ rộng của bong bóng chat
