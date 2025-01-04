@@ -10,26 +10,13 @@
     justify-content: flex-end; // Khi isMine là true, bong bóng chat sẽ nằm bên phải
   }
   &:hover {
-    background-color: $gray-bg;
+    background-color: $text-gray-trans;
   }
-  &:hover .deleteOption {
-    display: block; // Hiển thị nút xóa khi hover vào bubble
+  &:hover .hoverContent {
+    display: flex;
   }
-  .deleteOption {
-    display: none; // Ẩn nút xóa mặc định
-    position: absolute;
-    top: 50%; // Đặt giữa chiều cao bong bóng
-    left: 45%; // Canh phải
-    transform: translateY(-50%); // Để căn giữa
-    button {
-      background-color: transparent;
-      border: none;
-      color: $text-gray-soft-new;
-      cursor: pointer;
-      &:hover {
-        color: $like-pink; // Thay đổi màu khi hover vào nút xóa
-      }
-    }
+  &:hover .hoverContentc {
+    display: flex;
   }
 
   .bubbleText {
@@ -52,15 +39,54 @@
       align-self: flex-start;
     }
   }
+  .hoverContentc {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    justify-content: flex-end; // Đảm bảo các phần tử con căn ở dưới cùng
+    align-items: flex-start; // Căn các phần tử con theo chiều ngang từ bên trái
 
-  .time {
-    color: $text-gray-soft-new;
-    font-size: 14px;
-    // position: absolute;
-    // bottom: -18px; // Đặt thời gian dưới đáy bong bóng
-    // right: 10px; // Canh phải
-    white-space: nowrap; // Đảm bảo thời gian không bị xuống dòng
-    text-align: right;
+    .time {
+      align-self: flex-end; // Đặt thời gian vào cuối phần tử cha
+      color: $text-gray-soft-new;
+      font-size: 14px;
+      white-space: nowrap;
+      text-align: right; // Đảm bảo thời gian canh phải
+    }
+  }
+  .hoverContent {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .deleteOption {
+      justify-self: center;
+      align-self: flex-end;
+
+      .icon-button {
+        background-color: transparent;
+        border: none;
+        color: $text-gray-soft-new;
+        padding: 0;
+
+        svg {
+          fill: $text-gray-soft-new; // Màu mặc định cho icon
+          transition: fill 0.3s ease; // Thêm hiệu ứng khi hover
+        }
+
+        &:hover svg {
+          color: $like-pink; // Màu khi hover
+        }
+      }
+    }
+
+    .time {
+      color: $text-gray-soft-new;
+      font-size: 14px;
+      white-space: nowrap; // Đảm bảo thời gian không bị xuống dòng
+      text-align: right;
+    }
   }
 
   .messageImage {
