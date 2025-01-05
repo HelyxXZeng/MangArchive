@@ -459,8 +459,8 @@ const GroupProfile = () => {
                             />
                             <Tab
                                 label={t("members")}
-                                to={`/group/${groupid}/friends`}
-                                value={`/group/${groupid}/friends`}
+                                to={`/group/${groupid}/members`}
+                                value={`/group/${groupid}/members`}
                                 component={Link}
                             />
                         </Tabs>

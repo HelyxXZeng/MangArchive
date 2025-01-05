@@ -23,7 +23,7 @@ import {
   getRating,
 } from "../../api/mangaAPI";
 
-interface Props {}
+interface Props { }
 
 const MangaDetails: React.FC<Props> = () => {
   const { manga_id } = useParams<{ manga_id: string }>();
@@ -185,6 +185,7 @@ const MangaDetails: React.FC<Props> = () => {
     };
     fetchCollectionAndRating();
   }, [userID, manga_id]);
+
   useEffect(() => {
     const fetchPost = async () => {
       if (manga_id) {
@@ -483,9 +484,8 @@ const MangaDetails: React.FC<Props> = () => {
             <div className="chapter-container">
               <div className="manga-details-nav-button-bar">
                 <div
-                  className={`chapters-nav-button ${
-                    activeButton === "chapters" ? "active" : ""
-                  }`}
+                  className={`chapters-nav-button ${activeButton === "chapters" ? "active" : ""
+                    }`}
                   onClick={() => handleButtonClick("chapters")}
                   style={{
                     borderTopLeftRadius: "8px",
@@ -495,17 +495,15 @@ const MangaDetails: React.FC<Props> = () => {
                   Chapters
                 </div>
                 <div
-                  className={`comments-nav-button ${
-                    activeButton === "comments" ? "active" : ""
-                  }`}
+                  className={`comments-nav-button ${activeButton === "comments" ? "active" : ""
+                    }`}
                   onClick={() => handleButtonClick("comments")}
                 >
                   Comments
                 </div>
                 <div
-                  className={`posts-nav-button ${
-                    activeButton === "posts" ? "active" : ""
-                  }`}
+                  className={`posts-nav-button ${activeButton === "posts" ? "active" : ""
+                    }`}
                   onClick={() => handleButtonClick("posts")}
                   style={{
                     borderTopRightRadius: "8px",
@@ -613,7 +611,7 @@ const MangaDetails: React.FC<Props> = () => {
                                 ))}
                             {replies[comment] &&
                               (visibleReplies[comment] || 1) <
-                                replies[comment].length && (
+                              replies[comment].length && (
                                 <div
                                   className="seemore commentCard"
                                   onClick={() => handleSeeMoreReplies(comment)}

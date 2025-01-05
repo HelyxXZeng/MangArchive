@@ -269,3 +269,25 @@ export const searchGroupAndUser = async (search_params: string | undefined) => {
     throw error;
   }
 };
+
+export const fetchGroupIdByName = async (groupName: string | undefined) => {
+  try {
+    if (groupName) {
+      const { data, error } = await supabase
+        .from('Groups')
+        .select('id')
+        .eq('name_id', groupName)
+        .single();
+
+      if (error) {
+        console.error("Error fetching following users:", error);
+        throw error;
+      }
+      return data;
+    }
+    throw new Error("User ID is undefined");
+  } catch (error) {
+    console.error("Error in fetchFollowingUsers:", error);
+    throw error;
+  }
+};
