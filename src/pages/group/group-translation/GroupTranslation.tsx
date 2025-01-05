@@ -4,6 +4,8 @@ import "./MangaTranslation.scss";
 import { supabase } from "../../../utils/supabase";
 import MangaCard from "../../../components/mangaComponents/title/TitleCard2";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 interface Props { }
 
@@ -15,6 +17,8 @@ const MangaTranslation: React.FC<Props> = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageInput, setPageInput] = useState("1");
     const chaptersPerPage = 20;
+    const { t } = useTranslation("", { keyPrefix: "profile" });
+    const navigate = useNavigate();
 
     const getManga = async (groupid: any) => {
         setData(null);
@@ -94,6 +98,10 @@ const MangaTranslation: React.FC<Props> = () => {
         }
     };
 
+    const handleRedirect = () => {
+        navigate(`/library/READING?type=translation&groupid=${groupid}`);
+    };
+
     return (
         <div>
             <div className="search-page">
@@ -121,6 +129,10 @@ const MangaTranslation: React.FC<Props> = () => {
                                         data={data.chapters[chap]}
                                     />
                                 ))} */}
+
+                                <button type="submit" className="submit-btn" onClick={handleRedirect}>
+                                    {t("more-manga")}
+                                </button>
 
                                 <div className="manga-grid-container">
                                     <div className="manga-grid">

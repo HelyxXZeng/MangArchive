@@ -248,7 +248,7 @@ const GroupProfile = () => {
     const routes = [
         `/group/${groupid}`,
         `/group/${groupid}/media`,
-        `/group/${groupid}/friends`,
+        `/group/${groupid}/members`,
         `/group/${groupid}/groups`,
         `/group/${groupid}/grouptranslation`,
     ];

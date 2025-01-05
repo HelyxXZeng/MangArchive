@@ -9,7 +9,10 @@ import { fetchUserIdByEmail } from "../../api/userAPI";
 interface Props { }
 
 const MangaLibrary: React.FC<Props> = () => {
+  const queryParams = new URLSearchParams(location.search);
   const { page } = useParams<{ page: string }>() || "READING";
+  const type = queryParams.get("type") || "";
+  const groupid = queryParams.get("groupid") || "";
   const [data, setData] = useState<any>(null);
 
   const [activeButton, setActiveButton] = useState(page);
@@ -237,13 +240,23 @@ const MangaLibrary: React.FC<Props> = () => {
                                     />
                                 ))} */}
 
-                <div className="manga-grid-container">
-                  <div className="manga-grid">
-                    {currentChapters.map((manga: any) => (
-                      <MangaCard key={manga.id} manga={manga} />
-                    ))}
+                {(type === "translation" && groupid) ? (
+                  <div className="manga-grid-container">
+                    <div className="manga-grid">
+                      {currentChapters.map((manga: any) => (
+                        <MangaCard key={manga.id} manga={manga} type={"translation"} groupId={groupid} />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="manga-grid-container">
+                    <div className="manga-grid">
+                      {currentChapters.map((manga: any) => (
+                        <MangaCard key={manga.id} manga={manga} />
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="chapter-pagination">
                   {currentPage > 1 && (
