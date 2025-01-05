@@ -22,6 +22,7 @@ const MangaLibrary: React.FC<Props> = () => {
   const chaptersPerPage = 20;
 
   const [userID, setUserID] = useState(null);
+  const [path, setPath] = useState("");
 
   const handleButtonClick = (buttonName: string) => {
     setActiveButton(buttonName);
@@ -68,6 +69,10 @@ const MangaLibrary: React.FC<Props> = () => {
   };
 
   useEffect(() => {
+    if (type && groupid) {
+      setPath(`?type=translation&groupid=${groupid}`);
+    }
+    else setPath("");
     getManga(page, userID);
   }, [page, userID]);
 
@@ -133,7 +138,7 @@ const MangaLibrary: React.FC<Props> = () => {
     <div>
       <div className="manga-library-nav-button-bar">
         <NavLink
-          to={`/library/READING`}
+          to={`/library/READING` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
@@ -149,7 +154,7 @@ const MangaLibrary: React.FC<Props> = () => {
           </div>
         </NavLink>
         <NavLink
-          to={`/library/COMPLETED`}
+          to={`/library/COMPLETED` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
@@ -161,7 +166,7 @@ const MangaLibrary: React.FC<Props> = () => {
           </div>
         </NavLink>
         <NavLink
-          to={`/library/ON-HOLD`}
+          to={`/library/ON-HOLD` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
@@ -173,7 +178,7 @@ const MangaLibrary: React.FC<Props> = () => {
           </div>
         </NavLink>
         <NavLink
-          to={`/library/DROPPED`}
+          to={`/library/DROPPED` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
@@ -185,7 +190,7 @@ const MangaLibrary: React.FC<Props> = () => {
           </div>
         </NavLink>
         <NavLink
-          to={`/library/PLAN-TO-READ`}
+          to={`/library/PLAN-TO-READ` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
@@ -197,7 +202,7 @@ const MangaLibrary: React.FC<Props> = () => {
           </div>
         </NavLink>
         <NavLink
-          to={`/library/RE-READING`}
+          to={`/library/RE-READING` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
