@@ -2,11 +2,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Message {
-  message_id: string;
+  message_id: number;
   sender_id: number;
   message_content: string;
   is_deleted: boolean;
-  created_at: string;
+  message_time: string;
+  is_read: boolean;
+  receiver_id: number;
 }
 
 interface MessagesState {
@@ -27,8 +29,20 @@ const messagesSlice = createSlice({
     addMessage(state, action: PayloadAction<Message>) {
       state.messages.push(action.payload);
     },
+    updateMessageStatus(
+      state,
+      action: PayloadAction<{ id: number; isDeleted: boolean }>
+    ) {
+      const message = state.messages.find(
+        (msg) => msg.message_id === action.payload.id
+      );
+      if (message) {
+        message.is_deleted = action.payload.isDeleted;
+      }
+    },
   },
 });
 
-export const { setMessages, addMessage } = messagesSlice.actions;
+export const { setMessages, addMessage, updateMessageStatus } =
+  messagesSlice.actions;
 export default messagesSlice.reducer;

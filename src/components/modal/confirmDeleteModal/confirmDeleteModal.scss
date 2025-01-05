@@ -1,0 +1,65 @@
+@import "../../../global-styles/Color.scss";
+
+.post-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 360px;
+  width: 100%;
+  max-width: 640px;
+  background-color: $soft-bg;
+  color: $text-white-new;
+  font-family: "Lato", sans-serif;
+  border: 2px solid $gray-bg;
+  box-shadow: 24;
+  padding: 16px;
+  border-radius: 18px;
+  max-height: 768px;
+  // overflow-y: auto;
+
+  .header {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    .post-modal-title {
+      color: $text-white-new;
+      font-family: "Lato", sans-serif;
+      font-weight: 700;
+    }
+
+    IconButton {
+      color: $text-white-new;
+    }
+  }
+
+  .mainContent {
+    margin-bottom: 24px;
+    font-size: 18px;
+    text-align: center;
+  }
+  .deleteOption {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .cancle-button,
+    .delete-button {
+      margin: 4px;
+    }
+    .cancle-button {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+
+      &:hover {
+        background-color: $text-gray-soft-new;
+      }
+    }
+    .delete-button {
+      background-color: $like-pink;
+    }
+  }
+}
