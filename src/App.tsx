@@ -32,6 +32,7 @@ import GroupProfile from "./pages/group/group-profile/GroupProfile";
 import GroupPost from "./pages/group/group-post/GroupPost";
 import GroupMedia from "./pages/group/group-media/GroupMedia";
 import GroupMembers from "./pages/group/group-members/GroupMembers";
+import UploadMangaPage from "./pages/translation/UploadMangaPage";
 
 function App() {
   const Layout = () => {
@@ -110,7 +111,7 @@ function App() {
         },
         {
           path: "/translation",
-          element: <AboutUs />,
+          element: <UploadMangaPage />,
         },
         {
           path: "/nofitication",
@@ -129,7 +130,7 @@ function App() {
               element: <GroupMedia />,
             },
             {
-              path: "friends",
+              path: "members",
               element: <GroupMembers />,
             },
             {

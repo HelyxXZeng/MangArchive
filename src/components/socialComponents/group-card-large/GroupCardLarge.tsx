@@ -92,21 +92,26 @@ const GroupCardLarge: React.FC<GroupCardLargeProps> = ({
 
   useEffect(() => {
     const checkIfFollowed = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("GroupFollowing")
-          .select("*")
-          .eq("user", realUserID)
-          .eq("follow", userID)
-          .single();
+      if (session && session.user) {
+        try {
+          const { data, error } = await supabase
+            .from("GroupFollowing")
+            .select("*")
+            .eq("user", realUserID)
+            .eq("follow", userID)
+            .single();
 
-        if (error && error.code !== "PGRST116") {
-          throw error;
-        } else {
-          setIsFollowed(!!data);
+          if (error && error.code !== "PGRST116") {
+            throw error;
+          } else {
+            setIsFollowed(!!data);
+          }
+        } catch (error) {
+          console.error("Error checking follow status:", error);
         }
-      } catch (error) {
-        console.error("Error checking follow status:", error);
+      }
+      else {
+        setIsFollowed(false);
       }
     };
 
