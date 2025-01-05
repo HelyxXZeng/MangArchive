@@ -128,7 +128,8 @@
     "members": "Members",
     "followers": "Followers",
     "join": "Join Group",
-    "unjoin": "Leave Group"
+    "unjoin": "Leave Group",
+    "translation": "Translation"
   },
   "rightbar": {
     "who_to_follow": "Who to follow",

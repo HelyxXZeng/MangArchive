@@ -6,10 +6,10 @@ import { supabase } from "../../utils/supabase";
 import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import { fetchUserIdByEmail } from "../../api/userAPI";
 
-interface Props {}
+interface Props { }
 
 const MangaLibrary: React.FC<Props> = () => {
-  const { page } = useParams<{ page: string }>();
+  const { page } = useParams<{ page: string }>() || "READING";
   const [data, setData] = useState<any>(null);
 
   const [activeButton, setActiveButton] = useState(page);
@@ -134,9 +134,8 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`chapters-nav-button ${
-              activeButton === "READING" ? "active" : ""
-            }`}
+            className={`chapters-nav-button ${activeButton === "READING" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("READING")}
             style={{
               borderTopLeftRadius: "8px",
@@ -151,9 +150,8 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "COMPLETED" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "COMPLETED" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("COMPLETED")}
           >
             COMPLETED
@@ -164,9 +162,8 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "ON-HOLD" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "ON-HOLD" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("ON-HOLD")}
           >
             ON HOLD
@@ -177,9 +174,8 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "DROPPED" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "DROPPED" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("DROPPED")}
           >
             DROPPED
@@ -190,9 +186,8 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "PLAN-TO-READ" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "PLAN-TO-READ" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("PLAN-TO-READ")}
           >
             PLAN TO READ
@@ -203,9 +198,8 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`posts-nav-button ${
-              activeButton === "RE-READING" ? "active" : ""
-            }`}
+            className={`posts-nav-button ${activeButton === "RE-READING" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("RE-READING")}
             style={{
               borderTopRightRadius: "8px",
