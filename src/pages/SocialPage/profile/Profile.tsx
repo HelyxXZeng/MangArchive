@@ -33,6 +33,7 @@ import { followUserById, unfollowUserById } from "../../../api/scocialAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 import { useTranslation } from "react-i18next";
 import BlockUserModal from "../../../components/modal/blockUserModal/BlockUserModal";
+import ReportUserModal from "../../../components/modal/reportUserModal/ReportUserModal";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -377,6 +378,15 @@ const Profile = () => {
                     targetName={username!}
                     targetUID={userInfo.id!}
                     handleBlock={handleBlockUser}
+                  />
+                )}
+                {modalType === "report" && (
+                  <ReportUserModal
+                    open={true}
+                    handleClose={handleCloseModal}
+                    currentUID={userID}
+                    targetUID={userInfo.id!}
+                    targetName={username!}
                   />
                 )}
               </div>

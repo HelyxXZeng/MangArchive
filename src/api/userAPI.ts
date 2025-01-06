@@ -165,6 +165,26 @@ export const unblockUser = async (userid: number, target_userid: number) => {
   }
 };
 
+export const reportUser = async (
+  userid: number,
+  target_userid: number,
+  report_content: string,
+  report_type: string
+) => {
+  try {
+    const { error } = await supabase.rpc("report_user", {
+      reporter_id: userid,
+      reported_id: target_userid,
+      report_content: report_content,
+      report_type: report_type,
+    });
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error report user:", error);
+    throw error;
+  }
+};
+
 export const uploadUserImage = async (publicUrl: string, imageName: string) => {
   try {
     const { data: image, error } = await supabase.rpc("upload_image", {
