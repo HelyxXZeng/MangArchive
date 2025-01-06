@@ -6,7 +6,7 @@ import MangaCard from "../../../components/mangaComponents/title/TitleCard2";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { censorBadWords, checkContentAI } from "../../../api/contentAPI";
+// import { censorBadWords, checkContentAI } from "../../../api/contentAPI";
 
 interface Props { }
 
@@ -101,8 +101,7 @@ const MangaTranslation: React.FC<Props> = () => {
 
     const handleRedirect = async () => {
         // const result = await checkContentAI('Fuck you!');
-        // console.log(result);
-        // if (result[0].score > result[1].score) console.log("Aggressive words!");
+        // if (result) console.log(result);
         // else console.log("Valid content!");
 
         // const result2 = await censorBadWords('Fuck you!');

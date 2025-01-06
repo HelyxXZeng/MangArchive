@@ -19,6 +19,7 @@ import { uploadImage } from "../../api/fileUploadAPI";
 import { fetchUserIdByEmail, fetchUserProfileImages } from "../../api/userAPI";
 import { phraseImageUrl } from "../../utils/imageLinkPhraser";
 import { useTranslation } from "react-i18next";
+import { checkContentAI } from "../../api/contentAPI";
 
 interface CommentBoxProps {
   postId?: string | any;
@@ -117,6 +118,14 @@ const CommentBox = forwardRef<CommentBoxRef, CommentBoxProps>((props, ref) => {
     setUploading(true);
     try {
       let commentId;
+
+      const result = await checkContentAI(comment);
+      if (result) {
+        alert(`This comment is ` + result.type);
+        setUploading(false);
+        return;
+      }
+
       if (replyInfo && comment && realUserID) {
         commentId = await uploadReply(replyInfo.commentId, realUserID, comment);
       } else {

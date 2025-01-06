@@ -11,6 +11,7 @@ import "./commentCard.scss";
 import { fetchUserInfo, fetchUserProfileImages } from "../../api/userAPI";
 import { phraseImageUrl } from "../../utils/imageLinkPhraser";
 import LoadingWave from "../loadingWave/LoadingWave";
+import { checkContentAI } from "../../api/contentAPI";
 
 interface CommentCardProps {
   className?: string;
@@ -35,6 +36,8 @@ const CommentCard: React.FC<CommentCardProps> = ({
 
   const [userInfo, setUserInfo] = useState<any>(null);
   const [commentImages, setCommentImages] = useState<string>("");
+  const [contentCovered, setContentCovered] = useState<boolean>(false);
+  const [isContentVisible, setIsContentVisible] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -83,6 +86,12 @@ const CommentCard: React.FC<CommentCardProps> = ({
             return console.error("Error checking like status:", likeError);
           setIsLiked(liked);
           setLikeCount(comment[0].likecount);
+
+          // Check content offensiveness
+          const offensiveResult = await checkContentAI(comment[0].content);
+          if (offensiveResult && offensiveResult.score > 0.5) {
+            setContentCovered(true); // Cover content if offensive
+          }
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -112,6 +121,10 @@ const CommentCard: React.FC<CommentCardProps> = ({
         console.error("Error liking comment:", error);
       }
     }
+  };
+
+  const handleContentToggle = () => {
+    setIsContentVisible((prev) => !prev);
   };
 
   if (!commentData || !userInfo) {
@@ -145,21 +158,26 @@ const CommentCard: React.FC<CommentCardProps> = ({
               <span className="level">
                 LV
                 <span
-                  className={`textHighlight ${
-                    level < 4
-                      ? "bluetext"
-                      : level < 7
+                  className={`textHighlight ${level < 4
+                    ? "bluetext"
+                    : level < 7
                       ? "yellowtext"
                       : "redtext"
-                  }`}
+                    }`}
                 >
                   {level}
                 </span>
               </span>
             </div>
           </div>
-          <div className="CommentContent">
-            <span>{commentData.content}</span>
+          <div className="CommentContent" onClick={handleContentToggle}>
+            {contentCovered && !isContentVisible ? (
+              <span className="coveredContent">
+                Content is covered due to offensiveness
+              </span>
+            ) : (
+              <span>{commentData.content}</span>
+            )}
           </div>
         </div>
         {commentImages && (

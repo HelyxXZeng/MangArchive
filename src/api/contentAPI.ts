@@ -7,7 +7,20 @@ export const checkContentAI = async (content: string) => {
         inputs: content,
         model: 'cardiffnlp/twitter-roberta-base-offensive',
     });
-    return result;
+
+    const offensiveScore = result.find((item: any) => item.label === 'offensive')?.score ?? 0;
+
+    if (offensiveScore > 0.9) {
+        return { type: 'Extremely offensive', score: offensiveScore };
+    } else if (offensiveScore > 0.75) {
+        return { type: 'Highly offensive', score: offensiveScore };
+    } else if (offensiveScore > 0.5) {
+        return { type: 'Very offensive', score: offensiveScore };
+    } else if (offensiveScore > 0.35) {
+        return { type: 'Quite offensive', score: offensiveScore };
+    } else {
+        return false;
+    }
 };
 
 export const censorBadWords = async (content: string) => {
