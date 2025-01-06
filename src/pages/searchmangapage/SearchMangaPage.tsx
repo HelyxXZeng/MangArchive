@@ -6,6 +6,9 @@ import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import searchManga from "../../utils/MangaSearch";
 import TriStateCheckbox from "./checkbox/TriStateCheckbox"; // Adjust the path as necessary
 import { useTranslation } from "react-i18next";
+import { searchGroupAndUser } from "../../api/scocialAPI";
+import UserCardLarge from "../../components/socialComponents/userCardLarge/UserCardLarge";
+import GroupCardLarge from "../../components/socialComponents/group-card-large/GroupCardLarge";
 
 const SearchMangaPage: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +24,8 @@ const SearchMangaPage: React.FC = () => {
   const [thisExcludedTags, setThisExcludedTags] =
     useState<string[]>(excludedTags);
 
+  const [users, setUsers] = useState<any[]>([]);
+  const [groups, setGroups] = useState<any[]>([]);
   const [mangaList, setMangaList] = useState<any[]>([]);
   const [limit] = useState<number>(20); // Number of items per page
   const [offset, setOffset] = useState<number>(0); // Current offset
@@ -35,6 +40,7 @@ const SearchMangaPage: React.FC = () => {
   const [pageInput, setPageInput] = useState<string>("1");
   const [totalPages, setTotalPages] = useState<number>(1);
   const { t } = useTranslation("", { keyPrefix: "search-page" });
+
   // Fetch tags only once
   useEffect(() => {
     const fetchTags = async () => {
@@ -50,54 +56,77 @@ const SearchMangaPage: React.FC = () => {
 
     fetchTags();
   }, []);
+  const fetchMangaData = async () => {
+    try {
+      const mangas = await searchManga(
+        title,
+        limit,
+        offset,
+        "",
+        [],
+        [],
+        0,
+        [],
+        [],
+        [],
+        [],
+        ["safe", "suggestive", "erotica"],
+        excludedTags,
+        "OR",
+        includedTags,
+        "AND"
+      );
+      setMangaList(mangas.data);
+      setIsCompleted(true);
+
+      if (mangas.data.length > 0) {
+        const total = parseInt(mangas.total, 10);
+        setTotalCount(total); // Update total count
+        setTotalPages(Math.ceil(total / limit));
+      } else {
+        setTotalCount(0); // Update total count
+        setTotalPages(0);
+      }
+
+      setError(null);
+    } catch (err) {
+      setError("Error fetching data. Please refresh the page.");
+    }
+  };
+
+  const fetchUsersAndGroups = async () => {
+    try {
+      const data = await searchGroupAndUser(title);
+      const usersList: any[] = [];
+      const groupsList: any[] = [];
+
+      data.forEach((element: any) => {
+        if (element.entity_type === 'User') {
+          usersList.push(element);
+        } else if (element.entity_type === 'Group') {
+          groupsList.push(element);
+        }
+      });
+
+      setUsers(usersList);
+      setGroups(groupsList);
+
+    } catch (err) {
+      setError("Error fetching social data.");
+    }
+  };
 
   // Fetch manga data based on location and pagination changes
   useEffect(() => {
-    const fetchMangaData = async () => {
-      try {
-        const mangas = await searchManga(
-          title,
-          limit,
-          offset,
-          "",
-          [],
-          [],
-          0,
-          [],
-          [],
-          [],
-          [],
-          ["safe", "suggestive", "erotica", "pornographic"],
-          excludedTags,
-          "OR",
-          includedTags,
-          "AND"
-        );
-        setMangaList(mangas.data);
-        setIsCompleted(true);
-
-        if (mangas.data.length > 0) {
-          const total = parseInt(mangas.total, 10);
-          setTotalCount(total); // Update total count
-          setTotalPages(Math.ceil(total / limit));
-        } else {
-          setTotalCount(0); // Update total count
-          setTotalPages(0);
-        }
-
-        setError(null);
-      } catch (err) {
-        setError("Error fetching data. Please refresh the page.");
-      }
-    };
-
     setThisIncludedTags(includedTags);
     setThisExcludedTags(excludedTags);
     setSearchInput(title);
 
+    fetchUsersAndGroups();
     fetchMangaData();
   }, [title, limit, offset, location]);
 
+  // when search
   const handleSearchPress = () => {
     const params = new URLSearchParams();
     if (searchInput) params.append("title", searchInput);
@@ -173,8 +202,8 @@ const SearchMangaPage: React.FC = () => {
       )}
       {mangaTags && mangaTags.length > 0 && (
         <>
-          <p style={{ color: "whitesmoke" }}>{t("tag-instruction")}</p>
           <div className={`tag-checkboxes ${show ? "show" : ""}`}>
+            <p style={{ color: "whitesmoke", width: "100%" }}>{t("tag-instruction")}</p>
             {thisIncludedTags &&
               thisExcludedTags &&
               mangaTags.map((tag) => (
@@ -211,6 +240,27 @@ const SearchMangaPage: React.FC = () => {
           </button>
         </>
       )}
+      <div style={{ color: "whitesmoke", width: "90%" }}>
+        <h2 style={{ color: "whitesmoke", width: "100%" }}>Groups</h2>
+        {groups && groups.map((user) => (
+          <GroupCardLarge
+            key={user.entity_id}
+            userID={user.entity_id}
+            fetchSuggestUser={fetchUsersAndGroups}
+          />
+        ))}
+
+        <h2 style={{ color: "whitesmoke", width: "100%" }}>Users</h2>
+        {users && users.map((user) => (
+          <UserCardLarge
+            key={user.entity_id}
+            userID={user.entity_id}
+            fetchSuggestUser={fetchUsersAndGroups}
+          />
+        ))}
+      </div>
+
+      <h2 style={{ color: "whitesmoke", width: "100%", paddingLeft: "5%" }}>Manga</h2>
 
       {mangaList && mangaList.length === 0 && !error && !isCompleted ? (
         <div className="loading-wave">

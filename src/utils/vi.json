@@ -131,7 +131,11 @@
     "level": "LV",
     "joinedIn": "Gia nhập vào",
     "friends": "Bạn bè",
-    "groups": "Nhóm"
+    "groups": "Nhóm",
+    "members": "Thành viên",
+    "followers": "Người theo dõi",
+    "join": "Tham gia nhóm",
+    "unjoin": "Rời nhóm"
   },
   "rightbar": {
     "who_to_follow": "Nên theo dõi ai?",

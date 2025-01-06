@@ -68,7 +68,7 @@ export const fetchProfileCountData = async (userId: string) => {
         this_offset: 0,
         this_user_id: userId,
       }),
-      supabase.rpc("get_follow_group", { this_user_id: userId }),
+      supabase.rpc("get_group_following", { this_user_id: userId }),
       supabase.rpc("get_follow_user", { this_user_id: userId }),
     ]);
 

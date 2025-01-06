@@ -29,6 +29,12 @@ import ProtectedRoute from "./hooks/protectRouter";
 import LatestManga from "./pages/searchmangapage/latestManga/LatestManga";
 import Message from "./pages/message/Message";
 import Notification from "./pages/notification/Notification";
+import GroupProfile from "./pages/group/group-profile/GroupProfile";
+import GroupPost from "./pages/group/group-post/GroupPost";
+import GroupMedia from "./pages/group/group-media/GroupMedia";
+import GroupMembers from "./pages/group/group-members/GroupMembers";
+import UploadMangaPage from "./pages/translation/UploadMangaPage";
+
 
 function App() {
   const Layout = () => {
@@ -107,11 +113,33 @@ function App() {
         },
         {
           path: "/translation",
-          element: <AboutUs />,
+          element: <UploadMangaPage />,
         },
         {
           path: "/nofitication",
           element: <AboutUs />,
+        },
+        {
+          path: "group/:groupid",
+          element: <GroupProfile />,
+          children: [
+            {
+              path: "",
+              element: <GroupPost />,
+            },
+            {
+              path: "media",
+              element: <GroupMedia />,
+            },
+            {
+              path: "members",
+              element: <GroupMembers />,
+            },
+            {
+              path: "groups",
+              element: <Groups />,
+            },
+          ],
         },
         {
           path: "/",
