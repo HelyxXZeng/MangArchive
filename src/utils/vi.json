@@ -116,6 +116,11 @@
   "utils-reply": {
     "reply-user": "Trả lời bình luận của @"
   },
+  "notification": {
+    "notification": "Thông báo",
+    "back": "Trở về",
+    "mark_all_read": "Đánh dấu tất cả đã đọc"
+  },
   "profile": {
     "back": "Quay lại",
     "post": "Bài viết",

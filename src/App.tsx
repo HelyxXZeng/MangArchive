@@ -28,6 +28,7 @@ import MangaHistory from "./pages/mangahistory/History";
 import ProtectedRoute from "./hooks/protectRouter";
 import LatestManga from "./pages/searchmangapage/latestManga/LatestManga";
 import Message from "./pages/message/Message";
+import Notification from "./pages/notification/Notification";
 
 function App() {
   const Layout = () => {
@@ -153,6 +154,14 @@ function App() {
           element: (
             <ProtectedRoute>
               <Discorver />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "notification/",
+          element: (
+            <ProtectedRoute>
+              <Notification />
             </ProtectedRoute>
           ),
         },

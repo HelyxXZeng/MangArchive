@@ -108,6 +108,11 @@
   "utils-reply": {
     "reply-user": "Replying to @"
   },
+  "notification": {
+    "notification": "Notification",
+    "back": "Back",
+    "mark_all_read": "Mark all read"
+  },
   "profile": {
     "back": "Back",
     "post": "Post",

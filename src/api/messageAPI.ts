@@ -44,10 +44,11 @@ export const markMessageAsRead = async (
   sender_id: number,
   receiver_id: number
 ) => {
-  const { error } = await supabase.rpc("mark_message_as_read", {
+  const { error } = await supabase.rpc("mark_messages_as_read", {
     sender_user_id: sender_id,
     receiver_user_id: receiver_id,
   });
+  // console.log(sender_id, receiver_id, "mark");
   if (error) {
     console.log("Error mark read message:", error);
     throw error;

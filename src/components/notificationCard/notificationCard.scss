@@ -1,0 +1,65 @@
+@import "../../global-styles/Color.scss";
+
+.notificationCardContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 100%;
+  margin: 4px auto 4px auto;
+  padding: 4px 16px;
+  border-bottom: 1px $text-gray-soft-new solid;
+  pointer-events: auto;
+  cursor: pointer;
+  .rightNof {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    .nofIcon {
+      color: $orange-yellow;
+    }
+  }
+
+  .mainNof {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 4px;
+
+    .nofHeader {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      align-items: center;
+
+      .nofName {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .nofTime {
+        align-self: flex-end;
+        font-size: 12px;
+        font-weight: 400;
+        color: $text-gray-soft;
+      }
+    }
+
+    .nofContent {
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
+
+  .leftNof {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .circle {
+      width: 24px;
+      height: 24px;
+      background-color: $blue-soft;
+      border-radius: 50%;
+    }
+  }
+}
