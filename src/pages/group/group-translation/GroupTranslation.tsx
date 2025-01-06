@@ -6,6 +6,7 @@ import MangaCard from "../../../components/mangaComponents/title/TitleCard2";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { censorBadWords, checkContentAI } from "../../../api/contentAPI";
 
 interface Props { }
 
@@ -30,7 +31,7 @@ const MangaTranslation: React.FC<Props> = () => {
         );
         if (error) console.error(error);
         else {
-            console.log("this collections mangas are: ", spdata);
+            // console.log("this collections mangas are: ", spdata);
             if (spdata.length > 0) {
                 try {
                     const {
@@ -45,7 +46,7 @@ const MangaTranslation: React.FC<Props> = () => {
                             ids: spdata,
                         },
                     });
-                    console.log("Mangas data fetched successfully: ", fetchData);
+                    // console.log("Mangas data fetched successfully: ", fetchData);
                     setData(fetchData);
 
                     if (!fetchData) {
@@ -98,7 +99,15 @@ const MangaTranslation: React.FC<Props> = () => {
         }
     };
 
-    const handleRedirect = () => {
+    const handleRedirect = async () => {
+        // const result = await checkContentAI('Fuck you!');
+        // console.log(result);
+        // if (result[0].score > result[1].score) console.log("Aggressive words!");
+        // else console.log("Valid content!");
+
+        // const result2 = await censorBadWords('Fuck you!');
+        // console.log(result2.generated_text);
+
         navigate(`/library/READING?type=translation&groupid=${groupid}`);
     };
 
