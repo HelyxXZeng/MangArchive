@@ -1,161 +1,160 @@
-@import '../../global-styles/Color.scss';
+@import "../../global-styles/Color.scss";
 
 .commentCardContainer {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 
-    .avatar {
-        align-items: flex-start;
-        margin-right: 8px;
+  .avatar {
+    align-items: flex-start;
+    margin-right: 8px;
+  }
+
+  .leftContainer {
+    flex-direction: column;
+
+    .mainCommentContainer {
+      border-radius: 18px;
+      background-color: $gray-bg;
+      padding: 4px 8px;
     }
 
-    .leftContainer {
-        flex-direction: column;
+    .header {
+      cursor: pointer;
+      pointer-events: auto;
 
-        .mainCommentContainer {
-            border-radius: 18px;
-            background-color: $gray-bg;
-            padding: 4px 8px;
+      .nameNId {
+        font-size: 13px;
+        display: flex;
+        // flex-direction: column;
+        min-width: 80px;
+        width: auto;
+        max-width: 256px;
+        justify-content: flex-start;
+
+        .userNameChild {
+          align-items: center;
+          display: flex;
+          justify-content: flex-start;
+          gap: 4px;
+          flex-direction: row;
+
+          .level {
+            font-weight: 400;
+            font-style: italic;
+            font-size: 15px;
+
+            .bluetext {
+              color: $blue-soft;
+            }
+
+            .redtext {
+              color: $like-pink;
+            }
+
+            .yellowtext {
+              color: $orange-yellow;
+            }
+          }
+
+          .name {
+            justify-content: center;
+            font-weight: 700;
+            display: -webkit-box;
+            width: 100%;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+
+          .idName {
+            &:hover {
+              text-decoration: underline;
+            }
+          }
         }
 
-        .header {
-            cursor: pointer;
-            pointer-events: auto;
-
-            .nameNId {
-                font-size: 13px;
-                display: flex;
-                // flex-direction: column;
-                min-width: 80px;
-                width: auto;
-                max-width: 256px;
-                justify-content: flex-start;
-
-                .userNameChild {
-                    align-items: center;
-                    display: flex;
-                    justify-content: flex-start;
-                    gap: 4px;
-                    flex-direction: row;
-
-                    .level {
-                        font-weight: 400;
-                        font-style: italic;
-                        font-size: 15px;
-
-                        .bluetext {
-                            color: $blue-soft;
-                        }
-
-                        .redtext {
-                            color: $like-pink;
-                        }
-
-                        .yellowtext {
-                            color: $orange-yellow;
-                        }
-                    }
-
-                    .name {
-                        justify-content: center;
-                        font-weight: 700;
-                        display: -webkit-box;
-                        width: 100%;
-                        -webkit-line-clamp: 1;
-                        line-clamp: 1;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
-
-                    .idName {
-                        &:hover {
-                            text-decoration: underline;
-                        }
-                    }
-                }
-
-                .idName {
-                    justify-content: center;
-                    font-weight: 400;
-                    color: $text-gray-soft-new;
-                }
-
-            }
+        .idName {
+          justify-content: center;
+          font-weight: 400;
+          color: $text-gray-soft-new;
         }
-
-        .commentImage {
-            img {
-                border-radius: 18px;
-                width: auto;
-                height: auto;
-                max-width: 256px;
-                max-height: 256px;
-            }
-        }
-
-        .option {
-            font-size: 12px;
-            gap: 10px;
-            flex-direction: row;
-            display: flex;
-            cursor: pointer;
-            pointer-events: auto;
-            margin: 4px 0px 2px 8px;
-
-            .datetime {
-                font-weight: 400;
-                color: $text-gray-soft-new;
-            }
-
-            >* {
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-
-            .like {
-                justify-content: center;
-                align-items: center;
-                display: flex;
-                gap: 2px;
-
-                img {
-                    width: 16px;
-                    height: 16px;
-                }
-            }
-
-            .reply {
-                justify-content: center;
-                align-items: center;
-                display: flex;
-                gap: 2px;
-
-                img {
-                    width: 16px;
-                    height: 16px;
-                }
-            }
-        }
+      }
     }
 
-    .coveredContent {
-        background-color: $blue-soft;
-        border: 1px solid $blue-manhwa-text;
-        color: $red;
-        border-radius: 5px;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        padding-inline: 2px;
+    .commentImage {
+      img {
+        border-radius: 18px;
+        width: auto;
+        height: auto;
+        max-width: 256px;
+        max-height: 256px;
+      }
+    }
 
+    .option {
+      font-size: 12px;
+      gap: 10px;
+      flex-direction: row;
+      display: flex;
+      cursor: pointer;
+      pointer-events: auto;
+      margin: 4px 0px 2px 8px;
+
+      .datetime {
+        font-weight: 400;
+        color: $text-gray-soft-new;
+      }
+
+      > * {
         &:hover {
-            background-color: $blue-soft-hover;
+          text-decoration: underline;
         }
+      }
+
+      .like {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        gap: 2px;
+
+        img {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      .reply {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        gap: 2px;
+
+        img {
+          width: 16px;
+          height: 16px;
+        }
+      }
     }
+  }
+
+  .coveredContent {
+    background-color: $gray-bg;
+    border: 1px solid $blue-manhwa-text;
+    color: $orange-yellow;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding-inline: 2px;
+
+    &:hover {
+      background-color: $text-gray-soft-new;
+    }
+  }
 }
