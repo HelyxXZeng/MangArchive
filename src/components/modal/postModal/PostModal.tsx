@@ -18,6 +18,7 @@ import { supabase } from "../../../utils/supabase";
 import { fetchMangaById } from "../../../api/mangaAPI";
 import { uploadImage } from "../../../api/fileUploadAPI";
 import { fetchUserIdByEmail } from "../../../api/userAPI";
+import { checkContentAI } from "../../../api/contentAPI";
 
 interface PostModalProps {
   open: boolean;
@@ -148,6 +149,13 @@ const PostModal = (props: PostModalProps) => {
   const handleSend = async () => {
     setUploading(true);
     setUploadProgress(0);
+
+    const result = await checkContentAI(postContent);
+    if (result) {
+      alert(`This post content is ` + result.type);
+      setUploading(false);
+      return;
+    }
 
     try {
       const { data: postId, error: postError } = await supabase.rpc(

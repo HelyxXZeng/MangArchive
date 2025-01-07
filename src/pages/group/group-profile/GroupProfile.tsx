@@ -248,8 +248,9 @@ const GroupProfile = () => {
     const routes = [
         `/group/${groupid}`,
         `/group/${groupid}/media`,
-        `/group/${groupid}/friends`,
+        `/group/${groupid}/members`,
         `/group/${groupid}/groups`,
+        `/group/${groupid}/grouptranslation`,
     ];
 
     function GroupouteMatch(patterns: readonly string[]) {
@@ -461,6 +462,12 @@ const GroupProfile = () => {
                                 label={t("members")}
                                 to={`/group/${groupid}/members`}
                                 value={`/group/${groupid}/members`}
+                                component={Link}
+                            />
+                            <Tab
+                                label={t("translation")}
+                                to={`/group/${groupid}/grouptranslation`}
+                                value={`/group/${groupid}/grouptranslation`}
                                 component={Link}
                             />
                         </Tabs>

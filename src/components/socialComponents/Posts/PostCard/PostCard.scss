@@ -1,7 +1,6 @@
 @import "../../../../global-styles/Color.scss";
 
-.loading
-{
+.loading {
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -23,10 +22,11 @@
 
         display: flex;
         margin-bottom: 12px;
-        
-        .avatarContainer,.nameNId{
+
+        .avatarContainer,
+        .nameNId {
             cursor: pointer;
-        pointer-events: auto;
+            pointer-events: auto;
         }
 
         .avatarContainer {
@@ -421,6 +421,21 @@
                     background-color: $gray-bg;
                 }
             }
+        }
+    }
+
+    .coveredContent {
+        background-color: $blue-soft;
+        border: 1px solid $blue-manhwa-text;
+        color: $red;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        padding-inline: 2px;
+
+        &:hover {
+            background-color: $blue-soft-hover;
         }
     }
 }

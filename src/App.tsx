@@ -34,6 +34,7 @@ import GroupPost from "./pages/group/group-post/GroupPost";
 import GroupMedia from "./pages/group/group-media/GroupMedia";
 import GroupMembers from "./pages/group/group-members/GroupMembers";
 import UploadMangaPage from "./pages/translation/UploadMangaPage";
+import GroupTranslation from "./pages/group/group-translation/GroupTranslation";
 
 
 function App() {
@@ -134,6 +135,10 @@ function App() {
             {
               path: "members",
               element: <GroupMembers />,
+            },
+            {
+              path: "grouptranslation",
+              element: <GroupTranslation />,
             },
             {
               path: "groups",

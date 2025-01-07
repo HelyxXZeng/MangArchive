@@ -70,11 +70,7 @@ const getDataApi = async (slug: any) => {
     console.error("Error fetching chapters from Supabase:", error);
   }
 
-  console.log(supabaseChapters);
-
   const allChapters = [...chapterArray, ...(supabaseChapters || [])];
-
-  console.log(allChapters);
 
   const chapters: any = {};
   let manga_last_updated: any = "";

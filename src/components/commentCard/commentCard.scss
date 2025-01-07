@@ -1,24 +1,27 @@
 @import '../../global-styles/Color.scss';
 
-.commentCardContainer{
+.commentCardContainer {
     display: flex;
     flex-direction: row;
-    .avatar{
+
+    .avatar {
         align-items: flex-start;
         margin-right: 8px;
     }
-    .leftContainer{
+
+    .leftContainer {
         flex-direction: column;
 
-        .mainCommentContainer{
+        .mainCommentContainer {
             border-radius: 18px;
             background-color: $gray-bg;
             padding: 4px 8px;
         }
-        
-        .header{
+
+        .header {
             cursor: pointer;
             pointer-events: auto;
+
             .nameNId {
                 font-size: 13px;
                 display: flex;
@@ -27,32 +30,32 @@
                 width: auto;
                 max-width: 256px;
                 justify-content: flex-start;
-    
+
                 .userNameChild {
                     align-items: center;
                     display: flex;
                     justify-content: flex-start;
                     gap: 4px;
                     flex-direction: row;
-    
+
                     .level {
                         font-weight: 400;
                         font-style: italic;
                         font-size: 15px;
-    
+
                         .bluetext {
                             color: $blue-soft;
                         }
-    
+
                         .redtext {
                             color: $like-pink;
                         }
-    
+
                         .yellowtext {
                             color: $orange-yellow;
                         }
                     }
-    
+
                     .name {
                         justify-content: center;
                         font-weight: 700;
@@ -63,28 +66,30 @@
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                         text-overflow: ellipsis;
-    
+
                         &:hover {
                             text-decoration: underline;
                         }
                     }
-                    .idName{
+
+                    .idName {
                         &:hover {
                             text-decoration: underline;
                         }
                     }
                 }
-    
+
                 .idName {
                     justify-content: center;
                     font-weight: 400;
                     color: $text-gray-soft-new;
                 }
-    
+
             }
         }
-        .commentImage{
-            img{
+
+        .commentImage {
+            img {
                 border-radius: 18px;
                 width: auto;
                 height: auto;
@@ -92,7 +97,8 @@
                 max-height: 256px;
             }
         }
-        .option{
+
+        .option {
             font-size: 12px;
             gap: 10px;
             flex-direction: row;
@@ -100,31 +106,37 @@
             cursor: pointer;
             pointer-events: auto;
             margin: 4px 0px 2px 8px;
-            .datetime{
+
+            .datetime {
                 font-weight: 400;
                 color: $text-gray-soft-new;
             }
-            > * {
+
+            >* {
                 &:hover {
                     text-decoration: underline;
                 }
             }
-            .like{
+
+            .like {
                 justify-content: center;
                 align-items: center;
                 display: flex;
                 gap: 2px;
-                img{
+
+                img {
                     width: 16px;
-                height: 16px;
+                    height: 16px;
                 }
             }
-            .reply{
+
+            .reply {
                 justify-content: center;
                 align-items: center;
                 display: flex;
                 gap: 2px;
-                img{
+
+                img {
                     width: 16px;
                     height: 16px;
                 }
@@ -132,4 +144,18 @@
         }
     }
 
+    .coveredContent {
+        background-color: $blue-soft;
+        border: 1px solid $blue-manhwa-text;
+        color: $red;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        padding-inline: 2px;
+
+        &:hover {
+            background-color: $blue-soft-hover;
+        }
+    }
 }

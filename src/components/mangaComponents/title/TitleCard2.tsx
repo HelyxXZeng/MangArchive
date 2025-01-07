@@ -11,9 +11,11 @@ import { useTranslation } from "react-i18next";
 interface Props {
   manga: any;
   includedTags?: string[]; // Add this line
+  type?: string;
+  groupId?: string;
 }
 
-const MangaCard: React.FC<Props> = ({ manga, includedTags = [] }) => {
+const MangaCard: React.FC<Props> = ({ manga, includedTags = [], type = "", groupId = "" }) => {
   const [cover, setCover] = useState("");
   const [author, setAuthor] = useState("");
   const [artist, setArtist] = useState("");
@@ -183,14 +185,25 @@ const MangaCard: React.FC<Props> = ({ manga, includedTags = [] }) => {
             ratio="4/6"
           />
         </div>
-        <NavLink to={`/manga/${manga.id}`} style={{ textDecoration: "none" }}>
-          <div className="title-and-artist-container">
-            <h2>{title}</h2>
-            <p className="author-artist">
-              {author === artist ? author : author + ", " + artist}
-            </p>
-          </div>
-        </NavLink>
+        {type === "translation" ? (
+          <NavLink to={`/translation?manga_id=${manga.id}&group=${groupId}`} style={{ textDecoration: "none" }}>
+            <div className="title-and-artist-container">
+              <h2>{title}</h2>
+              <p className="author-artist">
+                {author === artist ? author : author + ", " + artist}
+              </p>
+            </div>
+          </NavLink>
+        ) : (
+          <NavLink to={`/manga/${manga.id}`} style={{ textDecoration: "none" }}>
+            <div className="title-and-artist-container">
+              <h2>{title}</h2>
+              <p className="author-artist">
+                {author === artist ? author : author + ", " + artist}
+              </p>
+            </div>
+          </NavLink>
+        )}
         <div className="manga-card-content">
           <div className="tags">
             {manga.attributes.tags.map((tag: any) => (

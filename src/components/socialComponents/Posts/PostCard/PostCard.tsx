@@ -14,6 +14,7 @@ import {
 } from "../../../../api/postAPI";
 import { fetchMangaById } from "../../../../api/mangaAPI";
 import LoadingWave from "../../../loadingWave/LoadingWave";
+import { checkContentAI } from "../../../../api/contentAPI";
 
 interface PostCardProps {
   postId: any;
@@ -38,11 +39,19 @@ const PostCard = ({
     avatar: string;
   } | null>(null);
   const [liked, setLiked] = useState<boolean>(false);
+  const [contentCovered, setContentCovered] = useState<boolean>(false);
+  const [isContentVisible, setIsContentVisible] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   const getPostInfo = async () => {
     const post = await fetchPostInfo(postId);
+
+    // Check content offensiveness
+    const offensiveResult = await checkContentAI(post.content);
+    if (offensiveResult && offensiveResult.score > 0.5) {
+      setContentCovered(true); // Cover content if offensive
+    }
     setPostInfo(post);
   };
 
@@ -169,6 +178,10 @@ const PostCard = ({
     }
   };
 
+  const handleContentToggle = () => {
+    setIsContentVisible((prev) => !prev);
+  };
+
   const { username: CurrentuserName } = useParams();
   const handleNavigate = () => {
     if (userInfo && userInfo.username !== CurrentuserName) {
@@ -277,13 +290,12 @@ const PostCard = ({
               <span className="level">
                 LV
                 <span
-                  className={`textHighlight ${
-                    level < 4
-                      ? "bluetext"
-                      : level < 7
+                  className={`textHighlight ${level < 4
+                    ? "bluetext"
+                    : level < 7
                       ? "yellowtext"
                       : "redtext"
-                  }`}
+                    }`}
                 >
                   {level}
                 </span>
@@ -304,8 +316,14 @@ const PostCard = ({
         </div>
       </div>
       <div className="cardContent">
-        <div className="textContent">
-          <span>{postInfo.content}</span>
+        <div className="textContent" onClick={handleContentToggle}>
+          {contentCovered && !isContentVisible ? (
+            <span className="coveredContent">
+              Content is covered due to offensiveness
+            </span>
+          ) : (
+            <span>{postInfo.content}</span>
+          )}
         </div>
         {comic && (
           <div className="comicslug">
