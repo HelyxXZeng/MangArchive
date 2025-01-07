@@ -22,8 +22,9 @@ import {
   getCollection,
   getRating,
 } from "../../api/mangaAPI";
+import useCheckSession from "../../hooks/session";
 
-interface Props { }
+interface Props {}
 
 const MangaDetails: React.FC<Props> = () => {
   const { manga_id } = useParams<{ manga_id: string }>();
@@ -56,7 +57,7 @@ const MangaDetails: React.FC<Props> = () => {
   }>({});
 
   const commentBoxRef = useRef<any>(null);
-
+  const session = useCheckSession();
   const handleButtonClick = (buttonName: string) => {
     setActiveButton(buttonName);
   };
@@ -136,23 +137,24 @@ const MangaDetails: React.FC<Props> = () => {
 
   useEffect(() => {
     async function getUser() {
-      try {
-        const { data: sessionData, error: sessionError } =
-          await supabase.auth.refreshSession();
-        if (sessionError) {
-          console.error(sessionError);
-          return;
-        }
-        if (sessionData && sessionData.user?.email) {
-          // console.log(sessionData.user.email);
+      if (session)
+        try {
+          const { data: sessionData, error: sessionError } =
+            await supabase.auth.refreshSession();
+          if (sessionError) {
+            console.error(sessionError);
+            return;
+          }
+          if (sessionData && sessionData.user?.email) {
+            // console.log(sessionData.user.email);
 
-          const data = await fetchUserIdByEmail(sessionData.user.email);
-          // console.log("User ID: ", data, sessionData.user.email);
-          setUserID(data);
+            const data = await fetchUserIdByEmail(sessionData.user.email);
+            // console.log("User ID: ", data, sessionData.user.email);
+            setUserID(data);
+          }
+        } catch (error) {
+          console.error("Error fetching user:", error);
         }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
     }
     getUser();
   }, []);
@@ -484,8 +486,9 @@ const MangaDetails: React.FC<Props> = () => {
             <div className="chapter-container">
               <div className="manga-details-nav-button-bar">
                 <div
-                  className={`chapters-nav-button ${activeButton === "chapters" ? "active" : ""
-                    }`}
+                  className={`chapters-nav-button ${
+                    activeButton === "chapters" ? "active" : ""
+                  }`}
                   onClick={() => handleButtonClick("chapters")}
                   style={{
                     borderTopLeftRadius: "8px",
@@ -495,15 +498,17 @@ const MangaDetails: React.FC<Props> = () => {
                   Chapters
                 </div>
                 <div
-                  className={`comments-nav-button ${activeButton === "comments" ? "active" : ""
-                    }`}
+                  className={`comments-nav-button ${
+                    activeButton === "comments" ? "active" : ""
+                  }`}
                   onClick={() => handleButtonClick("comments")}
                 >
                   Comments
                 </div>
                 <div
-                  className={`posts-nav-button ${activeButton === "posts" ? "active" : ""
-                    }`}
+                  className={`posts-nav-button ${
+                    activeButton === "posts" ? "active" : ""
+                  }`}
                   onClick={() => handleButtonClick("posts")}
                   style={{
                     borderTopRightRadius: "8px",
@@ -611,7 +616,7 @@ const MangaDetails: React.FC<Props> = () => {
                                 ))}
                             {replies[comment] &&
                               (visibleReplies[comment] || 1) <
-                              replies[comment].length && (
+                                replies[comment].length && (
                                 <div
                                   className="seemore commentCard"
                                   onClick={() => handleSeeMoreReplies(comment)}

@@ -16,6 +16,7 @@ import {
   getUnreadMessageNotification,
 } from "../../../api/notificationAPI";
 import { setCount } from "../../../reduxState/reducer/notificationReducer";
+import { supabase } from "../../../utils/supabase";
 
 const HeaderBar = () => {
   const navigate = useNavigate();
@@ -123,9 +124,30 @@ const HeaderBar = () => {
     fetchProfileImages();
   }, [realUserID]);
   useEffect(() => {
+    const subscription = supabase
+      .channel("Messages")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "Messages" },
+        async () => {
+          if (realUserID) {
+            await getUnreadMessageNotification(realUserID);
+            const data = await countUnreadNotification(realUserID);
+            dispatch(setCount(data));
+            // console.log(data);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [realUserID, dispatch]);
+  useEffect(() => {
     const fetchNotificationCount = async () => {
       if (realUserID) {
-        await getUnreadMessageNotification(realUserID);
+        // await getUnreadMessageNotification(realUserID);
         const data = await countUnreadNotification(realUserID);
         dispatch(setCount(data));
         // console.log(data);

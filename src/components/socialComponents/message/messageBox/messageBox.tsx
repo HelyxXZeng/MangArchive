@@ -79,6 +79,7 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
   const handleSend = async () => {
     if (message.trim() || image) {
       setUploading(true);
+      console.log(uploading);
       try {
         let messageID;
         if (!realUserID || !receiver_id) {
@@ -87,7 +88,9 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
         }
 
         messageID = await uploadMessage(realUserID, receiver_id, message);
+        console.log("upload xong text");
         if (image) {
+          console.log("bắt đầu upload hình");
           const imageFile = fileInputRef.current?.files?.[0];
           if (imageFile) {
             console.log("Image file:", imageFile); // Thay vì upload, chỉ log ra file hình
@@ -99,15 +102,20 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
                 messageID
               );
             }
+            console.log("upload xong hình");
           }
-          fileInputRef.current!.value = ""; // Reset giá trị của input file
-          setImage(null);
-          setUploading(false);
-          setMessage("");
         }
       } catch (error) {
         console.error("Upload failed:", error);
         setUploading(false);
+        console.log(uploading);
+      } finally {
+        // Đảm bảo setUploading về false bất kể thành công hay lỗi
+        setUploading(false);
+        fileInputRef.current!.value = ""; // Reset giá trị của input file
+        setImage(null);
+        // setUploading(false);
+        setMessage("");
       }
     }
   };
