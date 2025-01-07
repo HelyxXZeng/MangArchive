@@ -112,6 +112,10 @@ const ReportUserModal = (props: ReportUserProps) => {
                 "&:hover": {
                   backgroundColor: "#555", // Màu hover của item
                 },
+                "& .MuiSelect-icon": {
+                  color: "#ffffff",
+                  fill: "#fff !important  ",
+                },
               },
             }}
           >
