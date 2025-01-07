@@ -63,6 +63,11 @@
         border-color: $blue-soft;
       }
     }
+    &.MuiSelect-icon,
+    svg {
+      color: $text-white-new !important; /* Đổi màu icon */
+      fill: $text-white-new !important;
+    }
   }
   .reportOption {
     display: flex;
