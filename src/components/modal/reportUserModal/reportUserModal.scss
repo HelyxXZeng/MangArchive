@@ -1,6 +1,6 @@
 @import "../../../global-styles/Color.scss";
 
-.delete-modal {
+.report-modal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -24,7 +24,7 @@
     align-items: center;
     justify-content: space-between;
 
-    .delete-modal-title {
+    .report-modal-title {
       color: $text-white-new;
       font-family: "Lato", sans-serif;
       font-weight: 700;
@@ -38,18 +38,42 @@
   .mainContent {
     margin-bottom: 24px;
     font-size: 18px;
-    text-align: center;
+    text-align: left;
+    margin-bottom: 16px;
+
+    .MuiInputLabel-root {
+      color: $text-gray-soft-new;
+    }
+
+    .MuiInputBase-input {
+      font-family: "Lato", sans-serif;
+      color: $text-white-new;
+    }
+
+    .MuiOutlinedInput-root {
+      fieldset {
+        border-color: $gray-bg;
+      }
+
+      &:hover fieldset {
+        border-color: $blue-soft;
+      }
+
+      &.Mui-focused fieldset {
+        border-color: $blue-soft;
+      }
+    }
   }
-  .deleteOption {
+  .reportOption {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 
     .cancle-button,
-    .delete-button {
+    .report-button {
       margin: 4px;
     }
-    .cancle-button {
+    .cancel-button {
       background-color: transparent;
       border: none;
       box-shadow: none;
@@ -58,7 +82,7 @@
         background-color: $text-gray-soft-new;
       }
     }
-    .delete-button {
+    .report-button {
       background-color: $like-pink;
     }
   }

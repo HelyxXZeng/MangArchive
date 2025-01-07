@@ -126,6 +126,7 @@ const Message = () => {
           }
           const messagesData = await getMessagesFromUser(senderId, userID);
           dispatch(setMessages(messagesData || []));
+          markMessageAsRead(senderId, userID!);
         } catch (error) {
           console.error("Error fetching messages:", error);
         }

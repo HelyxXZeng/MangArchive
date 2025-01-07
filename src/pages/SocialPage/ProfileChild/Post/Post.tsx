@@ -24,7 +24,7 @@ const Post = () => {
           const data = await fetchUserInfoByUsername(username);
           setUserInfo(data[0]);
           // Set showPostSection to true only if email matches session user's email
-          setShowPostSection(data?.email === session.user.email);
+          setShowPostSection(data[0]?.email === session.user.email);
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
@@ -64,9 +64,9 @@ const Post = () => {
 
   useEffect(() => {
     if (userInfo?.id) {
-      fetchPostList(false); // Initial fetch with reset
+      fetchPostList(true); // Initial fetch with reset
     }
-  }, [userInfo]);
+  }, [userInfo, username]);
 
   const loadMorePosts = () => {
     const newOffset = offset + 5; // Tính offset mới

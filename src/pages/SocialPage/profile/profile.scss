@@ -120,6 +120,11 @@
           color: $main-bg;
           border: 1px solid $text-white;
         }
+        .textred {
+          background-color: transparent;
+          color: $like-pink;
+          border: 1px solid $like-pink;
+        }
 
         .rightOption {
           display: flex;
@@ -128,9 +133,23 @@
           align-items: center;
 
           .textblack,
-          .textwhite {
+          .textwhite,
+          .textred {
             height: 36px;
             width: 150px;
+          }
+
+          .MuiMenu-root {
+            .MuiPaper-root {
+              background-color: $soft-bg; // Màu nền Menu
+              color: $text-white-new; // Màu chữ
+            }
+          }
+
+          .MuiMenuItem-root {
+            &:hover {
+              background-color: $gray-bg; // Màu nền khi hover
+            }
           }
         }
       }

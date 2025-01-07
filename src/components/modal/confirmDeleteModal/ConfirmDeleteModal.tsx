@@ -24,18 +24,22 @@ const ConfirmDeleteModal = (props: confirmDeleteProps) => {
     <Modal
       open={props.open}
       onClose={uploading ? () => {} : props.handleClose}
-      aria-labelledby="post-modal-title"
-      aria-describedby="post-modal-description"
+      aria-labelledby="delete-modal-title"
+      aria-describedby="delete-modal-description"
     >
-      <div className="post-modal customScrollbar">
+      <div className="delete-modal customScrollbar">
         <div className="header">
           <div className="none"></div>
-          <Typography className="post-modal-title" variant="h6" component="h2">
+          <Typography
+            className="delete-modal-title"
+            variant="h6"
+            component="h2"
+          >
             Confirm Delete
           </Typography>
           <IconButton
             onClick={uploading ? () => {} : props.handleClose}
-            className="post-modal-title"
+            className="delete-modal-title"
           >
             X
           </IconButton>

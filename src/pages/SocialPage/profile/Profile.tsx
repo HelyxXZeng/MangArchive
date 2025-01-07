@@ -8,19 +8,32 @@ import {
   useParams,
 } from "react-router-dom";
 import "./profile.scss";
-import { Avatar, Button, IconButton, Tab, Tabs } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import UpdateProfileModal from "../../../components/modal/updateProfileModal/UpdateProfileModal";
 import useCheckSession from "../../../hooks/session";
 import {
+  blockUser,
   checkIsFollowingUser,
+  checkIsUserBlocked,
   fetchProfileCountData,
   fetchUserIdByEmail,
   fetchUserInfoByUsername,
   fetchUserProfileImages,
+  unblockUser,
 } from "../../../api/userAPI";
 import { followUserById, unfollowUserById } from "../../../api/scocialAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 import { useTranslation } from "react-i18next";
+import BlockUserModal from "../../../components/modal/blockUserModal/BlockUserModal";
+import ReportUserModal from "../../../components/modal/reportUserModal/ReportUserModal";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -35,6 +48,21 @@ const Profile = () => {
       followUser();
     }
   };
+  const [isBlocked, setIsBlocked] = useState(false);
+  const handleBlockUser = async () => {
+    try {
+      if (isBlocked) {
+        await unblockUser(userID, userInfo.id);
+        setIsBlocked(false);
+      } else {
+        await blockUser(userID, userInfo.id);
+        setIsBlocked(true);
+        setIsFollowed(false); // Reset follow state when user is blocked
+      }
+    } catch (error) {
+      console.error("Error toggling block status:", error);
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userID, setUserID] = useState<any>(null);
   const [userInfo, setUserInfo] = useState<any>(null);
@@ -47,6 +75,25 @@ const Profile = () => {
   const [groupCount, setGroupCount] = useState(0);
   const [friendCount, setFriendCount] = useState(0);
   const { t } = useTranslation("", { keyPrefix: "profile" });
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [modalType, setModalType] = useState<"block" | "report" | null>(null);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpenModal = (type: "block" | "report") => {
+    setModalType(type);
+    handleMenuClose();
+  };
+
+  const handleCloseModal = () => {
+    setModalType(null);
+  };
   useEffect(() => {
     const getUserID = async () => {
       if (session && session.user) {
@@ -65,7 +112,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        if (username && session.user) {
+        if (username && session?.user!) {
           const data = await fetchUserInfoByUsername(username);
           setUserInfo(data[0]);
           setIsCurrentUser(data[0].email === session?.user?.email);
@@ -96,6 +143,15 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    const checkIfBlocked = async () => {
+      try {
+        const isUserBlocked = await checkIsUserBlocked(userID, userInfo.id);
+        setIsBlocked(isUserBlocked);
+        // console.log(userInfo.username, isUserBlocked, isBlocked);
+      } catch (error) {
+        console.error("Error checking block status:", error);
+      }
+    };
     const checkIfFollowed = async () => {
       try {
         const isFollowing = await checkIsFollowingUser(userID, userInfo.id);
@@ -107,10 +163,11 @@ const Profile = () => {
       }
     };
     if (userID && userInfo && !isCurrentUser) {
+      checkIfBlocked();
       // console.log(userID, userInfo, isCurrentUser);
-      checkIfFollowed();
+      if (!isBlocked) checkIfFollowed();
     }
-  }, [userID, userInfo, isCurrentUser]);
+  }, [userID, userInfo, isCurrentUser, isBlocked, isFollowed]);
 
   //đếm bài đăng và following
   useEffect(() => {
@@ -247,14 +304,26 @@ const Profile = () => {
               </div>
             ) : (
               <div className="rightOption">
-                <Button
-                  className={!isFollowed ? "textblack" : "textwhite"}
-                  onClick={handleFollowUser}
-                  variant="contained"
-                  sx={{ borderRadius: "24px" }}
-                >
-                  {isFollowed ? t("unfollow") : t("follow")}
-                </Button>
+                {isBlocked ? (
+                  <Button
+                    className="textred"
+                    onClick={handleBlockUser}
+                    variant="contained"
+                    sx={{ borderRadius: "24px" }}
+                  >
+                    Unblock
+                  </Button>
+                ) : (
+                  <Button
+                    className={!isFollowed ? "textblack" : "textwhite"}
+                    onClick={handleFollowUser}
+                    variant="contained"
+                    sx={{ borderRadius: "24px" }}
+                  >
+                    {isFollowed ? t("unfollow") : t("follow")}
+                  </Button>
+                )}
+
                 <IconButton
                   className="directMessage"
                   onClick={() => {
@@ -264,14 +333,62 @@ const Profile = () => {
                   <img src="/icons/direct-message.svg" alt="DM Button" />
                 </IconButton>
 
-                <IconButton
-                  className="more-circle"
-                  onClick={() =>
-                    console.log("More about this user:", userInfo?.username)
-                  }
-                >
+                <IconButton className="more-circle" onClick={handleMenuOpen}>
                   <img src="/icons/more-circle.svg" alt="DM Button" />
                 </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  sx={{
+                    "& .MuiPaper-root": {
+                      backgroundColor: "#242526", // Màu nền của Menu
+                      color: "#e7e9ea", // Màu chữ
+                    },
+                  }}
+                >
+                  {!isBlocked && (
+                    <MenuItem
+                      onClick={() => handleOpenModal("block")}
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "#3a3b3c", // Màu khi hover
+                        },
+                      }}
+                    >
+                      Block User
+                    </MenuItem>
+                  )}
+                  <MenuItem
+                    onClick={() => handleOpenModal("report")}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#3a3b3c", // Màu khi hover
+                      },
+                    }}
+                  >
+                    Report User
+                  </MenuItem>
+                </Menu>
+                {modalType === "block" && (
+                  <BlockUserModal
+                    open={true}
+                    handleClose={handleCloseModal}
+                    currentUID={userID}
+                    targetName={username!}
+                    targetUID={userInfo.id!}
+                    handleBlock={handleBlockUser}
+                  />
+                )}
+                {modalType === "report" && (
+                  <ReportUserModal
+                    open={true}
+                    handleClose={handleCloseModal}
+                    currentUID={userID}
+                    targetUID={userInfo.id!}
+                    targetName={username!}
+                  />
+                )}
               </div>
             )}
           </div>

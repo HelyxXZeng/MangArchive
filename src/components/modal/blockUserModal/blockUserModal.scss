@@ -1,6 +1,6 @@
 @import "../../../global-styles/Color.scss";
 
-.delete-modal {
+.block-modal {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -24,7 +24,7 @@
     align-items: center;
     justify-content: space-between;
 
-    .delete-modal-title {
+    .block-modal-title {
       color: $text-white-new;
       font-family: "Lato", sans-serif;
       font-weight: 700;
@@ -38,15 +38,15 @@
   .mainContent {
     margin-bottom: 24px;
     font-size: 18px;
-    text-align: center;
+    text-align: left;
   }
-  .deleteOption {
+  .blockOption {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 
     .cancle-button,
-    .delete-button {
+    .block-button {
       margin: 4px;
     }
     .cancle-button {
@@ -58,7 +58,7 @@
         background-color: $text-gray-soft-new;
       }
     }
-    .delete-button {
+    .block-button {
       background-color: $like-pink;
     }
   }

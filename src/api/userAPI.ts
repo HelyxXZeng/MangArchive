@@ -120,7 +120,71 @@ export const checkIsFollowingUser = async (
     throw error;
   }
 };
+
+export const checkIsUserBlocked = async (
+  userid: number,
+  target_userid: number
+) => {
+  try {
+    const { data, error } = await supabase.rpc("is_user_blocking", {
+      user_id: userid,
+      target_user_id: target_userid,
+    });
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error checking is blocking user:", error);
+    throw error;
+  }
+};
+
 // Set
+export const blockUser = async (userid: number, target_userid: number) => {
+  try {
+    const { error } = await supabase.rpc("block_user", {
+      current_user_id: userid,
+      target_user_id: target_userid,
+    });
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error block user:", error);
+    throw error;
+  }
+};
+
+export const unblockUser = async (userid: number, target_userid: number) => {
+  try {
+    const { error } = await supabase.rpc("unblock_user", {
+      current_user_id: userid,
+      target_user_id: target_userid,
+    });
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error unblock user:", error);
+    throw error;
+  }
+};
+
+export const reportUser = async (
+  userid: number,
+  target_userid: number,
+  report_content: string,
+  report_type: string
+) => {
+  try {
+    const { error } = await supabase.rpc("report_user", {
+      reporter_id: userid,
+      reported_id: target_userid,
+      report_content: report_content,
+      report_type: report_type,
+    });
+    if (error) throw error;
+  } catch (error) {
+    console.error("Error report user:", error);
+    throw error;
+  }
+};
+
 export const uploadUserImage = async (publicUrl: string, imageName: string) => {
   try {
     const { data: image, error } = await supabase.rpc("upload_image", {

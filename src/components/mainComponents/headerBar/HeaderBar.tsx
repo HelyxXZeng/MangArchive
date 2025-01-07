@@ -10,7 +10,12 @@ import {
 } from "../../../api/userAPI";
 import { phraseImageUrl } from "../../../utils/imageLinkPhraser";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  countUnreadNotification,
+  getUnreadMessageNotification,
+} from "../../../api/notificationAPI";
+import { setCount } from "../../../reduxState/reducer/notificationReducer";
 
 const HeaderBar = () => {
   const navigate = useNavigate();
@@ -20,8 +25,10 @@ const HeaderBar = () => {
   const session = useCheckSession();
   const [status, setStatus] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
-  let notificationCount = 1;
-  // const [notificationCount, setNotificationCount] = useState(1);
+  // let notificationCount = 1;
+  const dispatch = useDispatch();
+  const { notificationCount } = useSelector((state: any) => state.notification);
+  // const [notificationCount, setNotificationCount] = useState(0);
   const [searchInput, setSearchInput] = useState<string>("");
   const [profileImages, setProfileImages] = useState<{
     avatar: string;
@@ -35,6 +42,7 @@ const HeaderBar = () => {
   const onSignUpContainerClick = useCallback(() => {
     navigate("/auth/signup");
   }, [navigate]);
+
   useEffect(() => {
     // console.log(
     //   "condition:",
@@ -114,7 +122,17 @@ const HeaderBar = () => {
 
     fetchProfileImages();
   }, [realUserID]);
-
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      if (realUserID) {
+        await getUnreadMessageNotification(realUserID);
+        const data = await countUnreadNotification(realUserID);
+        dispatch(setCount(data));
+        // console.log(data);
+      }
+    };
+    fetchNotificationCount();
+  }, [realUserID]);
   const handleSearch = () => {
     if (searchInput.trim() !== "") {
       navigate(`/search?title=${encodeURIComponent(searchInput)}`);
@@ -155,7 +173,7 @@ const HeaderBar = () => {
         <div className="auth">
           {status ? (
             <div className="userThings">
-              <div className="notificationIcon">
+              <NavLink to={`/notification/`} className="notificationIcon">
                 <Badge
                   color="error"
                   badgeContent={notificationCount}
@@ -164,7 +182,7 @@ const HeaderBar = () => {
                 >
                   <img src="/icons/messagetext.svg" alt="Notifications" />
                 </Badge>
-              </div>
+              </NavLink>
               <NavLink to={`/profile/${username}`}>
                 <Avatar
                   className="avatar"
