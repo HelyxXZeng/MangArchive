@@ -18,18 +18,23 @@ import { supabase } from "../../../utils/supabase";
 import { fetchMangaById } from "../../../api/mangaAPI";
 import { uploadImage } from "../../../api/fileUploadAPI";
 import { fetchUserIdByEmail } from "../../../api/userAPI";
+import { checkContentAI } from "../../../api/contentAPI";
 
 interface PostModalProps {
   open: boolean;
   handleClose: () => void;
   mangaid?: string;
   refreshList?: () => void;
+  group_id?: string;
 }
 
 const PostModal = (props: PostModalProps) => {
   const [postContent, setPostContent] = useState("");
   const [mangaSuggestContent, setMangaSuggestContent] = useState(
     props.mangaid || ""
+  );
+  const [groupid, setGroupid] = useState(
+    props.group_id || null
   );
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [images, setImages] = useState<string[]>([]);
@@ -145,6 +150,13 @@ const PostModal = (props: PostModalProps) => {
     setUploading(true);
     setUploadProgress(0);
 
+    const result = await checkContentAI(postContent);
+    if (result) {
+      alert(`This post content is ` + result.type);
+      setUploading(false);
+      return;
+    }
+
     try {
       const { data: postId, error: postError } = await supabase.rpc(
         "upload_post",
@@ -152,6 +164,7 @@ const PostModal = (props: PostModalProps) => {
           this_truyen: mangaSuggestContent || null,
           this_user_id: realUserID,
           this_content: postContent,
+          this_group_name_id: groupid
         }
       );
 
@@ -192,6 +205,7 @@ const PostModal = (props: PostModalProps) => {
       // Clear all inputs
       setPostContent("");
       setMangaSuggestContent("");
+      setGroupid(null);
       setImages([]);
       setImagesFile([]);
       setUploading(false);
@@ -206,7 +220,7 @@ const PostModal = (props: PostModalProps) => {
   return (
     <Modal
       open={props.open}
-      onClose={uploading ? () => {} : props.handleClose}
+      onClose={uploading ? () => { } : props.handleClose}
       aria-labelledby="post-modal-title"
       aria-describedby="post-modal-description"
     >
@@ -217,13 +231,22 @@ const PostModal = (props: PostModalProps) => {
             New Post
           </Typography>
           <IconButton
-            onClick={uploading ? () => {} : props.handleClose}
+            onClick={uploading ? () => { } : props.handleClose}
             className="post-modal-title"
           >
             X
           </IconButton>
         </div>
         <div className="mangaSuggest">
+          <TextField
+            placeholder="If post for group then group id should be here"
+            variant="outlined"
+            fullWidth
+            rows={1}
+            value={groupid}
+            className="mangaSuggestField"
+          />
+
           {mangaSuggestContent ? (
             <TextField
               placeholder="Enter comicId here (copy series code from link)"

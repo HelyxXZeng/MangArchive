@@ -9,13 +9,14 @@ import Modal from "../../components/mangaComponents/messagemodal/Modal";
 import SwiperCore from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { supabase } from "../../utils/supabase";
 
 SwiperCore.use([Autoplay, Pagination, Navigation]);
 
-interface Props {}
+interface Props { }
 
 const MangaDetails: React.FC<Props> = () => {
-  const { chapter_id } = useParams<{ chapter_id: string }>();
+  const { chapter_id } = useParams<{ chapter_id: string }>() || "3";
   const { chap } = useParams<{ chap: string }>();
   // const location = useLocation();
   // const queryParams = new URLSearchParams(location.search);
@@ -32,19 +33,43 @@ const MangaDetails: React.FC<Props> = () => {
   const navigate = useNavigate(); // Use history for navigation
 
   const getData = async () => {
-    try {
-      const resp = await axios({
-        method: "GET",
-        url: `https://api.mangadex.org/at-home/server/${chapter_id}`,
-      });
-      console.log("Chapter data fetched successfully: ", resp.data.chapter);
-      setData(resp.data);
+    if (chapter_id && chapter_id.length < 16) {
+      try {
+        // Query the Image table to fetch all rows where the chapter matches the given chapterId
+        const { data, error } = await supabase
+          .from("Image")
+          .select("url")
+          .eq("chapter", chapter_id);
 
-      if (!resp.data) {
-        throw new Error("Chapter not found.");
+        if (error) {
+          console.error("Error fetching image URLs:", error);
+          throw error;
+        }
+
+        // Extract and return the URLs from the result
+        const urls = data?.map((image: any) => image.url);
+        setData(urls);
+
+      } catch (err) {
+        console.error("Error during the database query:", err);
+        throw err;
       }
-    } catch (error) {
-      console.error("Error fetching chapter:", error);
+    }
+    else {
+      try {
+        const resp = await axios({
+          method: "GET",
+          url: `https://api.mangadex.org/at-home/server/${chapter_id}`,
+        });
+        console.log("Chapter data fetched successfully: ", resp.data.chapter);
+        setData(resp.data);
+
+        if (!resp.data) {
+          throw new Error("Chapter not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching chapter:", error);
+      }
     }
   };
 
@@ -88,7 +113,7 @@ const MangaDetails: React.FC<Props> = () => {
     const zip = new JSZip();
     const folder = zip.folder(`MangArchive/${chapter_id}`);
 
-    if (data && data.chapter && data.chapter.data) {
+    if (chapter_id && chapter_id.length >= 16 && data && data.chapter && data.chapter.data) {
       try {
         for (const page of data.chapter.data) {
           const response = await axios({
@@ -108,7 +133,29 @@ const MangaDetails: React.FC<Props> = () => {
       } finally {
         setIsDownloading(false);
       }
-    } else {
+    }
+    else if (chapter_id && chapter_id.length < 16 && data) {
+      try {
+        for (const page of data) {
+          const response = await axios({
+            method: "GET",
+            url: `${page}`,
+            responseType: "arraybuffer",
+          });
+
+          if (folder) folder.file(page, response.data);
+        }
+
+        const content = await zip.generateAsync({ type: "blob" });
+        saveAs(content, `MangArchive_${chapter_id}.zip`);
+        setModalMessage("Download complete!");
+      } catch (error) {
+        setModalMessage("An error occurred during download.");
+      } finally {
+        setIsDownloading(false);
+      }
+    }
+    else {
       setModalMessage("No data available to download.");
       setIsDownloading(false);
     }
@@ -161,19 +208,35 @@ const MangaDetails: React.FC<Props> = () => {
             }}
             style={{ height: "100%" }}
           >
-            {data.chapter.data.map((chap: any, index: number) => (
-              <SwiperSlide key={index} style={{ width: "100%" }}>
-                <div
-                  className={`swiper-slide-content ${imgStyle} customScrollbar`}
-                >
-                  <img
-                    src={`${data.baseUrl}/data/${data.chapter.hash}/${chap}`}
-                    alt={`Page ${index + 1}`}
-                    loading="lazy"
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
+            {chapter_id && chapter_id.length < 16 ? (
+              data.map((chap: any, index: number) => (
+                <SwiperSlide key={index} style={{ width: "100%" }}>
+                  <div
+                    className={`swiper-slide-content ${imgStyle} customScrollbar`}
+                  >
+                    <img
+                      src={`${chap}`}
+                      alt={`Page ${index + 1}`}
+                      loading="lazy"
+                    />
+                  </div>
+                </SwiperSlide>
+              ))
+            ) : (
+              data.chapter.data.map((chap: any, index: number) => (
+                <SwiperSlide key={index} style={{ width: "100%" }}>
+                  <div
+                    className={`swiper-slide-content ${imgStyle} customScrollbar`}
+                  >
+                    <img
+                      src={`${data.baseUrl}/data/${data.chapter.hash}/${chap}`}
+                      alt={`Page ${index + 1}`}
+                      loading="lazy"
+                    />
+                  </div>
+                </SwiperSlide>
+              ))
+            )}
           </Swiper>
           <div className="chapter-swiper-pagination"></div>
           <button className="toggle-style-button" onClick={toggleImgStyle}>

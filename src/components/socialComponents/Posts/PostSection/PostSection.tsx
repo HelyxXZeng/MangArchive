@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 interface Props {
   refreshList?: () => void;
   manga_id?: string;
+  group_id?: string;
 }
 
 const PostSection = (prop: Props) => {
@@ -85,6 +86,7 @@ const PostSection = (prop: Props) => {
             handleClose={handleClose}
             refreshList={prop.refreshList}
             mangaid={prop.manga_id}
+            group_id={prop.group_id}
           />
         </div>
       </div>

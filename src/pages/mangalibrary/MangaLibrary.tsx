@@ -6,10 +6,13 @@ import { supabase } from "../../utils/supabase";
 import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import { fetchUserIdByEmail } from "../../api/userAPI";
 
-interface Props {}
+interface Props { }
 
 const MangaLibrary: React.FC<Props> = () => {
-  const { page } = useParams<{ page: string }>();
+  const queryParams = new URLSearchParams(location.search);
+  const { page } = useParams<{ page: string }>() || "READING";
+  const type = queryParams.get("type") || "";
+  const groupid = queryParams.get("groupid") || "";
   const [data, setData] = useState<any>(null);
 
   const [activeButton, setActiveButton] = useState(page);
@@ -19,6 +22,7 @@ const MangaLibrary: React.FC<Props> = () => {
   const chaptersPerPage = 20;
 
   const [userID, setUserID] = useState(null);
+  const [path, setPath] = useState("");
 
   const handleButtonClick = (buttonName: string) => {
     setActiveButton(buttonName);
@@ -65,6 +69,10 @@ const MangaLibrary: React.FC<Props> = () => {
   };
 
   useEffect(() => {
+    if (type && groupid) {
+      setPath(`?type=translation&groupid=${groupid}`);
+    }
+    else setPath("");
     getManga(page, userID);
   }, [page, userID]);
 
@@ -130,13 +138,12 @@ const MangaLibrary: React.FC<Props> = () => {
     <div>
       <div className="manga-library-nav-button-bar">
         <NavLink
-          to={`/library/READING`}
+          to={`/library/READING` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`chapters-nav-button ${
-              activeButton === "READING" ? "active" : ""
-            }`}
+            className={`chapters-nav-button ${activeButton === "READING" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("READING")}
             style={{
               borderTopLeftRadius: "8px",
@@ -147,65 +154,60 @@ const MangaLibrary: React.FC<Props> = () => {
           </div>
         </NavLink>
         <NavLink
-          to={`/library/COMPLETED`}
+          to={`/library/COMPLETED` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "COMPLETED" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "COMPLETED" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("COMPLETED")}
           >
             COMPLETED
           </div>
         </NavLink>
         <NavLink
-          to={`/library/ON-HOLD`}
+          to={`/library/ON-HOLD` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "ON-HOLD" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "ON-HOLD" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("ON-HOLD")}
           >
             ON HOLD
           </div>
         </NavLink>
         <NavLink
-          to={`/library/DROPPED`}
+          to={`/library/DROPPED` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "DROPPED" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "DROPPED" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("DROPPED")}
           >
             DROPPED
           </div>
         </NavLink>
         <NavLink
-          to={`/library/PLAN-TO-READ`}
+          to={`/library/PLAN-TO-READ` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${
-              activeButton === "PLAN-TO-READ" ? "active" : ""
-            }`}
+            className={`comments-nav-button ${activeButton === "PLAN-TO-READ" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("PLAN-TO-READ")}
           >
             PLAN TO READ
           </div>
         </NavLink>
         <NavLink
-          to={`/library/RE-READING`}
+          to={`/library/RE-READING` + path}
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`posts-nav-button ${
-              activeButton === "RE-READING" ? "active" : ""
-            }`}
+            className={`posts-nav-button ${activeButton === "RE-READING" ? "active" : ""
+              }`}
             onClick={() => handleButtonClick("RE-READING")}
             style={{
               borderTopRightRadius: "8px",
@@ -243,13 +245,23 @@ const MangaLibrary: React.FC<Props> = () => {
                                     />
                                 ))} */}
 
-                <div className="manga-grid-container">
-                  <div className="manga-grid">
-                    {currentChapters.map((manga: any) => (
-                      <MangaCard key={manga.id} manga={manga} />
-                    ))}
+                {(type === "translation" && groupid) ? (
+                  <div className="manga-grid-container">
+                    <div className="manga-grid">
+                      {currentChapters.map((manga: any) => (
+                        <MangaCard key={manga.id} manga={manga} type={"translation"} groupId={groupid} />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="manga-grid-container">
+                    <div className="manga-grid">
+                      {currentChapters.map((manga: any) => (
+                        <MangaCard key={manga.id} manga={manga} />
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="chapter-pagination">
                   {currentPage > 1 && (

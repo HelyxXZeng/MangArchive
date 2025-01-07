@@ -52,8 +52,6 @@ const searchManga = async (
         if (updatedAtSince) params.updatedAtSince = updatedAtSince;
 
         const resp = await axios.get(`${baseUrl}/manga?includes[]=cover_art&includes[]=author&includes[]=artist`, { params });
-
-        console.log(params);
         return resp.data;
 
     } catch (error) {

@@ -49,8 +49,7 @@ const UpdateProfileModal = (props: UPModalProps) => {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [background, setBackground] = useState<string>("");
   const [avatar, setAvatar] = useState<string>("");
-  const [isSendButtonDisabled, setIsSendButtonDisabled] =
-    useState<boolean>(true);
+  const [isSendButtonDisabled, setIsSendButtonDisabled] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nameError, setNameError] = useState<string | null>(null);
   const backgroundInputRef = useRef<HTMLInputElement>(null);
@@ -76,7 +75,7 @@ const UpdateProfileModal = (props: UPModalProps) => {
       } else {
         setUserId("");
       }
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     getUser();

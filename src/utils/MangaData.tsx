@@ -3,6 +3,7 @@ import { uniq } from "lodash";
 
 // import corsAxios from '../utils/corsAxios';
 import axios from "axios";
+import { supabase } from "./supabase";
 
 const getDataApi = async (slug: any) => {
   const returnData: any = { slug, staff: [] };
@@ -59,9 +60,22 @@ const getDataApi = async (slug: any) => {
     groups[index] = groupId;
   });
 
+  // Fetch chapters from Supabase
+  const { data: supabaseChapters, error } = await supabase
+    .from("Chapter")
+    .select("*")
+    .eq("manga_id", slug);
+
+  if (error) {
+    console.error("Error fetching chapters from Supabase:", error);
+  }
+
+  const allChapters = [...chapterArray, ...(supabaseChapters || [])];
+
   const chapters: any = {};
   let manga_last_updated: any = "";
-  chapterArray.forEach(
+
+  allChapters.forEach(
     ({
       id,
       volume,
