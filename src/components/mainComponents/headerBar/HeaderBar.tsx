@@ -130,6 +130,7 @@ const HeaderBar = () => {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "Messages" },
         async () => {
+          console.log("đang có tin nhắn mới");
           if (realUserID) {
             await getUnreadMessageNotification(realUserID);
             const data = await countUnreadNotification(realUserID);

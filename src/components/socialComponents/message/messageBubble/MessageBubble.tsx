@@ -57,13 +57,13 @@ const MessageBubble = (props: BubbleProps) => {
 
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => setIsModalOpen(false);
-
   // console.log(isDeleted);
   useEffect(() => {
     const fetchMessageImage = async () => {
       try {
         if (id && !isDeleted) {
           // Chỉ fetch nếu không bị xóa
+          await new Promise((resolve) => setTimeout(resolve, 3000)); // Ngủ 1 giây
           const data = await getMessageImage(id);
           const imageUrl = phraseImageUrl(data);
           setMessageImages(imageUrl);
@@ -73,7 +73,20 @@ const MessageBubble = (props: BubbleProps) => {
       }
     };
     fetchMessageImage();
-  }, [id, isDeleted]);
+  }, [id, isDeleted, text]);
+
+  useEffect(() => {
+    console.log(id, text, time);
+
+    // if (id) {
+    //   getMessageImage(id)
+    //     .then((res) => {
+    //       console.log("Image response:", res, id);
+
+    //     })
+    //     .catch((err) => console.error(err));
+    // }
+  }, [id]);
 
   return (
     <div className={`messageBubbleContainer ${isMine ? "isMine" : ""}`}>
