@@ -46,8 +46,10 @@
       }
     }
     .latestMessage {
+      max-width: 184px;
       color: $text-gray-soft;
       line-clamp: 2;
+      overflow: hidden;
     }
   }
 }

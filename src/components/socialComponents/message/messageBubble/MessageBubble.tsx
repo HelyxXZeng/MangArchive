@@ -75,18 +75,16 @@ const MessageBubble = (props: BubbleProps) => {
     fetchMessageImage();
   }, [id, isDeleted, text]);
 
-  useEffect(() => {
-    console.log(id, text, time);
-
-    // if (id) {
-    //   getMessageImage(id)
-    //     .then((res) => {
-    //       console.log("Image response:", res, id);
-
-    //     })
-    //     .catch((err) => console.error(err));
-    // }
-  }, [id]);
+  // useEffect(() => {
+  //   // console.log(id, text, time);
+  //   // if (id) {
+  //   //   getMessageImage(id)
+  //   //     .then((res) => {
+  //   //       console.log("Image response:", res, id);
+  //   //     })
+  //   //     .catch((err) => console.error(err));
+  //   // }
+  // }, [id]);
 
   return (
     <div className={`messageBubbleContainer ${isMine ? "isMine" : ""}`}>

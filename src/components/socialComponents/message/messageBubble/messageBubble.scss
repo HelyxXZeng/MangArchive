@@ -20,7 +20,8 @@
   }
 
   .bubbleText {
-    max-width: fit-content; // Giới hạn độ rộng của bong bóng chat
+    max-width: 400px;
+    width: fit-content; // Giới hạn độ rộng của bong bóng chat
     padding: 10px;
     border-radius: 10px;
     margin: 0 10px;
@@ -29,7 +30,13 @@
     border-radius: 20px;
     margin-top: 8px;
     position: relative; // Đặt thời gian vào bong bóng
+    word-wrap: break-word; // Cho phép ngắt dòng tự nhiên
+    overflow-wrap: break-word; // Ngắt dòng nếu không có khoảng trắng
+    white-space: pre-wrap; // Giữ format xuống dòng nhưng không cho tràn
     &.isMine {
+      // max-width: 400px;
+      // overflow: hidden;
+      // line-clamp: 1;
       background-color: $blue-main; // Màu nền cho bong bóng chat của người dùng
       align-self: flex-end;
     }

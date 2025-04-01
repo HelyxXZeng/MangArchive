@@ -26,10 +26,10 @@ const HeaderBar = () => {
   const session = useCheckSession();
   const [status, setStatus] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
-  // let notificationCount = 1;
+
   const dispatch = useDispatch();
   const { notificationCount } = useSelector((state: any) => state.notification);
-  // const [notificationCount, setNotificationCount] = useState(0);
+
   const [searchInput, setSearchInput] = useState<string>("");
   const [profileImages, setProfileImages] = useState<{
     avatar: string;

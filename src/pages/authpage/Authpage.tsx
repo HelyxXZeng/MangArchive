@@ -1,14 +1,13 @@
 import { useParams } from "react-router-dom";
 import Login from "../../components/auth/login/Login";
 import Signup from "../../components/auth/signup/Signup";
-import "./authpage.scss"
+import "./authpage.scss";
 
 const AuthPage = () => {
   const { action } = useParams<{ action: string | any }>();
-
   return (
     <div className="homepage-login">
-        <AuthContainer action={action} />
+      <AuthContainer action={action} />
       <img
         className="wallpaper-icon"
         loading="lazy"

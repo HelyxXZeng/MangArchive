@@ -58,13 +58,18 @@ export const markMessageAsRead = async (
 export const uploadMessage = async (
   sender: number,
   receiver: number,
-  content: string
+  content: string,
+  aesKey: string,
+  iv: string
 ) => {
   const { data, error } = await supabase.rpc("add_new_message", {
     sender_user_id: sender,
     receiver_user_id: receiver,
-    message_content: content,
+    message_content: content, // Nội dung tin nhắn đã mã hóa AES
+    aes_key: aesKey, // AES key đã mã hóa bằng RSA
+    iv: iv, // IV dùng để giải mã
   });
+
   if (error) {
     console.error("Error upload message: ", error);
     throw error;
