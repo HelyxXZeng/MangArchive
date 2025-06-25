@@ -4,7 +4,7 @@ import { supabase } from "../utils/supabase";
 export const fetchMangaById = async (mangaId: string) => {
   try {
     const { data } = await axios.get(
-      `https://api.mangadex.org/manga/${mangaId.trim()}?includes[]=cover_art&includes[]=artist&includes[]=author`
+      `https://mangapi.alse.workers.dev/api/${mangaId.trim()}?includes[]=cover_art&includes[]=artist&includes[]=author`
     );
     return data.data;
   } catch (error) {
@@ -25,7 +25,11 @@ interface AddRatingParams {
   userID: number;
 }
 
-export async function addCollection({ collection, manga_id, userID }: AddCollectionParams) {
+export async function addCollection({
+  collection,
+  manga_id,
+  userID,
+}: AddCollectionParams) {
   const { error } = await supabase.rpc("add_to_collection", {
     this_collection_name: collection,
     this_slug: manga_id,
@@ -71,7 +75,11 @@ export async function fetchMangaPosts(manga_id: string) {
   return data;
 }
 
-export async function fetchCommentsForManga(manga_id: string, offset: number, limit: number) {
+export async function fetchCommentsForManga(
+  manga_id: string,
+  offset: number,
+  limit: number
+) {
   const { data, error } = await supabase.rpc("get_comments_for_truyen", {
     this_truyen: manga_id,
     this_limit: limit,
@@ -82,7 +90,11 @@ export async function fetchCommentsForManga(manga_id: string, offset: number, li
 }
 
 // Fetch replies for comments
-export async function fetchRepliesForComment(commentId: number, limit: number, offset: number) {
+export async function fetchRepliesForComment(
+  commentId: number,
+  limit: number,
+  offset: number
+) {
   try {
     const { data, error } = await supabase.rpc("get_replies_for_comment", {
       this_limit: limit,

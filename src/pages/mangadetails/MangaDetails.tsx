@@ -68,7 +68,7 @@ const MangaDetails: React.FC<Props> = () => {
         data: { data: fetchData },
       } = await axios({
         method: "GET",
-        url: `https://api.mangadex.org/manga/${manga_id}?includes[]=cover_art&includes[]=author&includes[]=artist`,
+        url: `https://mangapi.alse.workers.dev/api//manga/${manga_id}?includes[]=cover_art&includes[]=author&includes[]=artist`,
       });
       // console.log("Manga data fetched successfully: ", fetchData);
       setManga(fetchData);

@@ -21,7 +21,7 @@ const ComicCard: React.FC<props> = (prop: props) => {
         <Image
           className="cover"
           src={
-            "https://uploads.mangadex.org/covers/" +
+            "https://mangapi.alse.workers.dev/uploads/covers/" +
             prop.id +
             "/" +
             prop.cover +
@@ -30,7 +30,7 @@ const ComicCard: React.FC<props> = (prop: props) => {
           alt={prop.title}
           ratio="3/4"
         />
-        {/* <img src={'https://uploads.mangadex.org/covers/' + prop.id + '/' + prop.cover + '.512.jpg'} alt={prop.title} /> */}
+        {/* <img src={'https://mangapi.alse.workers.dev/uploads/covers/' + prop.id + '/' + prop.cover + '.512.jpg'} alt={prop.title} /> */}
       </div>
       <div className="info">
         <div className="name">

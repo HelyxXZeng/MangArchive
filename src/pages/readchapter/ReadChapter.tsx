@@ -13,7 +13,7 @@ import { supabase } from "../../utils/supabase";
 
 SwiperCore.use([Autoplay, Pagination, Navigation]);
 
-interface Props { }
+interface Props {}
 
 const MangaDetails: React.FC<Props> = () => {
   const { chapter_id } = useParams<{ chapter_id: string }>() || "3";
@@ -49,17 +49,15 @@ const MangaDetails: React.FC<Props> = () => {
         // Extract and return the URLs from the result
         const urls = data?.map((image: any) => image.url);
         setData(urls);
-
       } catch (err) {
         console.error("Error during the database query:", err);
         throw err;
       }
-    }
-    else {
+    } else {
       try {
         const resp = await axios({
           method: "GET",
-          url: `https://api.mangadex.org/at-home/server/${chapter_id}`,
+          url: `https://mangapi.alse.workers.dev/api//at-home/server/${chapter_id}`,
         });
         console.log("Chapter data fetched successfully: ", resp.data.chapter);
         setData(resp.data);
@@ -113,7 +111,13 @@ const MangaDetails: React.FC<Props> = () => {
     const zip = new JSZip();
     const folder = zip.folder(`MangArchive/${chapter_id}`);
 
-    if (chapter_id && chapter_id.length >= 16 && data && data.chapter && data.chapter.data) {
+    if (
+      chapter_id &&
+      chapter_id.length >= 16 &&
+      data &&
+      data.chapter &&
+      data.chapter.data
+    ) {
       try {
         for (const page of data.chapter.data) {
           const response = await axios({
@@ -133,8 +137,7 @@ const MangaDetails: React.FC<Props> = () => {
       } finally {
         setIsDownloading(false);
       }
-    }
-    else if (chapter_id && chapter_id.length < 16 && data) {
+    } else if (chapter_id && chapter_id.length < 16 && data) {
       try {
         for (const page of data) {
           const response = await axios({
@@ -154,8 +157,7 @@ const MangaDetails: React.FC<Props> = () => {
       } finally {
         setIsDownloading(false);
       }
-    }
-    else {
+    } else {
       setModalMessage("No data available to download.");
       setIsDownloading(false);
     }
@@ -208,35 +210,33 @@ const MangaDetails: React.FC<Props> = () => {
             }}
             style={{ height: "100%" }}
           >
-            {chapter_id && chapter_id.length < 16 ? (
-              data.map((chap: any, index: number) => (
-                <SwiperSlide key={index} style={{ width: "100%" }}>
-                  <div
-                    className={`swiper-slide-content ${imgStyle} customScrollbar`}
-                  >
-                    <img
-                      src={`${chap}`}
-                      alt={`Page ${index + 1}`}
-                      loading="lazy"
-                    />
-                  </div>
-                </SwiperSlide>
-              ))
-            ) : (
-              data.chapter.data.map((chap: any, index: number) => (
-                <SwiperSlide key={index} style={{ width: "100%" }}>
-                  <div
-                    className={`swiper-slide-content ${imgStyle} customScrollbar`}
-                  >
-                    <img
-                      src={`${data.baseUrl}/data/${data.chapter.hash}/${chap}`}
-                      alt={`Page ${index + 1}`}
-                      loading="lazy"
-                    />
-                  </div>
-                </SwiperSlide>
-              ))
-            )}
+            {chapter_id && chapter_id.length < 16
+              ? data.map((chap: any, index: number) => (
+                  <SwiperSlide key={index} style={{ width: "100%" }}>
+                    <div
+                      className={`swiper-slide-content ${imgStyle} customScrollbar`}
+                    >
+                      <img
+                        src={`${chap}`}
+                        alt={`Page ${index + 1}`}
+                        loading="lazy"
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))
+              : data.chapter.data.map((chap: any, index: number) => (
+                  <SwiperSlide key={index} style={{ width: "100%" }}>
+                    <div
+                      className={`swiper-slide-content ${imgStyle} customScrollbar`}
+                    >
+                      <img
+                        src={`${data.baseUrl}/data/${data.chapter.hash}/${chap}`}
+                        alt={`Page ${index + 1}`}
+                        loading="lazy"
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
           </Swiper>
           <div className="chapter-swiper-pagination"></div>
           <button className="toggle-style-button" onClick={toggleImgStyle}>

@@ -45,7 +45,7 @@ const SearchMangaPage: React.FC = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const baseUrl = "https://api.mangadex.org";
+        const baseUrl = "https://mangapi.alse.workers.dev/api/";
         const tags = await axios.get(`${baseUrl}/manga/tag`);
         setMangaTags(tags.data.data);
         setError(null);
@@ -101,16 +101,15 @@ const SearchMangaPage: React.FC = () => {
       const groupsList: any[] = [];
 
       data.forEach((element: any) => {
-        if (element.entity_type === 'User') {
+        if (element.entity_type === "User") {
           usersList.push(element);
-        } else if (element.entity_type === 'Group') {
+        } else if (element.entity_type === "Group") {
           groupsList.push(element);
         }
       });
 
       setUsers(usersList);
       setGroups(groupsList);
-
     } catch (err) {
       setError("Error fetching social data.");
     }
@@ -203,7 +202,9 @@ const SearchMangaPage: React.FC = () => {
       {mangaTags && mangaTags.length > 0 && (
         <>
           <div className={`tag-checkboxes ${show ? "show" : ""}`}>
-            <p style={{ color: "whitesmoke", width: "100%" }}>{t("tag-instruction")}</p>
+            <p style={{ color: "whitesmoke", width: "100%" }}>
+              {t("tag-instruction")}
+            </p>
             {thisIncludedTags &&
               thisExcludedTags &&
               mangaTags.map((tag) => (
@@ -242,25 +243,29 @@ const SearchMangaPage: React.FC = () => {
       )}
       <div style={{ color: "whitesmoke", width: "90%" }}>
         <h2 style={{ color: "whitesmoke", width: "100%" }}>Groups</h2>
-        {groups && groups.map((user) => (
-          <GroupCardLarge
-            key={user.entity_id}
-            userID={user.entity_id}
-            fetchSuggestUser={fetchUsersAndGroups}
-          />
-        ))}
+        {groups &&
+          groups.map((user) => (
+            <GroupCardLarge
+              key={user.entity_id}
+              userID={user.entity_id}
+              fetchSuggestUser={fetchUsersAndGroups}
+            />
+          ))}
 
         <h2 style={{ color: "whitesmoke", width: "100%" }}>Users</h2>
-        {users && users.map((user) => (
-          <UserCardLarge
-            key={user.entity_id}
-            userID={user.entity_id}
-            fetchSuggestUser={fetchUsersAndGroups}
-          />
-        ))}
+        {users &&
+          users.map((user) => (
+            <UserCardLarge
+              key={user.entity_id}
+              userID={user.entity_id}
+              fetchSuggestUser={fetchUsersAndGroups}
+            />
+          ))}
       </div>
 
-      <h2 style={{ color: "whitesmoke", width: "100%", paddingLeft: "5%" }}>Manga</h2>
+      <h2 style={{ color: "whitesmoke", width: "100%", paddingLeft: "5%" }}>
+        Manga
+      </h2>
 
       {mangaList && mangaList.length === 0 && !error && !isCompleted ? (
         <div className="loading-wave">

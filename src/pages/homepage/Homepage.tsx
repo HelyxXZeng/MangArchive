@@ -5,7 +5,7 @@ interface Manga {
   id: string;
   title: string;
 }
-// const baseUrl = 'https://api.mangadex.org';
+// const baseUrl = 'https://mangapi.alse.workers.dev/api/';
 // const title = 'Kanojyo to Himitsu to Koimoyou';
 const Homepage = () => {
   // const [mangaList, setMangaList] = useState([]);
@@ -33,7 +33,7 @@ const Homepage = () => {
   // };
   // useEffect(() => {
   //   getMainPageMangas();
-  //   // axios.get('https://api.mangadex.org/manga')
+  //   // axios.get('https://mangapi.alse.workers.dev/api//manga')
   //   //   .then(response => {
   //   //     console.table(response.data.results);
   //   //     setMangaList(response.data.results);
@@ -48,7 +48,7 @@ const Homepage = () => {
   // //   const newSlugs: { [key: string]: string | null } = {};
   // //   for (const manga of mangaList) {
   // //     try {
-  // //       const response = await axios.get(`https://api.mangadex.org/manga/${manga.id}`);
+  // //       const response = await axios.get(`https://mangapi.alse.workers.dev/api//manga/${manga.id}`);
   // //       newSlugs[manga.id] = response.data.data.attributes.slug;
   // //     } catch (error) {
   // //       console.error('Error fetching manga slug:', error);

@@ -6,7 +6,7 @@ import { supabase } from "../../utils/supabase";
 import MangaCard from "../../components/mangaComponents/title/TitleCard2";
 import { fetchUserIdByEmail } from "../../api/userAPI";
 
-interface Props { }
+interface Props {}
 
 const MangaLibrary: React.FC<Props> = () => {
   const queryParams = new URLSearchParams(location.search);
@@ -47,7 +47,7 @@ const MangaLibrary: React.FC<Props> = () => {
             data: { data: fetchData },
           } = await axios({
             method: "GET",
-            url: `https://api.mangadex.org/manga?includes[]=cover_art&includes[]=author&includes[]=artist`,
+            url: `https://mangapi.alse.workers.dev/api//manga?includes[]=cover_art&includes[]=author&includes[]=artist`,
             params: {
               order: {
                 latestUploadedChapter: "desc",
@@ -71,8 +71,7 @@ const MangaLibrary: React.FC<Props> = () => {
   useEffect(() => {
     if (type && groupid) {
       setPath(`?type=translation&groupid=${groupid}`);
-    }
-    else setPath("");
+    } else setPath("");
     getManga(page, userID);
   }, [page, userID]);
 
@@ -142,8 +141,9 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`chapters-nav-button ${activeButton === "READING" ? "active" : ""
-              }`}
+            className={`chapters-nav-button ${
+              activeButton === "READING" ? "active" : ""
+            }`}
             onClick={() => handleButtonClick("READING")}
             style={{
               borderTopLeftRadius: "8px",
@@ -158,8 +158,9 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${activeButton === "COMPLETED" ? "active" : ""
-              }`}
+            className={`comments-nav-button ${
+              activeButton === "COMPLETED" ? "active" : ""
+            }`}
             onClick={() => handleButtonClick("COMPLETED")}
           >
             COMPLETED
@@ -170,8 +171,9 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${activeButton === "ON-HOLD" ? "active" : ""
-              }`}
+            className={`comments-nav-button ${
+              activeButton === "ON-HOLD" ? "active" : ""
+            }`}
             onClick={() => handleButtonClick("ON-HOLD")}
           >
             ON HOLD
@@ -182,8 +184,9 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${activeButton === "DROPPED" ? "active" : ""
-              }`}
+            className={`comments-nav-button ${
+              activeButton === "DROPPED" ? "active" : ""
+            }`}
             onClick={() => handleButtonClick("DROPPED")}
           >
             DROPPED
@@ -194,8 +197,9 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`comments-nav-button ${activeButton === "PLAN-TO-READ" ? "active" : ""
-              }`}
+            className={`comments-nav-button ${
+              activeButton === "PLAN-TO-READ" ? "active" : ""
+            }`}
             onClick={() => handleButtonClick("PLAN-TO-READ")}
           >
             PLAN TO READ
@@ -206,8 +210,9 @@ const MangaLibrary: React.FC<Props> = () => {
           style={{ textDecoration: "none", width: "100%" }}
         >
           <div
-            className={`posts-nav-button ${activeButton === "RE-READING" ? "active" : ""
-              }`}
+            className={`posts-nav-button ${
+              activeButton === "RE-READING" ? "active" : ""
+            }`}
             onClick={() => handleButtonClick("RE-READING")}
             style={{
               borderTopRightRadius: "8px",
@@ -245,11 +250,16 @@ const MangaLibrary: React.FC<Props> = () => {
                                     />
                                 ))} */}
 
-                {(type === "translation" && groupid) ? (
+                {type === "translation" && groupid ? (
                   <div className="manga-grid-container">
                     <div className="manga-grid">
                       {currentChapters.map((manga: any) => (
-                        <MangaCard key={manga.id} manga={manga} type={"translation"} groupId={groupid} />
+                        <MangaCard
+                          key={manga.id}
+                          manga={manga}
+                          type={"translation"}
+                          groupId={groupid}
+                        />
                       ))}
                     </div>
                   </div>

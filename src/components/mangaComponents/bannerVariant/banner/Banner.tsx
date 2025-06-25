@@ -39,12 +39,12 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
 
   return (
     <div className="banner-container">
-      {/* <div className="background-img" style={{backgroundImage: `url(https://uploads.mangadex.org/covers/${manga.id}/${cover}.512.jpg)`}}/> */}
+      {/* <div className="background-img" style={{backgroundImage: `url(https://mangapi.alse.workers.dev/uploads/covers/${manga.id}/${cover}.512.jpg)`}}/> */}
       <NavLink to={`/manga/${manga.id}`} style={{ textDecoration: "none" }}>
         <div className="background-img">
           <img
             src={
-              "https://uploads.mangadex.org/covers/" +
+              "https://mangapi.alse.workers.dev/uploads/covers/" +
               manga.id +
               "/" +
               cover +
@@ -59,7 +59,7 @@ const Banner: React.FC<BannerProps> = ({ manga, rank }) => {
           <div className="banner-image">
             <Image
               src={
-                "https://uploads.mangadex.org/covers/" +
+                "https://mangapi.alse.workers.dev/uploads/covers/" +
                 manga.id +
                 "/" +
                 cover +
