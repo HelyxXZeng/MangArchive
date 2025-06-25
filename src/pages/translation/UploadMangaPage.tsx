@@ -27,7 +27,7 @@ const UploadMangaPage = () => {
   const [idValid, setIdValid] = useState<boolean>(true);
   const [comic, setComic] = useState<any>(null);
   const [groupId, setGroupId] = useState<any>(null);
-  const [idError, setIdError] = useState<string | null>(null);
+  // const [idError, setIdError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -53,153 +53,153 @@ const UploadMangaPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const uploadToMangaDex = async () => {
-    const baseUrl = "https://mangapi.alse.workers.dev/api/";
-    const username = "VuiVL"; // Replace with your MangaDex username
-    const password = "vuivl23072003"; // Replace with your MangaDex password
-    const groupIDs = ["18dadd0b-cbce-41c4-a8a9-5e653780b9ff"]; // Replace with your group ID
+  // const uploadToMangaDex = async () => {
+  //   const baseUrl = "https://mangapi.alse.workers.dev/api/";
+  //   const username = "VuiVL"; // Replace with your MangaDex username
+  //   const password = "vuivl23072003"; // Replace with your MangaDex password
+  //   const groupIDs = ["18dadd0b-cbce-41c4-a8a9-5e653780b9ff"]; // Replace with your group ID
 
-    let sessionToken: string;
-    let sessionID: string;
+  //   let sessionToken: string;
+  //   let sessionID: string;
 
-    try {
-      // Step 1: Login and get the session token
-      const loginResponse = await fetch(`${baseUrl}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+  //   try {
+  //     // Step 1: Login and get the session token
+  //     const loginResponse = await fetch(`${baseUrl}/auth/login`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ username, password }),
+  //     });
 
-      if (!loginResponse.ok) {
-        const errorData = await loginResponse.json();
-        console.error("Login failed:", errorData);
-        alert("Login failed. Please check your username and password.");
-        return;
-      }
+  //     if (!loginResponse.ok) {
+  //       const errorData = await loginResponse.json();
+  //       console.error("Login failed:", errorData);
+  //       alert("Login failed. Please check your username and password.");
+  //       return;
+  //     }
 
-      const loginData = await loginResponse.json();
-      sessionToken = loginData.token.session;
+  //     const loginData = await loginResponse.json();
+  //     sessionToken = loginData.token.session;
 
-      console.log("Session token retrieved:", sessionToken);
+  //     console.log("Session token retrieved:", sessionToken);
 
-      // Step 2: Start an upload session
-      const sessionResponse = await fetch(`${baseUrl}/upload/begin`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          groups: groupIDs,
-          manga: formData.mangaId, // Use the manga ID from the form
-        }),
-      });
+  //     // Step 2: Start an upload session
+  //     const sessionResponse = await fetch(`${baseUrl}/upload/begin`, {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${sessionToken}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         groups: groupIDs,
+  //         manga: formData.mangaId, // Use the manga ID from the form
+  //       }),
+  //     });
 
-      if (!sessionResponse.ok) {
-        const errorData = await sessionResponse.json();
-        console.error("Failed to start upload session:", errorData);
-        alert(
-          "Failed to start an upload session. Abandon any existing session if necessary."
-        );
-        return;
-      }
+  //     if (!sessionResponse.ok) {
+  //       const errorData = await sessionResponse.json();
+  //       console.error("Failed to start upload session:", errorData);
+  //       alert(
+  //         "Failed to start an upload session. Abandon any existing session if necessary."
+  //       );
+  //       return;
+  //     }
 
-      const sessionData = await sessionResponse.json();
-      sessionID = sessionData.data.id;
+  //     const sessionData = await sessionResponse.json();
+  //     sessionID = sessionData.data.id;
 
-      console.log("Upload session started with ID:", sessionID);
+  //     console.log("Upload session started with ID:", sessionID);
 
-      // Step 3: Upload images
-      const batches = [];
-      const batchSize = 5;
+  //     // Step 3: Upload images
+  //     const batches = [];
+  //     const batchSize = 5;
 
-      for (let i = 0; i < files.length; i += batchSize) {
-        batches.push(files.slice(i, i + batchSize));
-      }
+  //     for (let i = 0; i < files.length; i += batchSize) {
+  //       batches.push(files.slice(i, i + batchSize));
+  //     }
 
-      const successfulUploads = [];
-      const failedUploads = [];
+  //     const successfulUploads = [];
+  //     const failedUploads = [];
 
-      for (const batch of batches) {
-        const formDataToSubmit = new FormData();
-        batch.forEach((file, index) => {
-          formDataToSubmit.append(`file${index + 1}`, file, file.name);
-        });
+  //     for (const batch of batches) {
+  //       const formDataToSubmit = new FormData();
+  //       batch.forEach((file, index) => {
+  //         formDataToSubmit.append(`file${index + 1}`, file, file.name);
+  //       });
 
-        const uploadResponse = await fetch(`${baseUrl}/upload/${sessionID}`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-          },
-          body: formDataToSubmit,
-        });
+  //       const uploadResponse = await fetch(`${baseUrl}/upload/${sessionID}`, {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${sessionToken}`,
+  //         },
+  //         body: formDataToSubmit,
+  //       });
 
-        if (!uploadResponse.ok) {
-          const errorData = await uploadResponse.json();
-          console.error("Failed to upload images:", errorData);
-          failedUploads.push(...batch);
-        } else {
-          const uploadData = await uploadResponse.json();
-          successfulUploads.push(...uploadData.data);
-        }
-      }
+  //       if (!uploadResponse.ok) {
+  //         const errorData = await uploadResponse.json();
+  //         console.error("Failed to upload images:", errorData);
+  //         failedUploads.push(...batch);
+  //       } else {
+  //         const uploadData = await uploadResponse.json();
+  //         successfulUploads.push(...uploadData.data);
+  //       }
+  //     }
 
-      console.log("Successful uploads:", successfulUploads);
-      console.log("Failed uploads:", failedUploads);
+  //     console.log("Successful uploads:", successfulUploads);
+  //     console.log("Failed uploads:", failedUploads);
 
-      if (successfulUploads.length === 0) {
-        alert("Image upload failed. Please try again.");
-        return;
-      }
+  //     if (successfulUploads.length === 0) {
+  //       alert("Image upload failed. Please try again.");
+  //       return;
+  //     }
 
-      // Step 4: Rearrange pages and commit upload
-      successfulUploads.sort((a, b) => {
-        const nameA = a.attributes.originalFileName.toUpperCase();
-        const nameB = b.attributes.originalFileName.toUpperCase();
-        return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-      });
+  //     // Step 4: Rearrange pages and commit upload
+  //     successfulUploads.sort((a, b) => {
+  //       const nameA = a.attributes.originalFileName.toUpperCase();
+  //       const nameB = b.attributes.originalFileName.toUpperCase();
+  //       return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+  //     });
 
-      const pageOrder = successfulUploads.map((upload) => upload.id);
-      const chapterDraft = {
-        volume: formData.volume || null,
-        chapter: formData.chapter,
-        translatedLanguage: formData.language,
-        title: formData.title,
-      };
+  //     const pageOrder = successfulUploads.map((upload) => upload.id);
+  //     const chapterDraft = {
+  //       volume: formData.volume || null,
+  //       chapter: formData.chapter,
+  //       translatedLanguage: formData.language,
+  //       title: formData.title,
+  //     };
 
-      const commitResponse = await fetch(
-        `${baseUrl}/upload/${sessionID}/commit`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${sessionToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chapterDraft,
-            pageOrder,
-          }),
-        }
-      );
+  //     const commitResponse = await fetch(
+  //       `${baseUrl}/upload/${sessionID}/commit`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${sessionToken}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           chapterDraft,
+  //           pageOrder,
+  //         }),
+  //       }
+  //     );
 
-      if (!commitResponse.ok) {
-        const errorData = await commitResponse.json();
-        console.error("Failed to commit upload session:", errorData);
-        alert("Failed to commit the upload session.");
-        return;
-      }
+  //     if (!commitResponse.ok) {
+  //       const errorData = await commitResponse.json();
+  //       console.error("Failed to commit upload session:", errorData);
+  //       alert("Failed to commit the upload session.");
+  //       return;
+  //     }
 
-      const commitData = await commitResponse.json();
-      console.log("Upload session successfully committed:", commitData);
+  //     const commitData = await commitResponse.json();
+  //     console.log("Upload session successfully committed:", commitData);
 
-      alert("Manga upload successful!");
-    } catch (error) {
-      console.error("Error during the upload process:", error);
-      alert("An error occurred during the upload process. Please try again.");
-    }
-  };
+  //     alert("Manga upload successful!");
+  //   } catch (error) {
+  //     console.error("Error during the upload process:", error);
+  //     alert("An error occurred during the upload process. Please try again.");
+  //   }
+  // };
 
   const uploadChapter = async () => {
     setUploading(true);
@@ -275,20 +275,20 @@ const UploadMangaPage = () => {
         .then((response) => {
           setComic(response);
           setIdValid(true);
-          setIdError(null);
+          // setIdError(null);
         })
         .catch((error) => {
           console.error("Invalid manga ID:", error);
           setIdValid(false);
           setComic(null);
-          setIdError(
-            "Invalid manga ID, please copy from the link. Example: 09b80517-f0d6-44bd-94a6-0794da2e18d8"
-          );
+          // setIdError(
+          //   "Invalid manga ID, please copy from the link. Example: 09b80517-f0d6-44bd-94a6-0794da2e18d8"
+          // );
         });
     } else {
       setIdValid(true);
       setComic(null);
-      setIdError(null);
+      // setIdError(null);
     }
   };
 
