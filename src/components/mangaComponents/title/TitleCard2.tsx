@@ -15,7 +15,12 @@ interface Props {
   groupId?: string;
 }
 
-const MangaCard: React.FC<Props> = ({ manga, includedTags = [], type = "", groupId = "" }) => {
+const MangaCard: React.FC<Props> = ({
+  manga,
+  includedTags = [],
+  type = "",
+  groupId = "",
+}) => {
   const [cover, setCover] = useState("");
   const [author, setAuthor] = useState("");
   const [artist, setArtist] = useState("");
@@ -171,22 +176,27 @@ const MangaCard: React.FC<Props> = ({ manga, includedTags = [], type = "", group
           </div>
           <Image
             src={
-              "https://uploads.mangadex.org/covers/" +
+              "https://mangapi.alse.workers.dev/uploads/covers/" +
               manga.id +
               "/" +
               cover +
               ".512.jpg"
             }
-            alt={manga.attributes.title.en ||
+            alt={
+              manga.attributes.title.en ||
               manga.attributes.title.ja ||
               manga.attributes.title.ko ||
               manga.attributes.title["ja-ro"] ||
-              manga.attributes.title["ko-ro"]}
+              manga.attributes.title["ko-ro"]
+            }
             ratio="4/6"
           />
         </div>
         {type === "translation" ? (
-          <NavLink to={`/translation?manga_id=${manga.id}&group=${groupId}`} style={{ textDecoration: "none" }}>
+          <NavLink
+            to={`/translation?manga_id=${manga.id}&group=${groupId}`}
+            style={{ textDecoration: "none" }}
+          >
             <div className="title-and-artist-container">
               <h2>{title}</h2>
               <p className="author-artist">

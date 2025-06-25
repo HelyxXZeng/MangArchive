@@ -33,7 +33,7 @@ const MangaHistory: React.FC<Props> = () => {
             data: { data: fetchData },
           } = await axios({
             method: "GET",
-            url: `https://api.mangadex.org/manga?includes[]=cover_art&includes[]=author&includes[]=artist`,
+            url: `https://mangapi.alse.workers.dev/api//manga?includes[]=cover_art&includes[]=author&includes[]=artist`,
             params: {
               order: {
                 latestUploadedChapter: "desc",

@@ -36,7 +36,7 @@ const Manga = () => {
     // navigate(`/chapter/${chapID}`);
   };
 
-  const baseUrl = "https://api.mangadex.org";
+  const baseUrl = "https://mangapi.alse.workers.dev/api/";
   // const title = 'Kanojyo to Himitsu to Koimoyou';
   const getMainPageMangas = async () => {
     try {

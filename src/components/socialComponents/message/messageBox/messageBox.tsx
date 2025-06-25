@@ -7,6 +7,11 @@ import useCheckSession from "../../../../hooks/session";
 import { uploadImage } from "../../../../api/fileUploadAPI";
 import { uploadMessage, uploadMessageImage } from "../../../../api/messageAPI";
 import { supabase } from "../../../../utils/supabase";
+import {
+  decryptMessage,
+  encryptMessage,
+  generateAESKey,
+} from "../../../../utils/cryptoAES";
 
 const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
   const [message, setMessage] = useState("");
@@ -79,15 +84,25 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
   const handleSend = async () => {
     if (message.trim() || image) {
       setUploading(true);
+      console.log(uploading);
       try {
-        let messageID;
         if (!realUserID || !receiver_id) {
           console.error("Invalid user IDs:", realUserID, receiver_id);
           return;
         }
-
-        messageID = await uploadMessage(realUserID, receiver_id, message);
+        const { key, iv } = await generateAESKey();
+        const encryptMessaged = await encryptMessage(message, key, iv);
+        console.log(encryptMessaged);
+        const messageID = await uploadMessage(
+          realUserID,
+          receiver_id,
+          encryptMessaged,
+          key,
+          iv
+        );
+        // console.log("upload xong text");
         if (image) {
+          // console.log("bắt đầu upload hình");
           const imageFile = fileInputRef.current?.files?.[0];
           if (imageFile) {
             console.log("Image file:", imageFile); // Thay vì upload, chỉ log ra file hình
@@ -99,15 +114,23 @@ const MessagetBox = ({ receiver_id }: { receiver_id: number }) => {
                 messageID
               );
             }
+            // console.log("upload xong hình");
           }
-          fileInputRef.current!.value = ""; // Reset giá trị của input file
-          setImage(null);
-          setUploading(false);
-          setMessage("");
         }
+
+        const decrypttest = await decryptMessage(encryptMessaged, key, iv);
+        console.log(decrypttest, key, iv);
       } catch (error) {
         console.error("Upload failed:", error);
         setUploading(false);
+        // console.log(uploading);
+      } finally {
+        // Đảm bảo setUploading về false bất kể thành công hay lỗi
+        setUploading(false);
+        fileInputRef.current!.value = ""; // Reset giá trị của input file
+        setImage(null);
+        // setUploading(false);
+        setMessage("");
       }
     }
   };

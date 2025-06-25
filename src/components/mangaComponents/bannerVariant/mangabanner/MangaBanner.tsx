@@ -49,11 +49,11 @@ const MangaBanner: React.FC<BannerProps> = ({ manga }) => {
   return (
     <div>
       <div className="profile-manga-image">
-        {/* <img src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} /> */}
+        {/* <img src={'https://mangapi.alse.workers.dev/uploads/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} /> */}
         <Image
           className="cover-background"
           src={
-            "https://uploads.mangadex.org/covers/" +
+            "https://mangapi.alse.workers.dev/uploads/covers/" +
             manga.id +
             "/" +
             cover +
@@ -65,10 +65,10 @@ const MangaBanner: React.FC<BannerProps> = ({ manga }) => {
       </div>
       <div className="manga-banner-container">
         <div className="manga-banner-image">
-          {/* <img src={'https://uploads.mangadex.org/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} /> */}
+          {/* <img src={'https://mangapi.alse.workers.dev/uploads/covers/' + manga.id + '/' + cover + '.512.jpg'} alt={manga.attributes.title.en} /> */}
           <Image
             src={
-              "https://uploads.mangadex.org/covers/" +
+              "https://mangapi.alse.workers.dev/uploads/covers/" +
               manga.id +
               "/" +
               cover +

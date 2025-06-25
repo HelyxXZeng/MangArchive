@@ -17,6 +17,7 @@ import MessagetBox from "../../components/socialComponents/message/messageBox/me
 import { setMessages } from "../../reduxState/reducer/messageReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../reduxState/store";
+import { decryptMessage } from "../../utils/cryptoAES";
 
 interface Sender {
   sender_id: number;
@@ -66,6 +67,68 @@ const Message = () => {
 
     getUserID();
   }, [session]);
+
+  // useEffect(() => {
+  //   if (!userID || !id) return;
+
+  //   const setupKey = async () => {
+  //     try {
+  //       let storedPrivateKey = localStorage.getItem("privateKey") || "";
+  //       let storedPublicKey = localStorage.getItem("publicKey") || "";
+
+  //       // 📌 1️⃣ Nếu key trong Local Storage rỗng, cần lấy lại từ Supabase
+  //       if (!storedPrivateKey.trim() || !storedPublicKey.trim()) {
+  //         console.log("🔍 Private/Public Key bị rỗng, cần lấy lại...");
+
+  //         // 📌 2️⃣ Kiểm tra trên Supabase
+  //         const hasKey = await checkUserKey(userID);
+  //         if (hasKey) {
+  //           console.log("✅ User có private key trên Supabase!");
+  //           storedPrivateKey = await getPrivateKey(userID);
+  //           localStorage.setItem("privateKey", storedPrivateKey);
+  //           dispatch(setKeys({ privateKey: storedPrivateKey, publicKey: "" }));
+  //         } else {
+  //           console.log("❌ Chưa có key → Tạo mới...");
+  //           const { privateKey: newPrivateKey, publicKey: newPublicKey } =
+  //             await generateRSAKeys();
+  //           localStorage.setItem("privateKey", newPrivateKey);
+  //           localStorage.setItem("publicKey", newPublicKey);
+  //           storedPrivateKey = newPrivateKey;
+  //           storedPublicKey = newPublicKey;
+
+  //           dispatch(setKeys({ privateKey: newPrivateKey, publicKey: "" }));
+
+  //           // 📌 3️⃣ Lưu key lên Supabase
+  //           await addNewKey(userID, newPublicKey, newPrivateKey);
+  //         }
+  //       } else {
+  //         console.log("🔑 Đã tìm thấy private key hợp lệ trong Local Storage!");
+  //         dispatch(setKeys({ privateKey: storedPrivateKey, publicKey: "" }));
+  //       }
+
+  //       // 📌 4️⃣ Lấy Public Key của Receiver
+  //       const receiverPublicKey = await getReceiverPublicKey(parseInt(id));
+  //       if (receiverPublicKey) {
+  //         console.log(
+  //           "🎯 Đã lấy được public key của receiver!",
+  //           receiverPublicKey
+  //         );
+  //         dispatch(
+  //           setKeys({
+  //             privateKey: storedPrivateKey,
+  //             publicKey: receiverPublicKey,
+  //           })
+  //         );
+  //       } else {
+  //         console.error("❌ Không tìm thấy public key của receiver!");
+  //       }
+  //     } catch (error) {
+  //       console.error("🚨 Lỗi khi thiết lập key:", error);
+  //     }
+  //   };
+
+  //   setupKey();
+  // }, [userID, id, dispatch]);
 
   useEffect(() => {
     const getProfileImages = async () => {
@@ -124,11 +187,36 @@ const Message = () => {
             setActiveSenderName(sender.username);
             setActiveSenderAvatar(sender.avatar_url);
           }
-          const messagesData = await getMessagesFromUser(senderId, userID);
-          dispatch(setMessages(messagesData || []));
-          markMessageAsRead(senderId, userID!);
+
+          const encryptedMessages = await getMessagesFromUser(senderId, userID);
+          console.log("🔐 Tin nhắn đã mã hóa:", encryptedMessages);
+
+          // Giải mã từng tin nhắn
+          const processedMessages = await Promise.all(
+            encryptedMessages.map(async (msg: any) => {
+              try {
+                const decryptedContent = await decryptMessage(
+                  msg.message_content, // Nội dung tin nhắn đã mã hóa
+                  msg.aes_key, // AES key
+                  msg.iv // IV
+                );
+
+                return { ...msg, message_content: decryptedContent };
+              } catch (error) {
+                console.error(`❌ Lỗi giải mã tin nhắn ID ${msg.id}:`, error);
+                return {
+                  ...msg,
+                  message_content: "(Không thể giải mã tin nhắn)",
+                  error: true, // Đánh dấu lỗi để UI biết
+                };
+              }
+            })
+          );
+
+          dispatch(setMessages(processedMessages));
+          markMessageAsRead(senderId, userID);
         } catch (error) {
-          console.error("Error fetching messages:", error);
+          console.error("❌ Lỗi khi tải tin nhắn:", error);
         }
       }
     };
@@ -149,8 +237,34 @@ const Message = () => {
         async () => {
           if (id) {
             const senderId = parseInt(id, 10);
-            const messagesData = await getMessagesFromUser(senderId, userID!);
-            dispatch(setMessages(messagesData));
+            const encryptedMessages = await getMessagesFromUser(
+              senderId,
+              userID!
+            );
+
+            // Giải mã từng tin nhắn trước khi cập nhật Redux
+            const processedMessages = await Promise.all(
+              encryptedMessages.map(async (msg: any) => {
+                try {
+                  const decryptedContent = await decryptMessage(
+                    msg.message_content, // Nội dung đã mã hóa
+                    msg.aes_key, // AES key (đã giải mã từ RSA trước đó)
+                    msg.iv // IV
+                  );
+
+                  return { ...msg, message_content: decryptedContent };
+                } catch (error) {
+                  console.error(`❌ Lỗi giải mã tin nhắn ID ${msg.id}:`, error);
+                  return {
+                    ...msg,
+                    message_content: "(Không thể giải mã tin nhắn)",
+                    error: true, // Thêm cờ để frontend biết có lỗi
+                  };
+                }
+              })
+            );
+
+            dispatch(setMessages(processedMessages));
             markMessageAsRead(senderId, userID!);
           }
         }
@@ -161,6 +275,7 @@ const Message = () => {
       subscription.unsubscribe();
     };
   }, [userID, id, dispatch]);
+
   // console.log(messages);
   return (
     <div className="messagePageContainer">

@@ -9,14 +9,14 @@ const getDataApi = async (slug: any) => {
   const returnData: any = { slug, staff: [] };
 
   // const { data: { data: titleData } } = await corsAxios({
-  //     url: `https://api.mangadex.org/manga/${slug}?includes[]=cover_art&includes[]=author&includes[]=artist`
+  //     url: `https://mangapi.alse.workers.dev/api//manga/${slug}?includes[]=cover_art&includes[]=author&includes[]=artist`
   // })
 
   const {
     data: { data: titleData },
   } = await axios({
     method: "GET",
-    url: `https://api.mangadex.org/manga/${slug}?includes[]=cover_art&includes[]=author&includes[]=artist`,
+    url: `https://mangapi.alse.workers.dev/api//manga/${slug}?includes[]=cover_art&includes[]=author&includes[]=artist`,
     // params: {
     //   limit: 10,
     //   offset: 0
@@ -30,13 +30,13 @@ const getDataApi = async (slug: any) => {
   const coverArt = titleData.relationships.find(
     (r: any) => r.type === "cover_art"
   )?.attributes.fileName;
-  returnData.cover = `https://uploads.mangadex.org/covers/${slug}/${coverArt}`;
+  returnData.cover = `https://mangapi.alse.workers.dev/uploads/covers/${slug}/${coverArt}`;
 
   const {
     data: { data: chaptersData },
   } = await axios({
     method: "GET",
-    url: `https://api.mangadex.org/manga/${slug}/feed?limit=500&contentRating%5B%5D=safe&contentRating%5B%5D=suggestive&contentRating%5B%5D=erotica&contentRating%5B%5D=pornographic&includeFutureUpdates=1&order%5Bchapter%5D=asc&order%5BupdatedAt%5D=desc` /* translatedLanguage[]=vi& */,
+    url: `https://mangapi.alse.workers.dev/api//manga/${slug}/feed?limit=500&contentRating%5B%5D=safe&contentRating%5B%5D=suggestive&contentRating%5B%5D=erotica&contentRating%5B%5D=pornographic&includeFutureUpdates=1&order%5Bchapter%5D=asc&order%5BupdatedAt%5D=desc` /* translatedLanguage[]=vi& */,
   });
 
   const chapterArray = chaptersData.map((chapter: any) => ({
